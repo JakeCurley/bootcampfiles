@@ -441,3 +441,11 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+/Classwork/M2/InheritenceLabs/target/
+/Classwork/M2/StateCapitals/target/
+/Classwork/M2/StateCapitals2/target/
+/Classwork/M2/StudentQuizScores/target/
+/Classwork/M2/PrintWriter/target/
+/Classwork/M2/classroster/target/
+/Classwork/M2/AddressBook/target/
+/Summatives/M2-summative/DVDLibrary/target/
