@@ -7,6 +7,8 @@ package com.curleyj.dvdlibrary.dao;
 
 import com.curleyj.dvdlibrary.dto.dvd;
 import java.util.List;
+import java.util.Map;
+import java.util.OptionalLong;
 
 /**
  *
@@ -21,6 +23,19 @@ public interface DvDLibraryDao {
     
     dvd removeDvd(String title) throws DvDLibraryDaoException;
     
-    dvd editDvd(String dvd, int editChoice, String edit) throws DvDLibraryDaoException;
+    dvd editDvd(String dvd, String editChoice, String edit) throws DvDLibraryDaoException;
+
+    boolean titleCheck(String title) throws DvDLibraryDaoException;
     
+    List<dvd> getDvdLastNYears(int years) throws DvDLibraryDaoException;
+    
+    List<dvd> getDvdByRating(String rating) throws DvDLibraryDaoException;
+     
+    Map<String, List<dvd>> getDvdByDirector(String director) throws DvDLibraryDaoException;
+    
+    List<dvd> getDvdByStudio(String studio) throws DvDLibraryDaoException;
+    
+    double getAverageDvdAge() throws DvDLibraryDaoException;
+    
+    String getNewestDvd() throws DvDLibraryDaoException ;
 }

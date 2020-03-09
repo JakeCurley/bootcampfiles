@@ -39,21 +39,21 @@ public class AddressBookDaoFileImpl implements AddressBookDao {
 
     @Override
     public Address deleteAddress(String lastName) throws AddressBookDaoException {
-        loadRoster();
+        //loadRoster();
         Address deletedAddress = addresses.remove(lastName);
-        writeRoster();
+       // writeRoster();
         return deletedAddress;
     }
 
     @Override
     public Address getAddress(String address) throws AddressBookDaoException {
-        loadRoster();
+       // loadRoster();
         return addresses.get(address);
     }
 
     @Override
     public List<Address> listAllAddresses() throws AddressBookDaoException {
-        loadRoster();
+        //loadRoster();
         return new ArrayList<Address>(addresses.values());
     }
     

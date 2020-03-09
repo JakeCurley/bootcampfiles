@@ -12,11 +12,15 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.OptionalLong;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -26,6 +30,7 @@ public class DvDLibraryDaoFileImpl implements DvDLibraryDao {
     
     public static final String ROSTER_FILE = "roster.txt";
     public static final String DELIMITER = "::";
+    LocalDate ld = LocalDate.now();
     
     private Map<String, dvd> dvds = new HashMap<>();
     
@@ -60,26 +65,28 @@ public class DvDLibraryDaoFileImpl implements DvDLibraryDao {
     }
 
     @Override
-    public dvd editDvd(String title, int editChoice, String edit) throws DvDLibraryDaoException {
+    public dvd editDvd(String title, String editChoice, String edit) throws DvDLibraryDaoException {
         loadRoster();
         dvd editDvd = dvds.get(title);
+            
         switch (editChoice) {
-            case 1:
-                editDvd.setReleaseDate(edit);
+            case "1":
+                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+                editDvd.setld(LocalDate.parse(edit, dateFormat));
                 break;
-            case 2:
+            case "2":
                 editDvd.setRating(edit);
                 break;
-            case 3:
+            case "3":
                 editDvd.setDirectorName(edit);
                 break;
-            case 4:
+            case "4":
                 editDvd.setStudio(edit);
                 break;
-            case 5:
+            case "5":
                 editDvd.setUserRating(edit);
-                
         }
+         
         writeRoster();
         return editDvd;
     }
@@ -90,8 +97,8 @@ public class DvDLibraryDaoFileImpl implements DvDLibraryDao {
         String title = dvdTokens[0];
         
         dvd dvdFromFile = new dvd(title);
-        
-        dvdFromFile.setReleaseDate(dvdTokens[1]);
+        LocalDate ld = LocalDate.parse(dvdTokens[1]);
+        dvdFromFile.setld(ld);
         dvdFromFile.setRating(dvdTokens[2]);
         dvdFromFile.setDirectorName(dvdTokens[3]);
         dvdFromFile.setStudio(dvdTokens[4]);
@@ -125,7 +132,7 @@ public class DvDLibraryDaoFileImpl implements DvDLibraryDao {
     
     private String marshallDvd(dvd aDvd) {
         String dvdAsText = aDvd.getTitle() + DELIMITER;
-        dvdAsText += aDvd.getReleaseDate() + DELIMITER;
+        dvdAsText += aDvd.getld() + DELIMITER;
         dvdAsText += aDvd.getRating() + DELIMITER;
         dvdAsText += aDvd.getDirectorName() + DELIMITER;
         dvdAsText += aDvd.getStudio() + DELIMITER;
@@ -153,6 +160,73 @@ public class DvDLibraryDaoFileImpl implements DvDLibraryDao {
         }
         out.close();
     }
+    
+    @Override
+    public boolean titleCheck(String title) throws DvDLibraryDaoException {
+        loadRoster();
+        boolean titleTest = false;
+        if (dvds.containsKey(title)) {
+            titleTest = true;
+        }
+        return titleTest;
+    }
+    
+    @Override
+    public List<dvd> getDvdLastNYears(int years) throws DvDLibraryDaoException {
+        loadRoster();
+        return dvds.values()
+                .stream()
+                .filter(d -> d.getDvdAge() < years)
+                .collect(Collectors.toList());
+    }
+    
+    @Override
+    public List<dvd> getDvdByRating(String rating) throws DvDLibraryDaoException {
+        loadRoster();
+        return dvds.values()
+                .stream()
+                .filter(d -> d.getRating().equalsIgnoreCase(rating))
+                .collect(Collectors.toList());
+    }
+    @Override
+    public Map<String, List<dvd>> getDvdByDirector(String director) throws DvDLibraryDaoException {
+        loadRoster();
+        return dvds.values()
+                .stream()
+                .filter(d -> d.getDirectorName().equalsIgnoreCase(director))
+                .collect(Collectors.groupingBy(dvd::getRating));
+    }
+    
+    @Override
+    public List<dvd> getDvdByStudio(String studio) throws DvDLibraryDaoException {
+        loadRoster();
+        return dvds.values()
+                .stream()
+                .filter(d -> d.getStudio().equalsIgnoreCase(studio))
+                .collect(Collectors.toList());
+    }
+    
+    @Override
+    public double getAverageDvdAge() throws DvDLibraryDaoException {
+        loadRoster();
+        return dvds.values()
+                .stream()
+                .mapToLong(s -> s.getDvdAge())
+                .average()
+                .getAsDouble();
+    }
+    
+    @Override
+    public String getNewestDvd() throws DvDLibraryDaoException {
+        loadRoster();
+        return dvds.values()
+                .stream()
+                .mapToLong(s -> s.getDvdAge())
+                .min()
+                .toString();
+    }
+    
+    
     
     
 }

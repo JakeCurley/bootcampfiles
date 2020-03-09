@@ -5,6 +5,10 @@
  */
 package com.curleyj.dvdlibrary.ui;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 /**
@@ -84,7 +88,7 @@ public class UserIOConsoleImpl implements UserIO{
         boolean valid = false;
         while(!valid) {
             
-            if ((answer <= max) && (answer >= min)){
+            if ((answer < max) && (answer > min)){
                 valid = true;
             }
         }
@@ -121,5 +125,45 @@ public class UserIOConsoleImpl implements UserIO{
         String answer = sc.nextLine();
         
         return answer;
+    }
+    
+    @Override
+    public BigDecimal readBigDecimal(String prompt) {
+        System.out.println(prompt);
+        
+        String answer = sc.nextLine();
+        BigDecimal bAnswer = new BigDecimal(answer);
+        
+        return bAnswer;
+    }
+    
+    @Override
+    public LocalDate readLocalDate(String prompt) {
+        String date = "";
+        boolean runAgain;
+        
+        do {
+            try {
+                System.out.println(prompt);
+                String releaseYear = sc.nextLine();
+
+                System.out.println("Please enter release month");
+                String releaseMonth = sc.nextLine();
+
+                System.out.println("Please enter release day");
+                String releaseDay = sc.nextLine();
+
+                date = releaseMonth + "/" + releaseDay + "/" + releaseYear;
+
+                
+                runAgain = false;
+            }
+            catch (DateTimeParseException e) {
+                runAgain = true;
+            }
+        } while (runAgain);
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        LocalDate ld = LocalDate.parse(date, dateFormat);
+        return ld;
     }
 }

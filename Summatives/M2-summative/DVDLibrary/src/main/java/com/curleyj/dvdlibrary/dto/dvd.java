@@ -5,13 +5,17 @@
  */
 package com.curleyj.dvdlibrary.dto;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Objects;
+
 /**
  *
  * @author Jake
  */
 public class dvd {
     private String title;
-    private String releaseDate;
+    private LocalDate ld;
     private String rating;
     private String directorName;
     private String studio;
@@ -25,12 +29,12 @@ public class dvd {
         return title;
     }
 
-    public String getReleaseDate() {
-        return releaseDate;
+    public LocalDate getld() {
+        return ld;
     }
 
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
+    public void setld(LocalDate ld) {
+        this.ld = ld;
     }
 
     public String getRating() {
@@ -63,6 +67,56 @@ public class dvd {
 
     public void setUserRating(String userRating) {
         this.userRating = userRating;
+    }
+    
+    public long getDvdAge() {
+        Period p = ld.until(LocalDate.now());
+        return p.getYears();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 83 * hash + Objects.hashCode(this.title);
+        hash = 83 * hash + Objects.hashCode(this.ld);
+        hash = 83 * hash + Objects.hashCode(this.rating);
+        hash = 83 * hash + Objects.hashCode(this.directorName);
+        hash = 83 * hash + Objects.hashCode(this.studio);
+        hash = 83 * hash + Objects.hashCode(this.userRating);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final dvd other = (dvd) obj;
+        if (!Objects.equals(this.title, other.title)) {
+            return false;
+        }
+        if (!Objects.equals(this.ld, other.ld)) {
+            return false;
+        }
+        if (!Objects.equals(this.rating, other.rating)) {
+            return false;
+        }
+        if (!Objects.equals(this.directorName, other.directorName)) {
+            return false;
+        }
+        if (!Objects.equals(this.studio, other.studio)) {
+            return false;
+        }
+        if (!Objects.equals(this.userRating, other.userRating)) {
+            return false;
+        }
+        return true;
     }
     
     
