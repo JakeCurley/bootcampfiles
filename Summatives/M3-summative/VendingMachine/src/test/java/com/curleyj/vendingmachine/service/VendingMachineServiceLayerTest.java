@@ -20,6 +20,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -27,12 +29,16 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class VendingMachineServiceLayerTest {
     
+    
     private VendingMachineServiceLayer service;
     
     public VendingMachineServiceLayerTest() {
-        VendingMachineDao dao = new VendingMachineDaoStubImpl();
-        VendingMachineDaoAudit auditDao = new VendingMachineAuditDaoStubImpl();
-        service = new VendingMachineServiceLayerFileImpl(dao, auditDao);
+        //VendingMachineDao dao = new VendingMachineDaoStubImpl();
+        //VendingMachineDaoAudit auditDao = new VendingMachineAuditDaoStubImpl();
+        //service = new VendingMachineServiceLayerFileImpl(dao, auditDao);
+        
+         ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+         service = ctx.getBean("serviceLayer", VendingMachineServiceLayer.class);
     }
     
     @BeforeAll
@@ -55,7 +61,7 @@ public class VendingMachineServiceLayerTest {
      * Test of addMoney method, of class VendingMachineServiceLayer.
      */
     @Test
-    public void testAddMoney() throws Exception {
+    public void testAddMoney() {
     }
 
     /**
@@ -69,14 +75,14 @@ public class VendingMachineServiceLayerTest {
      * Test of displayItems method, of class VendingMachineServiceLayer.
      */
     @Test
-    public void testDisplayItems() throws Exception {
+    public void testDisplayItems() {
     }
 
     /**
      * Test of itemSelection method, of class VendingMachineServiceLayer.
      */
     @Test
-    public void testItemSelection() throws Exception {
+    public void testItemSelection() {
         
         String choice = "6";
         
@@ -85,6 +91,7 @@ public class VendingMachineServiceLayerTest {
             fail("VendingMachineInvalidSelectionException was not thrown.");
         }
         catch (VendingMachineInvalidSelectionException e) {
+            System.out.println("works");
             return;
         }
     }
@@ -93,62 +100,43 @@ public class VendingMachineServiceLayerTest {
      * Test of updateMoney method, of class VendingMachineServiceLayer.
      */
     @Test
-    public void testUpdateMoney() throws Exception {
+    public void testUpdateMoney() throws VendingMachineInsufficientFundsException, VendingMachineDaoException {
+        
+        Item onlyItem = new Item("KitKat");
+        onlyItem.setPrice(new BigDecimal("1.00"));
+        Money money = new Money("money");
+        money.setAmount(new BigDecimal(".50"));
+        
+        try {
+           service.updateMoney(onlyItem, money);
+           fail("Should have thrown exception");
+        }
+        catch (VendingMachineInsufficientFundsException e) {
+            System.out.println("Works");
+            return;
+        }
+        
     }
 
     /**
      * Test of inventoryCheck method, of class VendingMachineServiceLayer.
      */
     @Test
-    public void testInventoryCheck() throws Exception {
+    public void testInventoryCheck() {
     }
 
     /**
      * Test of giveChange method, of class VendingMachineServiceLayer.
      */
     @Test
-    public void testGiveChange() throws Exception {
+    public void testGiveChange() {
     }
 
     /**
      * Test of updateItems method, of class VendingMachineServiceLayer.
      */
     @Test
-    public void testUpdateItems() throws Exception {
-    }
-
-    public class VendingMachineServiceLayerImpl implements VendingMachineServiceLayer {
-
-        public Map<String, Money> addMoney(BigDecimal money) throws VendingMachineDaoException {
-            return null;
-        }
-
-        public Money getMoney() {
-            return null;
-        }
-
-        public ArrayList<Item> displayItems() throws VendingMachineDaoException {
-            return null;
-        }
-
-        public Item itemSelection(String choice) throws VendingMachineInvalidSelectionException {
-            return null;
-        }
-
-        public Money updateMoney(Item choiceItem, Money money) throws VendingMachineInsufficientFundsException, VendingMachineDaoException {
-            return null;
-        }
-
-        public boolean inventoryCheck(Item item) throws VendingMachineNoItemInventoryException {
-            return false;
-        }
-
-        public String giveChange(Money money) throws VendingMachineDaoException {
-            return "";
-        }
-
-        public void updateItems(Item choiceItem) throws VendingMachineDaoException {
-        }
+    public void testUpdateItems() {
     }
     
 }

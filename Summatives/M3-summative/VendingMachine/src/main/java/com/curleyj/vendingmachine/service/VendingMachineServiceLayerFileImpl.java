@@ -15,7 +15,6 @@ import static com.curleyj.vendingmachine.dto.Change.PENNY;
 import static com.curleyj.vendingmachine.dto.Change.QUARTER;
 import com.curleyj.vendingmachine.dto.Item;
 import com.curleyj.vendingmachine.dto.Money;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -65,7 +64,7 @@ public class VendingMachineServiceLayerFileImpl implements VendingMachineService
         BigDecimal broke = new BigDecimal("0");
         BigDecimal price = choiceItem.getPrice();
         BigDecimal currentMoney = money.getAmount();
-        BigDecimal afterPurchase = currentMoney.subtract(price);
+        BigDecimal afterPurchase = currentMoney.subtract(price).setScale(2, RoundingMode.HALF_UP);
         if (afterPurchase.compareTo(broke) < 0) {
             money.setAmount(money.getAmount());
             throw new VendingMachineInsufficientFundsException("Insufficient funds for this transaction.");

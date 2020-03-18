@@ -6,15 +6,8 @@
 package com.curleyj.classroster;
 
 import com.curleyj.classroster.controller.ClassRosterController;
-import com.curleyj.classroster.dao.ClassRosterAuditDao;
-import com.curleyj.classroster.dao.ClassRosterAuditDaoFileImpl;
-import com.curleyj.classroster.dao.ClassRosterDao;
-import com.curleyj.classroster.dao.ClassRosterDaoFileImpl;
-import com.curleyj.classroster.service.ClassRosterServiceLayer;
-import com.curleyj.classroster.service.ClassRosterServiceLayerImpl;
-import com.curleyj.classroster.ui.ClassRosterView;
-import com.curleyj.classroster.ui.UserIO;
-import com.curleyj.classroster.ui.UserIOConsoleImpl;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -22,12 +15,15 @@ import com.curleyj.classroster.ui.UserIOConsoleImpl;
  */
 public class App {
     public static void main(String[] args) {
-        UserIO myIo = new UserIOConsoleImpl();
-        ClassRosterView myView = new ClassRosterView(myIo);
-        ClassRosterDao myDao = new ClassRosterDaoFileImpl();
-        ClassRosterAuditDao myAuditDao = new ClassRosterAuditDaoFileImpl();
-        ClassRosterServiceLayer myService = new ClassRosterServiceLayerImpl(myDao, myAuditDao);
-        ClassRosterController controller = new ClassRosterController(myService, myView);
+        //UserIO myIo = new UserIOConsoleImpl();
+        //ClassRosterView myView = new ClassRosterView(myIo);
+        //ClassRosterDao myDao = new ClassRosterDaoFileImpl();
+        //ClassRosterAuditDao myAuditDao = new ClassRosterAuditDaoFileImpl();
+        //ClassRosterServiceLayer myService = new ClassRosterServiceLayerImpl(myDao, myAuditDao);
+        //ClassRosterController controller = new ClassRosterController(myService, myView);
+        
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        ClassRosterController controller = ctx.getBean("controller", ClassRosterController.class);
         
         controller.run();
     }

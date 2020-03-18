@@ -6,11 +6,8 @@
 package com.curleyj.dvdlibrary;
 
 import com.curleyj.dvdlibrary.controller.DvDLibraryController;
-import com.curleyj.dvdlibrary.dao.DvDLibraryDao;
-import com.curleyj.dvdlibrary.dao.DvDLibraryDaoFileImpl;
-import com.curleyj.dvdlibrary.ui.DvDLibraryView;
-import com.curleyj.dvdlibrary.ui.UserIO;
-import com.curleyj.dvdlibrary.ui.UserIOConsoleImpl;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -18,10 +15,8 @@ import com.curleyj.dvdlibrary.ui.UserIOConsoleImpl;
  */
 public class App {
     public static void main(String[] args) {
-        UserIO myIo = new UserIOConsoleImpl();
-        DvDLibraryView myView = new DvDLibraryView(myIo);
-        DvDLibraryDao myDao = new DvDLibraryDaoFileImpl();
-        DvDLibraryController controller = new DvDLibraryController(myDao, myView);
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        DvDLibraryController controller = ctx.getBean("controller", DvDLibraryController.class);
         controller.run();
     }
 }

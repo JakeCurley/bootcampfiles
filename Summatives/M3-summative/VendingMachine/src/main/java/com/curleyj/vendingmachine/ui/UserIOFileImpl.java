@@ -148,13 +148,13 @@ public class UserIOFileImpl implements UserIO {
                 System.out.println(prompt);
                 String releaseYear = sc.nextLine();
 
-                System.out.println("Please enter release month");
+                System.out.println("Please enter month");
                 String releaseMonth = sc.nextLine();
 
-                System.out.println("Please enter release day");
+                System.out.println("Please enter day");
                 String releaseDay = sc.nextLine();
 
-                date = releaseMonth + "/" + releaseDay + "/" + releaseYear;
+                date = releaseMonth + releaseDay + releaseYear;
 
                 
                 runAgain = false;
@@ -163,7 +163,7 @@ public class UserIOFileImpl implements UserIO {
                 runAgain = true;
             }
         } while (runAgain);
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MMddyyyy");
         LocalDate ld = LocalDate.parse(date, dateFormat);
         return ld;
     }

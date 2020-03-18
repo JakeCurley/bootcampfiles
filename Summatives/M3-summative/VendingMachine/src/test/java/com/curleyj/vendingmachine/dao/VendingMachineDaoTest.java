@@ -7,6 +7,7 @@ package com.curleyj.vendingmachine.dao;
 
 import com.curleyj.vendingmachine.dto.Item;
 import com.curleyj.vendingmachine.dto.Money;
+import com.curleyj.vendingmachine.service.VendingMachineServiceLayer;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Map;
@@ -16,6 +17,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -23,9 +26,11 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class VendingMachineDaoTest {
     
-    VendingMachineDao dao = new VendingMachineDaoFileImpl();
+    VendingMachineDao dao;
     
     public VendingMachineDaoTest() {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        dao = ctx.getBean("dao", VendingMachineDaoFileImpl.class);
     }
     
     @BeforeAll

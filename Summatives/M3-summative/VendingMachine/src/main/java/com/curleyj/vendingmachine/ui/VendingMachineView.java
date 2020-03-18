@@ -72,4 +72,8 @@ public class VendingMachineView {
     public void displayMoneyInvalid() {
         io.print("Please enter a valid number.");
     }
+    
+    public void displayNegativeNumber() {
+        io.print("Please enter a positive value.");
+    }
 }

@@ -20,6 +20,8 @@ import com.curleyj.vendingmachine.ui.UserIO;
 import com.curleyj.vendingmachine.ui.UserIOFileImpl;
 import com.curleyj.vendingmachine.ui.VendingMachineView;
 import java.io.IOException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 
 /**
@@ -29,12 +31,17 @@ import java.io.IOException;
 public class App {
     public static void main(String[] args) throws VendingMachineDaoException, VendingMachineInsufficientFundsException, VendingMachineNoItemInventoryException, VendingMachineInvalidSelectionException, IOException {
         
-        UserIO myIo = new UserIOFileImpl();
-        VendingMachineView myView = new VendingMachineView(myIo);
-        VendingMachineDao myDao = new VendingMachineDaoFileImpl();
-        VendingMachineDaoAudit myAuditDao = new VendingMachineDaoAuditFileImpl();
-        VendingMachineServiceLayer myService = new VendingMachineServiceLayerFileImpl(myDao, myAuditDao);
-        VendingMachineController controller = new VendingMachineController(myService, myView);
+        //UserIO myIo = new UserIOFileImpl();
+        //VendingMachineView myView = new VendingMachineView(myIo);
+        //VendingMachineDao myDao = new VendingMachineDaoFileImpl();
+        //VendingMachineDaoAudit myAuditDao = new VendingMachineDaoAuditFileImpl();
+        //VendingMachineServiceLayer myService = new VendingMachineServiceLayerFileImpl(myDao, myAuditDao);
+        //VendingMachineController controller = new VendingMachineController(myService, myView);
+        //controller.run();
+        
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        VendingMachineController controller = ctx.getBean("controller", VendingMachineController.class);
+        
         controller.run();
     }
 

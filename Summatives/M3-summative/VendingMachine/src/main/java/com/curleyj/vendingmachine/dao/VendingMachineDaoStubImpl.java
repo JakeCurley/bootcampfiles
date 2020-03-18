@@ -10,8 +10,8 @@ import com.curleyj.vendingmachine.dto.Money;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -24,7 +24,8 @@ public class VendingMachineDaoStubImpl implements VendingMachineDao {
     private Map<String, Item> itemList = new HashMap<>();
     private Map<String, Money> mapMoney = new HashMap<>();
     
-    public VendingMachineDaoStubImpl() {
+    @Autowired
+    public VendingMachineDaoStubImpl(Item onlyItem) {
         onlyItem.setName("KitKat");
         onlyItem.setQuantity(3);
         onlyItem.setPrice(new BigDecimal("1.10"));

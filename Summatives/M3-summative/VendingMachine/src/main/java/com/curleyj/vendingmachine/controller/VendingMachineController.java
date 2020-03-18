@@ -64,9 +64,16 @@ public class VendingMachineController {
         do {
             try {
                 BigDecimal mon = view.displayAddMoney();
-                service.addMoney(mon);
-                view.displayAddMoneySuccess(mon);
-                break;
+                if (mon.compareTo(new BigDecimal("0")) >= 0) {
+                    service.addMoney(mon);
+                    view.displayAddMoneySuccess(mon);
+                    break;
+                }
+                else {
+                    view.displayNegativeNumber();
+                    hasErrors = true;
+                }
+                
             }
             catch (NumberFormatException e) {
                 view.displayMoneyInvalid();
