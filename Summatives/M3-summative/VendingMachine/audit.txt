@@ -1,0 +1,36 @@
+2020-03-07T20:44:54.656118600 : $1.50 was added to the vending machine.
+2020-03-07T20:45:15.471111600 : com.curleyj.vendingmachine.dto.Item@58651fd0 was purchased.
+2020-03-07T20:45:15.495689600 : Change dispursed: 2 quarters 0 dimes 1 nickels 0 pennies.
+2020-03-07T20:50:19.430042900 : $2.00 was added to the vending machine.
+2020-03-07T20:50:27.589950300 : PayDay was purchased.
+2020-03-07T20:50:27.637671200 : Change dispursed: 5 quarters 0 dimes 0 nickels 0 pennies.
+2020-03-07T20:50:58.675924100 : $100 was added to the vending machine.
+2020-03-07T20:51:01.773338 : Twix was purchased.
+2020-03-07T20:51:01.776624300 : Change dispursed: 395 quarters 2 dimes 0 nickels 0 pennies.
+2020-03-07T22:16:02.185943100 : $1.50 was added to the vending machine.
+2020-03-07T22:16:06.317247900 : KitKat was purchased.
+2020-03-07T22:16:06.336428500 : Change dispursed: 1 quarters 1 dimes 1 nickels 0 pennies.
+2020-03-07T23:01:02.663003100 : $1.50 was added to the vending machine.
+2020-03-07T23:01:05.508799100 : KitKat was purchased.
+2020-03-07T23:01:05.527309 : Change dispursed: 1 quarters 1 dimes 1 nickels 0 pennies.
+2020-03-07T23:01:09.498203600 : $1.50 was added to the vending machine.
+2020-03-07T23:01:13.795215100 : Twix was purchased.
+2020-03-07T23:01:13.795489900 : Change dispursed: 1 quarters 2 dimes 0 nickels 0 pennies.
+2020-03-07T23:01:18.822074500 : $1 was added to the vending machine.
+2020-03-07T23:04:48.904902900 : $1.00 was added to the vending machine.
+2020-03-07T23:04:57.236849300 : PayDay was purchased.
+2020-03-07T23:04:57.258013900 : Change dispursed: 1 quarters 0 dimes 0 nickels 0 pennies.
+2020-03-08T16:44:52.026989800 : $1.50 was added to the vending machine.
+2020-03-08T16:44:54.600252200 : KitKat was purchased.
+2020-03-08T16:44:54.615212800 : Change dispursed: 1 quarters 1 dimes 1 nickels 0 pennies.
+2020-03-08T16:44:58.829237500 : $1.50 was added to the vending machine.
+2020-03-09T08:47:24.412373700 : $1.50 was added to the vending machine.
+2020-03-09T08:47:28.158442900 : KitKat was purchased.
+2020-03-09T08:47:28.189410500 : Change dispursed: 1 quarters 1 dimes 1 nickels 0 pennies.
+2020-03-09T08:47:31.038035600 : $2.00 was added to the vending machine.
+2020-03-09T08:47:34.658899900 : Twix was purchased.
+2020-03-09T08:47:34.659856 : Change dispursed: 3 quarters 2 dimes 0 nickels 0 pennies.
+2020-03-09T09:08:40.727851500 : $1.50 was added to the vending machine.
+2020-03-09T09:08:44.132496100 : KitKat was purchased.
+2020-03-09T09:08:44.147802700 : Change dispursed: 1 quarters 1 dimes 1 nickels 0 pennies.
+2020-03-09T09:08:49.231266500 : $1.00 was added to the vending machine.

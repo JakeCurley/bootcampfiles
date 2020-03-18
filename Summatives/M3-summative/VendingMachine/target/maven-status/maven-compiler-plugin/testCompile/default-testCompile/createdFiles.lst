@@ -1,2 +1,6 @@
 com\curleyj\vendingmachine\dao\VendingMachineDaoTest.class
 com\curleyj\vendingmachine\service\VendingMachineServiceLayerTest.class
+<<<<<<< HEAD
+=======
+com\curleyj\vendingmachine\service\VendingMachineServiceLayerTest$VendingMachineServiceLayerImpl.class
+>>>>>>> 87e354cb764d741934a05467e024bb7943f564c3
