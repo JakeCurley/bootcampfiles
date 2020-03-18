@@ -1,0 +1,4 @@
+com\curleyj\classroster\dao\ClassRosterPersistenceException.class
+com\curleyj\classroster\dao\ClassRosterAuditDaoFileImpl.class
+com\curleyj\classroster\dto\Student.class
+com\curleyj\classroster\dao\ClassRosterAuditDao.class
