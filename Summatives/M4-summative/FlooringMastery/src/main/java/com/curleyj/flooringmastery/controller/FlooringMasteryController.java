@@ -8,12 +8,15 @@ package com.curleyj.flooringmastery.controller;
 import com.curleyj.flooringmastery.dto.counter;
 import com.curleyj.flooringmastery.dto.order;
 import com.curleyj.flooringmastery.dto.product;
+import com.curleyj.flooringmastery.service.FlooringMasteryInvalidInputException;
+import com.curleyj.flooringmastery.service.FlooringMasteryInvalidOrderException;
 import com.curleyj.flooringmastery.service.FlooringMasteryServiceLayer;
 import com.curleyj.flooringmastery.ui.FlooringMasteryView;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 
 
@@ -80,44 +83,79 @@ public class FlooringMasteryController {
     public void displayOrders() throws Exception {
         
         HashMap<Integer, order> newMap = new HashMap<>();
+        TreeMap<Integer, order> orderedMap = new TreeMap<>();
         LocalDate ld = view.getDate();
         newMap = service.displayOrdersService(ld);
+        orderedMap.putAll(newMap);
         if (newMap.isEmpty()) {
             view.errorDisplayOrders();
         }
         else {
-            view.displayOrders(newMap);
+            view.displayOrders(orderedMap);
         }
     }
     
     public void addOrder() throws Exception {   
         counter currentCount = service.getCounter();
         view.bannerAddOrder();
-        order newOrder = view.addOrder(currentCount.getCount());
-        service.validateStateGetTaxRate(newOrder);
-        service.validateProductGetCosts(newOrder);
-        service.moneyCalculations(newOrder);
-        LocalDate ld = LocalDate.now();
-        String formattedDate = ld.format(DateTimeFormatter.ofPattern("MMddyyyy"));
-        newOrder.setDate(formattedDate);
-        view.displaySingleOrder(newOrder);
-        String choice = view.getConfirmationAdd();
-        if (choice.equalsIgnoreCase("Y")) {
-            service.addToMap(newOrder);
-            service.saveCounter(currentCount);
+        boolean valid = false;
+        while (!valid) {
+            try {
+               order newOrder = view.addOrder(currentCount.getCount()); 
+               service.validateStateGetTaxRate(newOrder);
+               service.validateProductGetCosts(newOrder);
+               service.moneyCalculations(newOrder);
+               LocalDate ld = LocalDate.now();
+               String formattedDate = ld.format(DateTimeFormatter.ofPattern("MMddyyyy"));
+               newOrder.setDate(formattedDate);
+               view.displaySingleOrder(newOrder);
+               String choice = view.getConfirmationAdd();
+               if (choice.equalsIgnoreCase("Y")) {
+                   service.addToMap(newOrder);
+                   currentCount.setCount(currentCount.getCount() + 1);
+                   //service.saveCounter(currentCount);
+               }
+               valid = true;
+            }
+            catch (FlooringMasteryInvalidInputException e) {
+                view.errorMessage(e.getMessage());
+                valid = false;
+            }
         }
     }
     
     public void removeOrder() throws Exception {
         view.bannerRemoveOrder();
         LocalDate ld = view.getDate();
+        boolean again = true;
         int orderNumber = view.getOrderNumber();
-        HashMap<Integer, order> newMap = service.displayOrdersService(ld);
-        order newOrder = service.getOrderNumberByDate(newMap, orderNumber);
-        view.displaySingleOrder(newOrder);
-        String choice = view.getConfirmationRemove();
-        if (choice.equalsIgnoreCase("Y")) {
-            service.removeOrder(newOrder);
+        while (again) {
+            HashMap<Integer, order> newMap = service.displayOrdersService(ld);
+            try {
+                order newOrder = service.getOrderNumberByDate(newMap, orderNumber);
+                view.displaySingleOrder(newOrder);
+                boolean valid = false;
+                while(!valid) {
+                    String choice = view.getConfirmationRemove();
+                    if (choice.equalsIgnoreCase("Y")) {
+                        service.removeOrder(newOrder);
+                        valid = true;
+                    }
+                    else if (!choice.equalsIgnoreCase("N")) {
+                        view.errorConfirmation();
+                        valid = false;
+                    }
+                    else {
+                        valid = true;
+                    }
+                }
+                again = false;
+            }
+            catch (FlooringMasteryInvalidOrderException e) {
+                view.errorMessage(e.getMessage());
+                orderNumber = view.getOrderNumber();
+                again = true;
+            }
         }
     }
     
@@ -129,14 +167,28 @@ public class FlooringMasteryController {
             view.errorDisplayOrders();
         }
         else {
-            int orderNumber = view.getOrderNumber();
-            order newOrder = service.getOrderNumberByDate(newMap, orderNumber);
-            newOrder = view.editOrder(newOrder);
-            service.addToMap(newOrder);
+            boolean again = true;
+            while(again) {
+                try {
+                    int orderNumber = view.getOrderNumber();
+                    order newOrder = service.getOrderNumberByDate(newMap, orderNumber);
+                    newOrder = view.editOrder(newOrder);
+                    service.validateStateGetTaxRate(newOrder);
+                    service.validateProductGetCosts(newOrder);
+                    service.moneyCalculations(newOrder);
+                    service.addToMap(newOrder);
+                    again = false;
+                }
+                catch (FlooringMasteryInvalidOrderException e) {
+                    view.errorMessage(e.getMessage());
+                    again = true;
+                }
+            }
         }
     }
     
     public void saveCurrentWork() throws Exception {
         service.saveCurrentWork();
+        
     }
 }

@@ -74,21 +74,37 @@ public class UserIOFileImpl implements UserIO {
     @Override
     public int readInt(String prompt){
         
+        int answer = 0;
+        boolean valid = false;
         System.out.println(prompt);
-        String sAnswer = sc.nextLine();
-        int answer = Integer.parseInt(sAnswer);
-        
+        while(!valid) {
+            String sAnswer = sc.nextLine();
+            try {
+                answer = Integer.parseInt(sAnswer);
+                valid = true;
+            }
+            catch (NumberFormatException e) {
+                System.out.println("Please enter a valid number.");
+                valid = false;
+            }
+        }
         return answer;
     }
     
     @Override
     public int readInt(String prompt, int min, int max){
-        
-        String sAnswer = sc.nextLine();
-        int answer = Integer.parseInt(sAnswer);
+        int answer = 0;
         boolean valid = false;
         while(!valid) {
-            
+            System.out.println(prompt);
+            String sAnswer = sc.nextLine();
+            try {
+                answer = Integer.parseInt(sAnswer);
+            }
+            catch (NumberFormatException e) {
+                System.out.println("Please enter a number 1-6.");
+                valid = false;
+            }
             if ((answer < max) && (answer > min)){
                 valid = true;
             }
@@ -129,20 +145,33 @@ public class UserIOFileImpl implements UserIO {
     }
     
     @Override
-    public BigDecimal readBigDecimal(String prompt) {
+    public BigDecimal readBigDecimal(String prompt, BigDecimal min) {
         System.out.println(prompt);
-        
-        String answer = sc.nextLine();
-        BigDecimal bAnswer = new BigDecimal(answer).setScale(2, RoundingMode.HALF_UP);
-        
-        return bAnswer;
+        boolean valid = false;
+        while (!valid) {
+                String answer = sc.nextLine();
+                try {
+                    BigDecimal bAnswer = new BigDecimal(answer).setScale(2, RoundingMode.HALF_UP);
+                    if (bAnswer.compareTo(min) < 0) {
+                        valid = false;
+                        System.out.println("Please enter a positive value");
+                    }
+                    else {
+                        System.out.println("Please enter a positive value.");
+                        return bAnswer;
+                    }
+                }
+                catch (NumberFormatException e) {
+                    System.out.println("Please enter a valid number: ");
+                }
+        }
+        return null;
     }
     
     @Override
     public LocalDate readLocalDate(String prompt) {
         String date = "";
         boolean runAgain;
-        
         do {
             try {
                 System.out.println(prompt);
@@ -156,15 +185,16 @@ public class UserIOFileImpl implements UserIO {
 
                 date = releaseMonth +  releaseDay  + releaseYear;
 
-                
-                runAgain = false;
+                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MMddyyyy");
+                LocalDate ld = LocalDate.parse(date, dateFormat);
+                return ld;
             }
             catch (DateTimeParseException e) {
+                System.out.println("Invalid input.  Please enter input in the following format - MM - dd - yyyy");
                 runAgain = true;
             }
         } while (runAgain);
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MMddyyyy");
-        LocalDate ld = LocalDate.parse(date, dateFormat);
-        return ld;
+        
+        return null;
     }
 }

@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 public class ClassRosterDaoTest {
     
     private ClassRosterDao dao = new ClassRosterDaoFileImpl();
-    
+
     public ClassRosterDaoTest() {
     }
 

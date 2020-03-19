@@ -9,6 +9,7 @@ import com.curleyj.flooringmastery.dto.counter;
 import com.curleyj.flooringmastery.dto.order;
 import com.curleyj.flooringmastery.dto.product;
 import com.curleyj.flooringmastery.dto.taxes;
+import com.curleyj.flooringmastery.service.FlooringMasteryInvalidOrderException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  *
@@ -122,19 +124,18 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     }
 
     @Override
-    public void loadOrders() throws Exception {
+    public void loadOrders() throws FlooringMasteryPersistenceException {
         File folder = new File("./resources/");
         File[] listOfFiles = folder.listFiles();
         int max = 0;
         Scanner scanner;
         for (File file : listOfFiles) {
             String date = file.toString().substring(19, 27);
-            System.out.println(date);
             if (file.isFile()) {
                 try {
                     scanner = new Scanner(new BufferedReader(new FileReader(file)));
                 } catch (FileNotFoundException e) {
-                    throw new Exception("-_- Could not load item data into memory.", e);
+                    throw new FlooringMasteryPersistenceException("-_- Could not load item data into memory.", e);
                 }
 
                 String currentLine;
@@ -153,7 +154,6 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     @Override
     public HashMap<Integer, order> loadOrdersByDate(LocalDate ld) {
         String date = ld.format(DateTimeFormatter.ofPattern("MMddyyyy"));
-        System.out.println(date);
         HashMap<Integer, order> newMap = new HashMap<>();
         Set<Integer> orderKey = orderMap.keySet();
         for (Integer k : orderKey) {
@@ -168,12 +168,14 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     }
 
     @Override
-    public HashMap<Integer, order> getMapDao() {
-        return orderMap;
+    public TreeMap<Integer, order> getMapDao() {
+        TreeMap<Integer, order> inOrder = new TreeMap<>(); 
+        inOrder.putAll(orderMap);
+        return inOrder;
     }
 
     @Override
-    public boolean setMode() throws Exception {
+    public boolean setMode() throws FlooringMasteryPersistenceException {
         String ROSTER_FILE = "configuration.txt";
         Scanner scanner;
         boolean training = false;
@@ -181,7 +183,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
         try {
             scanner = new Scanner(new BufferedReader(new FileReader(ROSTER_FILE)));
         } catch (FileNotFoundException e) {
-            throw new Exception("-_- Could not load mode settings into memory.", e);
+            throw new FlooringMasteryPersistenceException("-_- Could not load mode settings into memory.", e);
         }
         String currentLine = scanner.nextLine();
         if (currentLine.equalsIgnoreCase("training")) {
@@ -192,7 +194,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     }
 
     @Override
-    public BigDecimal loadTaxes(String state) throws Exception {
+    public BigDecimal loadTaxes(String state) throws FlooringMasteryPersistenceException {
 
         String ROSTER_FILE = "Taxes.txt";
         Scanner scanner;
@@ -200,7 +202,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
         try {
             scanner = new Scanner(new BufferedReader(new FileReader(ROSTER_FILE)));
         } catch (FileNotFoundException e) {
-            throw new Exception("-_- Could not load taxes data into memory.", e);
+            throw new FlooringMasteryPersistenceException("-_- Could not load taxes data into memory.", e);
         }
 
         String currentLine;
@@ -217,7 +219,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     }
 
     @Override
-    public product loadProducts(String type) throws Exception {
+    public product loadProducts(String type) throws FlooringMasteryPersistenceException {
 
         String ROSTER_FILE = "Products.txt";
         Scanner scanner;
@@ -225,7 +227,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
         try {
             scanner = new Scanner(new BufferedReader(new FileReader(ROSTER_FILE)));
         } catch (FileNotFoundException e) {
-            throw new Exception("-_- Could not load item data into memory.", e);
+            throw new FlooringMasteryPersistenceException("-_- Could not load item data into memory.", e);
         }
 
         String currentLine;
@@ -241,7 +243,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     }
 
     @Override
-    public void addToMap(order newOrder) throws Exception {
+    public void addToMap(order newOrder) throws FlooringMasteryPersistenceException {
         orderMap.put(newOrder.getOrderNumber(), newOrder);
     }
 
@@ -288,7 +290,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     }
 
     @Override
-    public counter loadCounter() throws Exception {
+    public counter loadCounter() throws FlooringMasteryPersistenceException {
 
         String ROSTER_FILE = "counter.txt";
         Scanner scanner;
@@ -296,7 +298,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
         try {
             scanner = new Scanner(new BufferedReader(new FileReader(ROSTER_FILE)));
         } catch (FileNotFoundException e) {
-            throw new Exception("-_- Could not load item data into memory.", e);
+            throw new FlooringMasteryPersistenceException("-_- Could not load item data into memory.", e);
         }
 
         String currentLine;
@@ -310,7 +312,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     }
 
     @Override
-    public void writeCounter(counter counter) throws Exception {
+    public void writeCounter(counter counter) throws FlooringMasteryPersistenceException, Exception {
         PrintWriter out;
         File file = new File("counter.txt");
         out = new PrintWriter(new FileWriter(file));
@@ -323,7 +325,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     }
 
     @Override
-    public void writeLibrary() throws Exception {
+    public void writeLibrary() throws FlooringMasteryPersistenceException, Exception {
 
         PrintWriter out;
 
@@ -346,8 +348,12 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     }
 
     @Override
-    public order getOrderNumberByDate(HashMap<Integer, order> newMap, int orderNumber) {
+    public order getOrderNumberByDate(HashMap<Integer, order> newMap, int orderNumber) throws FlooringMasteryInvalidOrderException {
+        if (newMap.get(orderNumber) == null) {
+            throw new FlooringMasteryInvalidOrderException("That order number does not exsist.");
+        }
         return newMap.get(orderNumber);
+
     }
 
     @Override

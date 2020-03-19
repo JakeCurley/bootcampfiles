@@ -6,6 +6,7 @@
 package com.curleyj.flooringmastery.service;
 
 import com.curleyj.flooringmastery.dao.FlooringMasteryDao;
+import com.curleyj.flooringmastery.dao.FlooringMasteryPersistenceException;
 import com.curleyj.flooringmastery.dto.counter;
 import com.curleyj.flooringmastery.dto.order;
 import com.curleyj.flooringmastery.dto.product;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 /**
  *
@@ -21,34 +23,67 @@ import java.util.HashMap;
 public class FlooringMasteryServiceLayerFileImpl implements FlooringMasteryServiceLayer {
 
     FlooringMasteryDao dao;
+    int counter;
 
     public FlooringMasteryServiceLayerFileImpl(FlooringMasteryDao dao) {
         this.dao = dao;
     }
 
     @Override
-    public void loadOrders() throws Exception {
+    public void loadOrders() throws FlooringMasteryPersistenceException {
         dao.loadOrders();
     }
 
     @Override
-    public HashMap<Integer, order> displayOrdersService(LocalDate ld) throws Exception {
+    public HashMap<Integer, order> displayOrdersService(LocalDate ld) throws FlooringMasteryPersistenceException {
         return dao.loadOrdersByDate(ld);
     }
 
     @Override
-    public void validateStateGetTaxRate(order newOrder) throws Exception {
+    public void validateStateGetTaxRate(order newOrder) throws FlooringMasteryPersistenceException {
         String state = newOrder.getState();
-        BigDecimal taxRate = dao.loadTaxes(state);
-        newOrder.setTaxRate(taxRate);
+        if (state.equalsIgnoreCase("mi")) {
+            BigDecimal taxRate = dao.loadTaxes("MI");
+            newOrder.setTaxRate(taxRate);
+        }
+        if (state.equalsIgnoreCase("oh")) {
+            BigDecimal taxRate = dao.loadTaxes("OH");
+            newOrder.setTaxRate(taxRate);
+        }
+        if (state.equalsIgnoreCase("pa")) {
+            BigDecimal taxRate = dao.loadTaxes("PA");
+            newOrder.setTaxRate(taxRate);
+        }
+        if (state.equalsIgnoreCase("in")) {
+            BigDecimal taxRate = dao.loadTaxes("IN");
+            newOrder.setTaxRate(taxRate);
+        }
+
     }
 
     @Override
-    public void validateProductGetCosts(order newOrder) throws Exception {
+    public void validateProductGetCosts(order newOrder) throws FlooringMasteryPersistenceException {
         String type = newOrder.getProductType();
-        product newProduct = dao.loadProducts(type);
-        newOrder.setCpsq(newProduct.getCpsf());
-        newOrder.setLaborCPSQ(newProduct.getLaborCPSF());
+        if (type.equalsIgnoreCase("wood")) {
+            product newProduct = dao.loadProducts("Wood");
+            newOrder.setCpsq(newProduct.getCpsf());
+            newOrder.setLaborCPSQ(newProduct.getLaborCPSF());
+        }
+        else if (type.equalsIgnoreCase("carpet")) {
+            product newProduct = dao.loadProducts("Carpet");
+            newOrder.setCpsq(newProduct.getCpsf());
+            newOrder.setLaborCPSQ(newProduct.getLaborCPSF());
+        }
+        else if (type.equalsIgnoreCase("tile")) {
+            product newProduct = dao.loadProducts("Tile");
+            newOrder.setCpsq(newProduct.getCpsf());
+            newOrder.setLaborCPSQ(newProduct.getLaborCPSF());
+        }
+        else if (type.equalsIgnoreCase("laminate")) {
+            product newProduct = dao.loadProducts("Laminate");
+            newOrder.setCpsq(newProduct.getCpsf());
+            newOrder.setLaborCPSQ(newProduct.getLaborCPSF());
+        }
     }
 
     @Override
@@ -60,42 +95,47 @@ public class FlooringMasteryServiceLayerFileImpl implements FlooringMasteryServi
     }
 
     @Override
-    public void addToMap(order newOrder) throws Exception {
+    public void addToMap(order newOrder) throws FlooringMasteryPersistenceException {
         dao.addToMap(newOrder);
     }
 
     @Override
-    public HashMap<Integer, order> getMap() {
+    public TreeMap<Integer, order> getMap() {
         return dao.getMapDao();
     }
 
     @Override
-    public order getOrderNumberByDate(HashMap<Integer, order> newMap, int orderNumber) {
+    public order getOrderNumberByDate(HashMap<Integer, order> newMap, int orderNumber) throws FlooringMasteryInvalidOrderException {
         return dao.getOrderNumberByDate(newMap, orderNumber);
     }
 
     @Override
     public void removeOrder(order newOrder) {
-        dao.removeOrder(newOrder);
+        try {
+            dao.removeOrder(newOrder);
+        }
+        catch(NumberFormatException e) {
+            System.out.println("test");
+        }
     }
 
     @Override
-    public void saveCurrentWork() throws Exception {
+    public void saveCurrentWork() throws FlooringMasteryPersistenceException, Exception {
         dao.writeLibrary();
     }
 
     @Override
-    public counter getCounter() throws Exception {
+    public counter getCounter() throws FlooringMasteryPersistenceException {
         return dao.loadCounter();
     }
 
     @Override
-    public void saveCounter(counter currentCount) throws Exception {
+    public void saveCounter(counter currentCount) throws FlooringMasteryPersistenceException, Exception {
         dao.writeCounter(currentCount);
     }
 
     @Override
-    public boolean getMode() throws Exception {
+    public boolean getMode() throws FlooringMasteryPersistenceException, Exception {
         return dao.setMode();
     }
 }

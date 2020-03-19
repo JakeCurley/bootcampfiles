@@ -5,13 +5,16 @@
  */
 package com.curleyj.flooringmastery.dao;
 
+import com.curleyj.flooringmastery.dao.FlooringMasteryPersistenceException;
 import com.curleyj.flooringmastery.dto.counter;
 import com.curleyj.flooringmastery.dto.order;
 import com.curleyj.flooringmastery.dto.product;
 import com.curleyj.flooringmastery.dto.taxes;
+import com.curleyj.flooringmastery.service.FlooringMasteryInvalidOrderException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 /**
  *
@@ -19,16 +22,16 @@ import java.util.HashMap;
  */
 public interface FlooringMasteryDao {
     
-    void loadOrders() throws Exception;
+    void loadOrders() throws FlooringMasteryPersistenceException;
     HashMap<Integer, order> loadOrdersByDate(LocalDate ld);
-    HashMap<Integer, order> getMapDao();
-    BigDecimal loadTaxes(String state) throws Exception;
-    product loadProducts(String type) throws Exception;
-    void addToMap(order newOrder) throws Exception;
-    void writeLibrary() throws Exception;
-    order getOrderNumberByDate(HashMap<Integer, order> newMap, int orderNumber);
+    TreeMap<Integer, order> getMapDao();
+    BigDecimal loadTaxes(String state) throws FlooringMasteryPersistenceException;
+    product loadProducts(String type) throws FlooringMasteryPersistenceException;
+    void addToMap(order newOrder) throws FlooringMasteryPersistenceException;
+    void writeLibrary() throws FlooringMasteryPersistenceException, Exception;
+    order getOrderNumberByDate(HashMap<Integer, order> newMap, int orderNumber) throws FlooringMasteryInvalidOrderException;
     void removeOrder(order newOrder);
-    counter loadCounter() throws Exception;
-    void writeCounter(counter counter) throws Exception;
+    counter loadCounter() throws FlooringMasteryPersistenceException;
+    void writeCounter(counter counter) throws FlooringMasteryPersistenceException, Exception;
     boolean setMode() throws Exception ;
 }
