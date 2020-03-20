@@ -106,8 +106,8 @@ public class FlooringMasteryServiceLayerFileImpl implements FlooringMasteryServi
     }
 
     @Override
-    public order getOrderNumberByDate(HashMap<Integer, order> newMap, int orderNumber) throws FlooringMasteryInvalidOrderException {
-        return dao.getOrderNumberByDate(newMap, orderNumber);
+    public order validateOrderNumber(HashMap<Integer, order> newMap, int orderNumber) throws FlooringMasteryInvalidOrderException {
+        return dao.validateOrderNumber(newMap, orderNumber);
     }
 
     @Override

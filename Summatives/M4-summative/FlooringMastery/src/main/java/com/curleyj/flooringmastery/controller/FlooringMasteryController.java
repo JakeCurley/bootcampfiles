@@ -129,7 +129,7 @@ public class FlooringMasteryController {
         while (again) {
             HashMap<Integer, order> newMap = service.displayOrdersService(ld);
             try {
-                order newOrder = service.getOrderNumberByDate(newMap, orderNumber);
+                order newOrder = service.validateOrderNumber(newMap, orderNumber);
                 view.displaySingleOrder(newOrder);
                 boolean valid = false;
                 while (!valid) {
@@ -164,7 +164,7 @@ public class FlooringMasteryController {
             while (again) {
                 try {
                     int orderNumber = view.getOrderNumber();
-                    order newOrder = service.getOrderNumberByDate(newMap, orderNumber);
+                    order newOrder = service.validateOrderNumber(newMap, orderNumber);
                     newOrder = view.editOrder(newOrder);
                     service.validateStateGetTaxRate(newOrder);
                     service.validateProductGetCosts(newOrder);

@@ -27,7 +27,7 @@ public interface FlooringMasteryServiceLayer {
    void moneyCalculations(order newOrder);
    TreeMap<Integer, order> getMap();
    void addToMap(order newOrder);
-   order getOrderNumberByDate(HashMap<Integer, order> newMap, int orderNumber) throws FlooringMasteryInvalidOrderException;
+   order validateOrderNumber(HashMap<Integer, order> newMap, int orderNumber) throws FlooringMasteryInvalidOrderException;
    void removeOrder(order newOrder);
    void writeOrders() throws FlooringMasteryPersistenceException;
    void writeCounter(counter currentCount) throws FlooringMasteryPersistenceException;

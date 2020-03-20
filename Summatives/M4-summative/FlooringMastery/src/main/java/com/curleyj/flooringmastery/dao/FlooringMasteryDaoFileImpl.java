@@ -360,7 +360,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     }
 
     @Override
-    public order getOrderNumberByDate(HashMap<Integer, order> newMap, int orderNumber) throws FlooringMasteryInvalidOrderException {
+    public order validateOrderNumber(HashMap<Integer, order> newMap, int orderNumber) throws FlooringMasteryInvalidOrderException {
         if (newMap.get(orderNumber) == null) {
             throw new FlooringMasteryInvalidOrderException("That order number does not exsist.");
         }

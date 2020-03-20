@@ -188,6 +188,7 @@ public class FlooringMasteryView {
             try {
                 BigDecimal bArea = new BigDecimal(area).setScale(2, RoundingMode.HALF_UP);
                 order.setArea(bArea);
+                break;
 
             } catch (NumberFormatException e) {
                 io.print("Please enter a number: ");

@@ -26,15 +26,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
  * @author Jake
  */
-/*public class FlooringMasteryDaoTest {
+public class FlooringMasteryDaoTest {
     
-    FlooringMasteryDao dao = new FlooringMasteryDaoFileImpl();
+    FlooringMasteryDao dao;
     public FlooringMasteryDaoTest() {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        dao = ctx.getBean("dao", FlooringMasteryDao.class);
     }
     
     @BeforeAll
@@ -63,7 +67,7 @@ import static org.junit.jupiter.api.Assertions.*;
         newOrder.setLaborCost(new BigDecimal("142.50"));
         newOrder.setTax(new BigDecimal("17.82"));
         newOrder.setTotal(new BigDecimal("314.82"));
-        newOrder.setDate("03172020");
+        newOrder.setDate("03182020");
         dao.addToMap(newOrder);
         
         order newOrder2 = new order(2);
@@ -78,7 +82,7 @@ import static org.junit.jupiter.api.Assertions.*;
         newOrder2.setTax(new BigDecimal("8.16"));
         newOrder2.setTotal(new BigDecimal("138.66"));
         newOrder2.setArea(new BigDecimal("30.00"));
-        newOrder2.setDate("03182020");
+        newOrder2.setDate("03192020");
         dao.addToMap(newOrder2);
         
         dao.writeOrders();
@@ -100,7 +104,7 @@ import static org.junit.jupiter.api.Assertions.*;
     /**
      * Test of loadOrders method, of class FlooringMasteryDao.
      */
-   /* @Test
+    @Test
     public void testLoadOrders() throws Exception {
         setUp();
         TreeMap<Integer, order> testMap = new TreeMap<>();
@@ -115,10 +119,10 @@ import static org.junit.jupiter.api.Assertions.*;
     /**
      * Test of loadOrdersByDate method, of class FlooringMasteryDao.
      */
-   /* @Test
+    @Test
     public void testLoadOrdersByDate1() throws Exception {
         setUp();
-        String date = "03172020";
+        String date = "03182020";
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MMddyyyy");
         LocalDate ld = LocalDate.parse(date, dateFormat);
         
@@ -134,7 +138,7 @@ import static org.junit.jupiter.api.Assertions.*;
     @Test
     public void testLoadOrdersByDate2() throws Exception {
         setUp();
-        String date = "03182020";
+        String date = "03192020";
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MMddyyyy");
         LocalDate ld = LocalDate.parse(date, dateFormat);
         
@@ -150,7 +154,7 @@ import static org.junit.jupiter.api.Assertions.*;
     /**
      * Test of getMapDao method, of class FlooringMasteryDao.
      */
-   /*@Test
+    @Test
     public void testGetMapDao() {
         //Don't need to test -> working in loadOrders() test
     }
@@ -158,7 +162,7 @@ import static org.junit.jupiter.api.Assertions.*;
     /**
      * Test of loadTaxes method, of class FlooringMasteryDao.
      */
-    /*@Test
+    @Test
     public void testLoadTaxes() throws Exception {
         setUp();
         try {
@@ -184,7 +188,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * Test of loadProducts method, of class FlooringMasteryDao.
      * @throws java.lang.Exception
      */
-    /*@Test
+    @Test
     public void testLoadProducts() throws Exception {
         setUp();
         product newProduct = dao.loadProducts("Wood");
@@ -200,7 +204,7 @@ import static org.junit.jupiter.api.Assertions.*;
     /**
      * Test of addToMap method, of class FlooringMasteryDao.
      */
-   /* @Test
+    @Test
     public void testAddToMap() throws Exception {
         setUp();
         TreeMap<Integer, order> newMap = new TreeMap<>();
@@ -277,7 +281,7 @@ import static org.junit.jupiter.api.Assertions.*;
     /**
      * Test of getOrderNumberByDate method, of class FlooringMasteryDao.
      */
-    /*@Test
+    @Test
     public void testGetOrderNumberByDate() throws Exception {
         setUp();
         HashMap<Integer, order> newMap = new HashMap<>();
@@ -285,9 +289,9 @@ import static org.junit.jupiter.api.Assertions.*;
         
         testMap = dao.getMapDao();
         newMap.putAll(testMap);
-        order order = dao.getOrderNumberByDate(newMap, 1);
+        order order = dao.validateOrderNumber(newMap, 1);
         try {
-            order order1 = dao.getOrderNumberByDate(newMap, 5);
+            order order1 = dao.validateOrderNumber(newMap, 500);
             fail("Should have thrown exception.");
         }
         catch (FlooringMasteryInvalidOrderException e) {
@@ -302,7 +306,7 @@ import static org.junit.jupiter.api.Assertions.*;
     /**
      * Test of removeOrder method, of class FlooringMasteryDao.
      */
-    /*@Test
+    @Test
     public void testRemoveOrder() {
         //Already works in previous tests
     }
@@ -310,7 +314,7 @@ import static org.junit.jupiter.api.Assertions.*;
     /**
      * Test of loadCounter method, of class FlooringMasteryDao.
      */
-  /* @Test
+   @Test
     public void testLoadCounter() throws Exception {
         setUp();
         String ROSTER_FILE = "test";
@@ -338,7 +342,7 @@ import static org.junit.jupiter.api.Assertions.*;
     /**
      * Test of writeCounter method, of class FlooringMasteryDao.
      */
-    /*@Test
+    @Test
     public void testWriteCounter() throws Exception {
         setUp();
         //store value so it can be set back after check
@@ -364,7 +368,7 @@ import static org.junit.jupiter.api.Assertions.*;
     /**
      * Test of setMode method, of class FlooringMasteryDao.
      */
-   /* @Test
+    @Test
     public void testSetMode() throws Exception {
         setUp();
         
@@ -376,4 +380,4 @@ import static org.junit.jupiter.api.Assertions.*;
         
     }
     
-}*/
+}

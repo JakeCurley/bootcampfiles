@@ -29,7 +29,7 @@ public interface FlooringMasteryDao {
     product loadProducts(String type) throws FlooringMasteryPersistenceException;
     void addToMap(order newOrder);
     void writeOrders() throws FlooringMasteryPersistenceException;
-    order getOrderNumberByDate(HashMap<Integer, order> newMap, int orderNumber) throws FlooringMasteryInvalidOrderException;
+    order validateOrderNumber(HashMap<Integer, order> newMap, int orderNumber) throws FlooringMasteryInvalidOrderException;
     void removeOrder(order newOrder);
     void loadCounter() throws FlooringMasteryPersistenceException;
     void writeCounter(counter counter) throws FlooringMasteryPersistenceException;

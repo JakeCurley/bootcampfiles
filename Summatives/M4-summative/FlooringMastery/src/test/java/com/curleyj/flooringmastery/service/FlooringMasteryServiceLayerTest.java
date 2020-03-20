@@ -23,6 +23,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -30,10 +32,11 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class FlooringMasteryServiceLayerTest {
     
-    FlooringMasteryDao dao = new FlooringMasteryDaoStubImpl();
-    FlooringMasteryServiceLayer service = new FlooringMasteryServiceLayerFileImpl(dao);
+    private FlooringMasteryServiceLayer service;
     
     public FlooringMasteryServiceLayerTest() {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        service = ctx.getBean("serviceLayer", FlooringMasteryServiceLayer.class);
     }
     
     @BeforeAll
@@ -65,21 +68,6 @@ public class FlooringMasteryServiceLayerTest {
      */
     @Test
     public void testDisplayOrdersService() throws Exception {
-        String date = "03172020";
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MMddyyyy");
-        LocalDate ld = LocalDate.parse(date, dateFormat);
-        
-        HashMap<Integer, order> newMap = new HashMap<>();
-        newMap = dao.loadOrdersByDate(ld);
-        
-        if (newMap.get(1).getCustomerName().equals("Curley")) {
-            return;
-        }
-        if (newMap.get(1).getCustomerName().equals("Curley2")) {
-            fail("Should not get this order.");
-        }
-        
-        
     }
 
     /**
@@ -87,13 +75,16 @@ public class FlooringMasteryServiceLayerTest {
      */
     @Test
     public void testValidateStateGetTaxRate() throws Exception {
-        String state = "OH";
-        BigDecimal taxRate = dao.loadTaxes(state);
-        assertEquals(taxRate, new BigDecimal("6.25"));
+        TreeMap<Integer, order> newMap = new TreeMap<>();
+        newMap = service.getMap();
         
-        String state2 = "IN";
-        BigDecimal taxRate2 = dao.loadTaxes(state2);
-        assertEquals(taxRate2, new BigDecimal("6.00"));
+        order order1 = newMap.get(1);
+        order1.setState("OH");
+        service.validateStateGetTaxRate(newMap.get(1));
+        
+        newMap = service.getMap();
+        assertEquals(newMap.get(1).getTaxRate(), new BigDecimal("6.25"));
+                
     }
 
     /**
@@ -102,11 +93,16 @@ public class FlooringMasteryServiceLayerTest {
     @Test
     public void testValidateProductGetCosts() throws Exception {
         String type = "wood";
-        product newProduct = dao.loadProducts(type);
-        
-        assertEquals(newProduct.getCpsf(),new BigDecimal("5.15"));
-        assertEquals(newProduct.getLaborCPSF(), new BigDecimal("4.75"));
-
+        product newProduct = new product(type);
+       
+        TreeMap<Integer, order> newMap = new TreeMap<>();
+        newMap = service.getMap();
+        order order1 = newMap.get(1);
+        order1.setProductType(newProduct.getName());
+        service.validateProductGetCosts(order1);
+        newMap = service.getMap();
+        assertEquals(newMap.get(1).getCpsq(),new BigDecimal("5.15"));
+        assertEquals(newMap.get(1).getLaborCPSQ(), new BigDecimal("4.75"));
     }
 
     /**
@@ -140,9 +136,10 @@ public class FlooringMasteryServiceLayerTest {
     @Test
     public void testGetMap() {
         TreeMap<Integer, order> newMap = new TreeMap<>();
-        newMap = dao.getMapDao();
+        newMap = service.getMap();
         
         assertEquals(newMap.get(1).getCustomerName(), "Curley");
+        assertNull(newMap.get(500));
     }
 
     /**
@@ -151,11 +148,11 @@ public class FlooringMasteryServiceLayerTest {
     @Test
     public void testAddToMap() throws Exception {
         order order = new order(3);
-        order.setDate("03172020");
-        dao.addToMap(order);
+        //order.setDate("03172020");
+        service.addToMap(order);
         
         TreeMap<Integer,order> newMap = new TreeMap<>();
-        newMap = dao.getMapDao();
+        newMap = service.getMap();
         
         assertEquals(newMap.get(3), order);
         
@@ -170,22 +167,17 @@ public class FlooringMasteryServiceLayerTest {
         
         order order = new order(1);
         newMap.put(order.getOrderNumber(), order);
-        
-        try {
-            order = dao.getOrderNumberByDate(newMap, 2);
+            try {
+            order = service.validateOrderNumber(newMap, 500);
             fail("should have thrown exception");
-        }
-        catch (FlooringMasteryInvalidOrderException e ) {
-            return;
-        }
-        
-        try {
-            dao.getOrderNumberByDate(newMap, 1);
-            return;
-        }
-        catch (FlooringMasteryInvalidOrderException e) {
-            fail("That order number should have been in the map.");
-        }
+            }
+            catch(FlooringMasteryInvalidOrderException e) {
+                return;
+            }
+
+            order = service.validateOrderNumber(newMap, 1);
+            assertNotNull(order);
+
     }
 
     /**
@@ -195,18 +187,16 @@ public class FlooringMasteryServiceLayerTest {
     public void testRemoveOrder() throws FlooringMasteryPersistenceException {
         order order = new order(3);
         order.setDate("03172020");
-        dao.addToMap(order);
+        service.addToMap(order);
         TreeMap<Integer, order> newMap = new TreeMap<>();
         
-        newMap = dao.getMapDao();
+        newMap = service.getMap();
         assertEquals(newMap.get(3), order);
         
-        dao.removeOrder(order);
+        service.removeOrder(order);
         
-        newMap = dao.getMapDao();
-        assertEquals(newMap.get(3), null);
-        assertEquals(newMap.get(2).getOrderNumber(), 2);
-        
+        newMap = service.getMap();
+        assertEquals(newMap.get(3), null);   
     }
 
     /**
@@ -241,7 +231,7 @@ public class FlooringMasteryServiceLayerTest {
     @Test
     public void testGetMode() throws Exception {
         
-        assertTrue(dao.setMode());
+        assertFalse(service.getMode());
         
     }
 }
