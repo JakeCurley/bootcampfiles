@@ -33,6 +33,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     HashMap<String, taxes> taxesMap = new HashMap<>();
     HashMap<Integer, order> orderMap = new HashMap<>();
     HashMap<String, product> productsMap = new HashMap<>();
+    HashMap<String, counter> counterMap = new HashMap<>();
     public static final String DELIMITER = ",";
 
     private order unmarshallOrder(String orderAsText, String date) {
@@ -169,7 +170,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
 
     @Override
     public TreeMap<Integer, order> getMapDao() {
-        TreeMap<Integer, order> inOrder = new TreeMap<>(); 
+        TreeMap<Integer, order> inOrder = new TreeMap<>();
         inOrder.putAll(orderMap);
         return inOrder;
     }
@@ -271,7 +272,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
         String name = orderTokens[0];
 
         counter counterFromFile = new counter(name);
-
+        counterFromFile.setName(name);
         String stringCount = orderTokens[1];
         int count = Integer.parseInt(stringCount);
 
@@ -290,7 +291,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     }
 
     @Override
-    public counter loadCounter() throws FlooringMasteryPersistenceException {
+    public void loadCounter() throws FlooringMasteryPersistenceException {
 
         String ROSTER_FILE = "counter.txt";
         Scanner scanner;
@@ -306,44 +307,49 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
 
         currentLine = scanner.nextLine();
         currentCounter = unmarshallCounter(currentLine);
+        counterMap.put(currentCounter.getName(), currentCounter);
         scanner.close();
-
-        return currentCounter;
     }
 
     @Override
     public void writeCounter(counter counter) throws FlooringMasteryPersistenceException, Exception {
-        PrintWriter out;
-        File file = new File("counter.txt");
-        out = new PrintWriter(new FileWriter(file));
-        counter.setCount(counter.getCount() + 1);
-        String counterAsText;
-        counterAsText = marshallCounter(counter);
-        out.println(counterAsText);
-        out.flush();
-        out.close();
+        try {
+            PrintWriter out;
+            File file = new File("counter.txt");
+            out = new PrintWriter(new FileWriter(file, false));
+            counter.setCount(counter.getCount());
+            String counterAsText;
+            counterAsText = marshallCounter(counter);
+            out.println(counterAsText);
+            out.flush();
+            out.close();
+        }
+        catch (Exception e) {
+            throw new FlooringMasteryPersistenceException("File not found.");
+        }
     }
 
     @Override
     public void writeLibrary() throws FlooringMasteryPersistenceException, Exception {
 
-        PrintWriter out;
-
-        Set<Integer> orderKey = orderMap.keySet();
-
-        for (Integer k : orderKey) {
-            String date = orderMap.get(k).getDate();
-            File file = new File("./resources/Orders_" + date + ".txt");
-            out = new PrintWriter(new FileWriter(file, false));
-            for (Integer j : orderKey) {
-                if (orderMap.get(j).getDate().equals(date)) {
-                    String orderAsText;
-                    orderAsText = marshallItem(orderMap.get(j));
-                    out.println(orderAsText);
-                    out.flush();
+        try {
+            PrintWriter out;
+            Set<Integer> orderKey = orderMap.keySet();
+            for (Integer k : orderKey) {
+                String date = orderMap.get(k).getDate();
+                File file = new File("./resources/Orders_" + date + ".txt");
+                out = new PrintWriter(new FileWriter(file, false));
+                for (Integer j : orderKey) {
+                    if (orderMap.get(j).getDate().equals(date)) {
+                        String orderAsText;
+                        orderAsText = marshallItem(orderMap.get(j));
+                        out.println(orderAsText);
+                        out.flush();
+                    }
                 }
             }
-
+        } catch (NullPointerException e) {
+            throw new FlooringMasteryPersistenceException("Could not save file.");
         }
     }
 
@@ -359,5 +365,15 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     @Override
     public void removeOrder(order newOrder) {
         orderMap.remove(newOrder.getOrderNumber());
+    }
+
+    @Override
+    public void addToCounter(counter currentCount) {
+        counterMap.put(currentCount.getName(), currentCount);
+    }
+
+    @Override
+    public counter getCurrentCounter() {
+        return counterMap.get("counter");
     }
 }

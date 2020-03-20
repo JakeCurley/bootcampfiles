@@ -7,12 +7,10 @@ package com.curleyj.flooringmastery.controller;
 
 import com.curleyj.flooringmastery.dto.counter;
 import com.curleyj.flooringmastery.dto.order;
-import com.curleyj.flooringmastery.dto.product;
 import com.curleyj.flooringmastery.service.FlooringMasteryInvalidInputException;
 import com.curleyj.flooringmastery.service.FlooringMasteryInvalidOrderException;
 import com.curleyj.flooringmastery.service.FlooringMasteryServiceLayer;
 import com.curleyj.flooringmastery.ui.FlooringMasteryView;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -38,6 +36,7 @@ public class FlooringMasteryController {
     public void run() throws Exception {
         boolean keepGoing = true;
         service.loadOrders();
+        service.getCounter();
         boolean mode = service.getMode();
         do {
             int choice = view.getChoiceAndPrintMenu();
@@ -68,6 +67,8 @@ public class FlooringMasteryController {
                 case 6:
                     if (!mode) {
                         saveCurrentWork();
+                        counter counter = service.getCurrentCounter();
+                        service.saveCounter(counter);
                         view.exitDisplaySaved();
                     }
                     else {
@@ -96,7 +97,7 @@ public class FlooringMasteryController {
     }
     
     public void addOrder() throws Exception {   
-        counter currentCount = service.getCounter();
+        counter currentCount = service.getCurrentCounter();
         view.bannerAddOrder();
         boolean valid = false;
         while (!valid) {
@@ -113,7 +114,7 @@ public class FlooringMasteryController {
                if (choice.equalsIgnoreCase("Y")) {
                    service.addToMap(newOrder);
                    currentCount.setCount(currentCount.getCount() + 1);
-                   //service.saveCounter(currentCount);
+                   service.addToCounter(currentCount);
                }
                valid = true;
             }
@@ -189,6 +190,7 @@ public class FlooringMasteryController {
     
     public void saveCurrentWork() throws Exception {
         service.saveCurrentWork();
-        
+        counter counter = service.getCurrentCounter();
+        service.saveCounter(counter);
     }
 }

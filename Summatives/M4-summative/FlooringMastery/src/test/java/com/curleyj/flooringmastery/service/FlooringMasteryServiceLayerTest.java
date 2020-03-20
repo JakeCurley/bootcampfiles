@@ -220,7 +220,7 @@ public class FlooringMasteryServiceLayerTest {
     /**
      * Test of getCounter method, of class FlooringMasteryServiceLayer.
      */
-    @Test
+   /* @Test
     public void testGetCounter() throws Exception {
         counter counter = dao.loadCounter();
         

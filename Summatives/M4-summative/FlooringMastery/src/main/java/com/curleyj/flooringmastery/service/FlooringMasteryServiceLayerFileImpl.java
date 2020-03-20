@@ -125,8 +125,8 @@ public class FlooringMasteryServiceLayerFileImpl implements FlooringMasteryServi
     }
 
     @Override
-    public counter getCounter() throws FlooringMasteryPersistenceException {
-        return dao.loadCounter();
+    public void getCounter() throws FlooringMasteryPersistenceException {
+        dao.loadCounter();
     }
 
     @Override
@@ -137,5 +137,15 @@ public class FlooringMasteryServiceLayerFileImpl implements FlooringMasteryServi
     @Override
     public boolean getMode() throws FlooringMasteryPersistenceException, Exception {
         return dao.setMode();
+    }
+    
+    @Override
+    public void addToCounter(counter currentCount) {
+        dao.addToCounter(currentCount);
+    }
+    
+    @Override
+    public counter getCurrentCounter() {
+        return dao.getCurrentCounter();
     }
 }

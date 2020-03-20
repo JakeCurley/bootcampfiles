@@ -29,7 +29,9 @@ public interface FlooringMasteryServiceLayer {
    order getOrderNumberByDate(HashMap<Integer, order> newMap, int orderNumber) throws FlooringMasteryInvalidOrderException;
    void removeOrder(order newOrder);
    void saveCurrentWork() throws FlooringMasteryPersistenceException, Exception;
-   counter getCounter() throws FlooringMasteryPersistenceException, Exception;
+   void getCounter() throws FlooringMasteryPersistenceException, Exception;
    void saveCounter(counter currentCount) throws FlooringMasteryPersistenceException, Exception;
    boolean getMode() throws FlooringMasteryPersistenceException, Exception;
+   void addToCounter(counter currentCount);
+   counter getCurrentCounter();
 }

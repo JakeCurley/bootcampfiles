@@ -5,11 +5,10 @@
  */
 package com.curleyj.flooringmastery.dao;
 
-import com.curleyj.flooringmastery.dao.FlooringMasteryPersistenceException;
+
 import com.curleyj.flooringmastery.dto.counter;
 import com.curleyj.flooringmastery.dto.order;
 import com.curleyj.flooringmastery.dto.product;
-import com.curleyj.flooringmastery.dto.taxes;
 import com.curleyj.flooringmastery.service.FlooringMasteryInvalidOrderException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -31,7 +30,9 @@ public interface FlooringMasteryDao {
     void writeLibrary() throws FlooringMasteryPersistenceException, Exception;
     order getOrderNumberByDate(HashMap<Integer, order> newMap, int orderNumber) throws FlooringMasteryInvalidOrderException;
     void removeOrder(order newOrder);
-    counter loadCounter() throws FlooringMasteryPersistenceException;
+    void loadCounter() throws FlooringMasteryPersistenceException;
     void writeCounter(counter counter) throws FlooringMasteryPersistenceException, Exception;
-    boolean setMode() throws Exception ;
+    boolean setMode() throws Exception;
+    void addToCounter(counter currentCount);
+    counter getCurrentCounter();
 }

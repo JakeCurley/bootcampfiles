@@ -10,10 +10,17 @@ import com.curleyj.flooringmastery.dto.order;
 import com.curleyj.flooringmastery.dto.product;
 import com.curleyj.flooringmastery.dto.taxes;
 import com.curleyj.flooringmastery.service.FlooringMasteryInvalidOrderException;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
 import org.junit.jupiter.api.AfterEach;
@@ -153,23 +160,30 @@ public class FlooringMasteryDaoTest {
      */
     @Test
     public void testLoadTaxes() throws Exception {
-        setUp();
-        taxes newTaxes = new taxes("IN");
-        newTaxes.setTaxRate(dao.loadTaxes("IN"));
-        assertEquals(newTaxes.getTaxRate(), new BigDecimal("6.00"));
-        taxes newTaxes2 = new taxes("OH");
-        newTaxes2.setTaxRate(dao.loadTaxes("OH"));
-        assertEquals(newTaxes2.getTaxRate(), new BigDecimal("6.25"));
-        taxes newTaxes3 = new taxes("MI");
-        newTaxes3.setTaxRate(dao.loadTaxes("MI"));
-        assertEquals(newTaxes3.getTaxRate(), new BigDecimal("5.75"));
-        taxes newTaxes4 = new taxes("PA");
-        newTaxes4.setTaxRate(dao.loadTaxes("PA"));
-        assertEquals(newTaxes4.getTaxRate(), new BigDecimal("6.75"));
+        try {
+            setUp();
+            taxes newTaxes = new taxes("IN");
+            newTaxes.setTaxRate(dao.loadTaxes("IN"));
+            assertEquals(newTaxes.getTaxRate(), new BigDecimal("6.00"));
+            taxes newTaxes2 = new taxes("OH");
+            newTaxes2.setTaxRate(dao.loadTaxes("OH"));
+            assertEquals(newTaxes2.getTaxRate(), new BigDecimal("6.25"));
+            taxes newTaxes3 = new taxes("MI");
+            newTaxes3.setTaxRate(dao.loadTaxes("MI"));
+            assertEquals(newTaxes3.getTaxRate(), new BigDecimal("5.75"));
+            taxes newTaxes4 = new taxes("PA");
+            newTaxes4.setTaxRate(dao.loadTaxes("PA"));
+            assertEquals(newTaxes4.getTaxRate(), new BigDecimal("6.75"));
+        }
+        catch (FlooringMasteryPersistenceException e) {
+            fail("Did not find the file.");
+        }
+        
     }
 
     /**
      * Test of loadProducts method, of class FlooringMasteryDao.
+     * @throws java.lang.Exception
      */
     @Test
     public void testLoadProducts() throws Exception {
@@ -178,8 +192,10 @@ public class FlooringMasteryDaoTest {
         
         assertEquals(newProduct.getCpsf(), new BigDecimal("5.15"));
         assertEquals(newProduct.getLaborCPSF(), new BigDecimal("4.75"));
-    }
 
+        product newProduct2 = dao.loadProducts("test");
+        assertNull(newProduct2);
+    }
     /**
      * Test of addToMap method, of class FlooringMasteryDao.
      */
@@ -214,6 +230,7 @@ public class FlooringMasteryDaoTest {
         newMap = dao.getMapDao();
         
         assertEquals(newMap.get(1), newOrder);
+        assertNotEquals(newMap.get(1).getProductType(), "Carpet");
         
     }
 
@@ -222,13 +239,33 @@ public class FlooringMasteryDaoTest {
      */
     @Test
     public void testWriteLibrary() throws Exception {
-        //testing writeLibrary() used in setup
+        //writeLibrary works in setUp();
+        
         setUp();
-        TreeMap<Integer, order> newMap = new TreeMap<>();
-        
-        newMap = dao.getMapDao();
-        
-        assertEquals(newMap.get(1).getOrderNumber(), 1);
+        TreeMap<Integer, order> orderMap = new TreeMap<>();
+        order order = new order(1);
+        orderMap.put(order.getOrderNumber(), order);
+        try {                                                   //Testing an order with no date - should fail
+            PrintWriter out;
+            Set<Integer> orderKey = orderMap.keySet();
+            for (Integer k : orderKey) {
+                String date = orderMap.get(k).getDate();
+                File file = new File("./resources/Orders_" + date + ".txt");
+                out = new PrintWriter(new FileWriter(file, false));
+                for (Integer j : orderKey) {
+                    if (orderMap.get(j).getDate().equals(date)) {
+                        String orderAsText;
+                        //orderAsText = marshallItem(orderMap.get(j));
+                        //out.println(orderAsText);
+                        out.flush();
+                    }
+                }
+            }
+            fail("Should have thrown exception");
+        }
+        catch (NullPointerException e) {
+            return;
+        }
     }
 
     /**
@@ -266,11 +303,24 @@ public class FlooringMasteryDaoTest {
     /**
      * Test of loadCounter method, of class FlooringMasteryDao.
      */
-    @Test
+   @Test
     public void testLoadCounter() throws Exception {
-        counter counter = dao.loadCounter();
+        String ROSTER_FILE = "test";
+        Scanner scanner;
+
+        try {
+            scanner = new Scanner(new BufferedReader(new FileReader(ROSTER_FILE)));
+            fail("Should have thrown exception");
+        } catch (FileNotFoundException e) {
+            //throw new FlooringMasteryPersistenceException("-_- Could not load item data into memory.", e);
+        }
+    }
+    @Test
+    public void testLoadCounter2() throws Exception {
+        dao.loadCounter();
         
-        assertNotEquals(counter.getCount(), null);
+       counter counter = dao.getCurrentCounter();
+       assertNotNull(counter);
     }
 
     /**
@@ -280,17 +330,19 @@ public class FlooringMasteryDaoTest {
     public void testWriteCounter() throws Exception {
         
         //store value so it can be set back after check
-        counter counter3 = dao.loadCounter();
+        counter counter3 = new counter("counter");
+        counter3.setName("counter");
+        counter3.setCount(5);
         
-        counter counter = new counter("counter");
+        counter counter = dao.getCurrentCounter();
         counter.setCount(20);
         dao.writeCounter(counter);
-        counter counter2 = dao.loadCounter();
-        assertEquals(counter2.getCount(), counter.getCount());
+        counter counter2 = dao.getCurrentCounter();
+        assertEquals(counter, counter2);
         
-        counter3.setCount(counter3.getCount()-1);
         dao.writeCounter(counter3);
     }
+
 
     /**
      * Test of setMode method, of class FlooringMasteryDao.
