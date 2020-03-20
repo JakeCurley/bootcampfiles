@@ -138,9 +138,20 @@ public class UserIOFileImpl implements UserIO {
     
     @Override
     public String readString(String prompt){
+        boolean valid = false;
         System.out.println(prompt);
-        String answer = sc.nextLine();
-        
+        String answer = "";
+        while (!valid) {
+           answer = sc.nextLine();
+
+           if (answer.contains(",")) {
+               System.out.println("Please enter an input without a comma.");
+               valid = false;
+           }
+           else {
+               valid = true;
+           }
+        } 
         return answer;
     }
     

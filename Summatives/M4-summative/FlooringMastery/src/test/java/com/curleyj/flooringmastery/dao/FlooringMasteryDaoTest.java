@@ -11,11 +11,8 @@ import com.curleyj.flooringmastery.dto.product;
 import com.curleyj.flooringmastery.dto.taxes;
 import com.curleyj.flooringmastery.service.FlooringMasteryInvalidOrderException;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -34,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author Jake
  */
-public class FlooringMasteryDaoTest {
+/*public class FlooringMasteryDaoTest {
     
     FlooringMasteryDao dao = new FlooringMasteryDaoFileImpl();
     public FlooringMasteryDaoTest() {
@@ -53,11 +50,6 @@ public class FlooringMasteryDaoTest {
         dao.loadOrders();
         TreeMap<Integer, order> newMap = new TreeMap<>();
         newMap = dao.getMapDao();
-        Set<Integer> orderKey = newMap.keySet();
-        for (Integer k : orderKey) {
-            dao.removeOrder(newMap.get(k));
-            dao.writeLibrary();
-        }
         
         order newOrder = new order(1);
         newOrder.setCustomerName("Curley");
@@ -89,34 +81,41 @@ public class FlooringMasteryDaoTest {
         newOrder2.setDate("03182020");
         dao.addToMap(newOrder2);
         
-        dao.writeLibrary();
+        dao.writeOrders();
         
     }
     
     @AfterEach
-    public void tearDown() {
+    public void tearDown() throws FlooringMasteryPersistenceException {
+        TreeMap<Integer, order> newMap = new TreeMap<>();
+        newMap = dao.getMapDao();
+        
+        dao.removeOrder(newMap.get(1));
+        dao.removeOrder(newMap.get(2));
+        
+        newMap = dao.getMapDao();
+        dao.writeOrders();
     }
 
     /**
      * Test of loadOrders method, of class FlooringMasteryDao.
      */
-    @Test
+   /* @Test
     public void testLoadOrders() throws Exception {
         setUp();
-
         TreeMap<Integer, order> testMap = new TreeMap<>();
         dao.loadOrders();
         testMap = dao.getMapDao();
         Set<Integer> orderKey = testMap.keySet();
         assertEquals(testMap.get(1).getOrderNumber(), 1);
         assertEquals(testMap.get(2).getOrderNumber(), 2);
-       
+        tearDown();
     }
 
     /**
      * Test of loadOrdersByDate method, of class FlooringMasteryDao.
      */
-    @Test
+   /* @Test
     public void testLoadOrdersByDate1() throws Exception {
         setUp();
         String date = "03172020";
@@ -131,7 +130,8 @@ public class FlooringMasteryDaoTest {
             assertEquals(test1Map.get(k).getOrderNumber(), 1);
         } 
     }
-      @Test
+    
+    @Test
     public void testLoadOrdersByDate2() throws Exception {
         setUp();
         String date = "03182020";
@@ -150,7 +150,7 @@ public class FlooringMasteryDaoTest {
     /**
      * Test of getMapDao method, of class FlooringMasteryDao.
      */
-    @Test
+   /*@Test
     public void testGetMapDao() {
         //Don't need to test -> working in loadOrders() test
     }
@@ -158,10 +158,10 @@ public class FlooringMasteryDaoTest {
     /**
      * Test of loadTaxes method, of class FlooringMasteryDao.
      */
-    @Test
+    /*@Test
     public void testLoadTaxes() throws Exception {
+        setUp();
         try {
-            setUp();
             taxes newTaxes = new taxes("IN");
             newTaxes.setTaxRate(dao.loadTaxes("IN"));
             assertEquals(newTaxes.getTaxRate(), new BigDecimal("6.00"));
@@ -178,14 +178,13 @@ public class FlooringMasteryDaoTest {
         catch (FlooringMasteryPersistenceException e) {
             fail("Did not find the file.");
         }
-        
     }
 
     /**
      * Test of loadProducts method, of class FlooringMasteryDao.
      * @throws java.lang.Exception
      */
-    @Test
+    /*@Test
     public void testLoadProducts() throws Exception {
         setUp();
         product newProduct = dao.loadProducts("Wood");
@@ -195,17 +194,20 @@ public class FlooringMasteryDaoTest {
 
         product newProduct2 = dao.loadProducts("test");
         assertNull(newProduct2);
+        
+        tearDown();
     }
     /**
      * Test of addToMap method, of class FlooringMasteryDao.
      */
-    @Test
+   /* @Test
     public void testAddToMap() throws Exception {
         setUp();
         TreeMap<Integer, order> newMap = new TreeMap<>();
         newMap = dao.getMapDao();
         order remove = newMap.get(1);
         dao.removeOrder(remove);
+        newMap = dao.getMapDao();
         
         order newOrder = new order(1);
         String date = "03182020";
@@ -232,12 +234,13 @@ public class FlooringMasteryDaoTest {
         assertEquals(newMap.get(1), newOrder);
         assertNotEquals(newMap.get(1).getProductType(), "Carpet");
         
+        tearDown();
     }
 
     /**
      * Test of writeLibrary method, of class FlooringMasteryDao.
      */
-    @Test
+    /*@Test
     public void testWriteLibrary() throws Exception {
         //writeLibrary works in setUp();
         
@@ -250,6 +253,9 @@ public class FlooringMasteryDaoTest {
             Set<Integer> orderKey = orderMap.keySet();
             for (Integer k : orderKey) {
                 String date = orderMap.get(k).getDate();
+                if (date == null) {
+                    throw new FlooringMasteryPersistenceException("No date.");
+                }
                 File file = new File("./resources/Orders_" + date + ".txt");
                 out = new PrintWriter(new FileWriter(file, false));
                 for (Integer j : orderKey) {
@@ -263,7 +269,7 @@ public class FlooringMasteryDaoTest {
             }
             fail("Should have thrown exception");
         }
-        catch (NullPointerException e) {
+        catch (FlooringMasteryPersistenceException e) {
             return;
         }
     }
@@ -271,7 +277,7 @@ public class FlooringMasteryDaoTest {
     /**
      * Test of getOrderNumberByDate method, of class FlooringMasteryDao.
      */
-    @Test
+    /*@Test
     public void testGetOrderNumberByDate() throws Exception {
         setUp();
         HashMap<Integer, order> newMap = new HashMap<>();
@@ -290,12 +296,13 @@ public class FlooringMasteryDaoTest {
         
         assertEquals(order, newMap.get(1));
         
+        tearDown();
     }
 
     /**
      * Test of removeOrder method, of class FlooringMasteryDao.
      */
-    @Test
+    /*@Test
     public void testRemoveOrder() {
         //Already works in previous tests
     }
@@ -303,8 +310,9 @@ public class FlooringMasteryDaoTest {
     /**
      * Test of loadCounter method, of class FlooringMasteryDao.
      */
-   @Test
+  /* @Test
     public void testLoadCounter() throws Exception {
+        setUp();
         String ROSTER_FILE = "test";
         Scanner scanner;
 
@@ -314,25 +322,30 @@ public class FlooringMasteryDaoTest {
         } catch (FileNotFoundException e) {
             //throw new FlooringMasteryPersistenceException("-_- Could not load item data into memory.", e);
         }
+        tearDown();
     }
     @Test
     public void testLoadCounter2() throws Exception {
+        setUp();
         dao.loadCounter();
         
        counter counter = dao.getCurrentCounter();
        assertNotNull(counter);
+       
+       tearDown();
     }
 
     /**
      * Test of writeCounter method, of class FlooringMasteryDao.
      */
-    @Test
+    /*@Test
     public void testWriteCounter() throws Exception {
-        
+        setUp();
         //store value so it can be set back after check
-        counter counter3 = new counter("counter");
-        counter3.setName("counter");
-        counter3.setCount(5);
+        dao.loadCounter();
+        counter counter3 = dao.getCurrentCounter();
+        counter counter4 = new counter("test");
+        counter4.setCount(counter3.getCount());
         
         counter counter = dao.getCurrentCounter();
         counter.setCount(20);
@@ -340,20 +353,27 @@ public class FlooringMasteryDaoTest {
         counter counter2 = dao.getCurrentCounter();
         assertEquals(counter, counter2);
         
+        counter3.setCount(counter4.getCount());
+        counter3.setName("counter");
         dao.writeCounter(counter3);
+        
+        tearDown();
     }
 
 
     /**
      * Test of setMode method, of class FlooringMasteryDao.
      */
-    @Test
+   /* @Test
     public void testSetMode() throws Exception {
+        setUp();
         
         boolean check = dao.setMode();
         
         assertFalse(check);
         
+        tearDown();
+        
     }
     
-}
+}*/

@@ -64,32 +64,28 @@ public class FlooringMasteryView {
             io.print("Labor Cost: $" + newMap.get(k).getLaborCost());
             io.print("Tax: $" + newMap.get(k).getTax());
             io.print("Total: $" + newMap.get(k).getTotal());
-            io.print("Date Added: " + newMap.get(k).getDate().substring(0,2) + "/" + newMap.get(k).getDate().substring(2,4) + "/" + newMap.get(k).getDate().substring(4,8) );
+            io.print("Date Added: " + newMap.get(k).getDate().substring(0, 2) + "/" + newMap.get(k).getDate().substring(2, 4) + "/" + newMap.get(k).getDate().substring(4, 8));
             io.print("======================================");
         }
     }
 
-    public void displaySingleOrder(order newOrder) throws FlooringMasteryInvalidOrderException {
-        try {
-            io.print("======================================");
-            io.print("Order Number: " + newOrder.getOrderNumber());
-            io.print("Customer Name: " + newOrder.getCustomerName());
-            io.print("State: " + newOrder.getState().toUpperCase());
-            io.print("Tax Rate: " + newOrder.getTaxRate() + "%");
-            String productType = newOrder.getProductType().substring(0, 1).toUpperCase() + newOrder.getProductType().substring(1).toLowerCase();
-            io.print("Product Type: " + productType);
-            io.print("Area: " + newOrder.getArea());
-            io.print("Cost Per Square Foot: $" + newOrder.getCpsq());
-            io.print("Labor Cost Per Square Foot: $" + newOrder.getLaborCPSQ());
-            io.print("Material Cost: $" + newOrder.getMaterialCost());
-            io.print("Labor Cost: $" + newOrder.getLaborCost());
-            io.print("Tax: $" + newOrder.getTax());
-            io.print("Total: $" + newOrder.getTotal());
-            io.print("Date Added: " + newOrder.getDate().substring(0,2) + "/" + newOrder.getDate().substring(2,4) + "/" + newOrder.getDate().substring(4,8) );
-            io.print("======================================");
-        } catch (NullPointerException e) {
-            throw new FlooringMasteryInvalidOrderException("Please enter a valid order number.", e);
-        }
+    public void displaySingleOrder(order newOrder) {
+        io.print("======================================");
+        io.print("Order Number: " + newOrder.getOrderNumber());
+        io.print("Customer Name: " + newOrder.getCustomerName());
+        io.print("State: " + newOrder.getState().toUpperCase());
+        io.print("Tax Rate: " + newOrder.getTaxRate() + "%");
+        String productType = newOrder.getProductType().substring(0, 1).toUpperCase() + newOrder.getProductType().substring(1).toLowerCase();
+        io.print("Product Type: " + productType);
+        io.print("Area: " + newOrder.getArea());
+        io.print("Cost Per Square Foot: $" + newOrder.getCpsq());
+        io.print("Labor Cost Per Square Foot: $" + newOrder.getLaborCPSQ());
+        io.print("Material Cost: $" + newOrder.getMaterialCost());
+        io.print("Labor Cost: $" + newOrder.getLaborCost());
+        io.print("Tax: $" + newOrder.getTax());
+        io.print("Total: $" + newOrder.getTotal());
+        io.print("Date Added: " + newOrder.getDate().substring(0, 2) + "/" + newOrder.getDate().substring(2, 4) + "/" + newOrder.getDate().substring(4, 8));
+        io.print("======================================");
     }
 
     public void bannerAddOrder() {
@@ -101,7 +97,7 @@ public class FlooringMasteryView {
         boolean valid = false;
         while (!valid) {
             newOrder.setCustomerName(io.readString("Please enter customer name: "));
-            if (!newOrder.getCustomerName().equals("") && newOrder.getCustomerName().substring(0,1).matches("[a-zA-Z]")) {
+            if (!newOrder.getCustomerName().equals("") && newOrder.getCustomerName().substring(0, 1).matches("[a-zA-Z]")) {
                 valid = true;
             }
         }
@@ -121,10 +117,9 @@ public class FlooringMasteryView {
             BigDecimal area = io.readBigDecimal("Please enter the area: ", new BigDecimal("0"));
             area.setScale(2, RoundingMode.HALF_UP);
             try {
-            newOrder.setArea(area);
-            valid = false;
-            }
-            catch (NumberFormatException e) {
+                newOrder.setArea(area);
+                valid = false;
+            } catch (NumberFormatException e) {
                 io.print("Please enter a number: ");
                 valid = true;
             }
@@ -154,28 +149,54 @@ public class FlooringMasteryView {
 
     public order editOrder(order order) throws FlooringMasteryInvalidOrderException {
         try {
-            String newName = io.readString("Please enter customer name (" + order.getCustomerName() + "): ");
+            boolean valid = true;
+            while(valid) {
+                String newName = io.readString("Please enter customer name (" + order.getCustomerName() + "): ");
+                if (!newName.equals("") && newName.substring(0, 1).matches("[a-zA-Z]")) {
+                    order.setCustomerName(newName);
+                    valid = false;
+                }
+                else if (newName.equals("")) {
+                    valid = false;
+                }
+            }
+            while(!valid) {
+                String newState = io.readString("Plase enter state name (" + order.getState().toUpperCase() + "): ");
+                if (newState.equalsIgnoreCase("OH") || newState.equalsIgnoreCase("MI") || newState.equalsIgnoreCase("IN") || newState.equalsIgnoreCase("PA")) {
+                    order.setState(newState);
+                    valid = true;
+                }
+                else if(newState.equalsIgnoreCase("")){
+                    valid = true;
+                }
+            }
+            while(valid) {
+                String newProductType = io.readString("Please enter the product type (" + order.getProductType().substring(0, 1).toUpperCase() + order.getProductType().substring(1).toLowerCase() + "): ");
+                if (newProductType.equalsIgnoreCase("Carpet") || newProductType.equalsIgnoreCase("Laminate") || newProductType.equalsIgnoreCase("Tile") || newProductType.equalsIgnoreCase("Wood")) {
+                    order.setProductType(newProductType);
+                    valid = false;
+                }
+                else if (newProductType.equalsIgnoreCase("")) {
+                    valid = false;
+                }
+            }
+            while (!valid) {
+            String area = io.readString("Please enter the area: ");
+            if (area.equals("")) {
+                    return order;
+                }
+            try {
+                BigDecimal bArea = new BigDecimal(area).setScale(2, RoundingMode.HALF_UP);
+                order.setArea(bArea);
 
-            if (!newName.equals("") && newName.substring(0,1).matches("[a-zA-Z]")) {
-                order.setCustomerName(newName);
+            } catch (NumberFormatException e) {
+                io.print("Please enter a number: ");
             }
-            String newState = io.readString("Plase enter state name (" + order.getState() + "): ");
-            if (!newState.equals("")) {
-                order.setState(newState);
             }
-            String newProductType = io.readString("Please enter the product type (" + order.getProductType() + "): ");
-            if (!newProductType.equals("")) {
-                order.setProductType(newProductType);
-            }
-            String newArea = io.readString("Please enter the area (" + order.getArea() + "): ");
-            if (newArea.equals("")) {
-                return order;
-            }
-            order.setArea(new BigDecimal(newArea).setScale(2, RoundingMode.HALF_UP));
-            return order;
         } catch (NullPointerException e) {
             throw new FlooringMasteryInvalidOrderException("Please enter a valid order number.", e);
         }
+        return order;
     }
 
     public void errorDisplayOrders() {
@@ -201,7 +222,12 @@ public class FlooringMasteryView {
     public void errorMessage(String prompt) {
         io.print(prompt);
     }
+
     public void errorConfirmation() {
         io.print("Please choose (Y/N): ");
+    }
+    
+    public void saveSuccess() {
+        io.print("Orders saved.");
     }
 }

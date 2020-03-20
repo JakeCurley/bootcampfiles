@@ -6,6 +6,7 @@
 package com.curleyj.flooringmastery.dao;
 
 import com.curleyj.flooringmastery.dto.counter;
+import com.curleyj.flooringmastery.dto.date;
 import com.curleyj.flooringmastery.dto.order;
 import com.curleyj.flooringmastery.dto.product;
 import com.curleyj.flooringmastery.service.FlooringMasteryInvalidOrderException;
@@ -117,12 +118,12 @@ public class FlooringMasteryDaoStubImpl implements FlooringMasteryDao {
     }
 
     @Override
-    public void addToMap(order newOrder) throws FlooringMasteryPersistenceException {
+    public void addToMap(order newOrder) {
         newMap.put(newOrder.getOrderNumber(), newOrder);
     }
 
     @Override
-    public void writeLibrary() throws FlooringMasteryPersistenceException, Exception {
+    public void writeOrders() throws FlooringMasteryPersistenceException {
         //not needed to test service layer - tested in Dao test
     }
 
@@ -146,12 +147,12 @@ public class FlooringMasteryDaoStubImpl implements FlooringMasteryDao {
     }
 
     @Override
-    public void writeCounter(counter counter) throws FlooringMasteryPersistenceException, Exception {
+    public void writeCounter(counter counter) throws FlooringMasteryPersistenceException {
         //not needed in service layer test - tested in Dao tests
     }
 
     @Override
-    public boolean setMode() throws Exception {
+    public boolean setMode() throws FlooringMasteryPersistenceException {
         return true;
     }
 
@@ -162,6 +163,21 @@ public class FlooringMasteryDaoStubImpl implements FlooringMasteryDao {
 
     @Override
     public counter getCurrentCounter() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void writeDate() throws FlooringMasteryPersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void addDate(date date) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void loadDate() throws FlooringMasteryPersistenceException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

@@ -7,6 +7,7 @@ package com.curleyj.flooringmastery.service;
 
 import com.curleyj.flooringmastery.dao.FlooringMasteryPersistenceException;
 import com.curleyj.flooringmastery.dto.counter;
+import com.curleyj.flooringmastery.dto.date;
 import com.curleyj.flooringmastery.dto.order;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,13 +26,16 @@ public interface FlooringMasteryServiceLayer {
    void validateProductGetCosts(order newOrder) throws FlooringMasteryPersistenceException;
    void moneyCalculations(order newOrder);
    TreeMap<Integer, order> getMap();
-   void addToMap(order newOrder) throws FlooringMasteryPersistenceException;
+   void addToMap(order newOrder);
    order getOrderNumberByDate(HashMap<Integer, order> newMap, int orderNumber) throws FlooringMasteryInvalidOrderException;
    void removeOrder(order newOrder);
-   void saveCurrentWork() throws FlooringMasteryPersistenceException, Exception;
-   void getCounter() throws FlooringMasteryPersistenceException, Exception;
-   void saveCounter(counter currentCount) throws FlooringMasteryPersistenceException, Exception;
-   boolean getMode() throws FlooringMasteryPersistenceException, Exception;
+   void writeOrders() throws FlooringMasteryPersistenceException;
+   void writeCounter(counter currentCount) throws FlooringMasteryPersistenceException;
+   void loadCounter() throws FlooringMasteryPersistenceException;
+   boolean getMode() throws FlooringMasteryPersistenceException;
    void addToCounter(counter currentCount);
    counter getCurrentCounter();
+   void addDate(date date) throws FlooringMasteryPersistenceException;
+   void loadDate() throws FlooringMasteryPersistenceException;
+   void writeDate() throws FlooringMasteryPersistenceException;
 }

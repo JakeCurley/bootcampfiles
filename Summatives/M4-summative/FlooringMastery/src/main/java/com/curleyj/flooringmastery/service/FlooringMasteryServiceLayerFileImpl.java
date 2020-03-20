@@ -8,6 +8,7 @@ package com.curleyj.flooringmastery.service;
 import com.curleyj.flooringmastery.dao.FlooringMasteryDao;
 import com.curleyj.flooringmastery.dao.FlooringMasteryPersistenceException;
 import com.curleyj.flooringmastery.dto.counter;
+import com.curleyj.flooringmastery.dto.date;
 import com.curleyj.flooringmastery.dto.order;
 import com.curleyj.flooringmastery.dto.product;
 import java.math.BigDecimal;
@@ -95,7 +96,7 @@ public class FlooringMasteryServiceLayerFileImpl implements FlooringMasteryServi
     }
 
     @Override
-    public void addToMap(order newOrder) throws FlooringMasteryPersistenceException {
+    public void addToMap(order newOrder) {
         dao.addToMap(newOrder);
     }
 
@@ -111,31 +112,27 @@ public class FlooringMasteryServiceLayerFileImpl implements FlooringMasteryServi
 
     @Override
     public void removeOrder(order newOrder) {
-        try {
             dao.removeOrder(newOrder);
-        }
-        catch(NumberFormatException e) {
-            System.out.println("test");
-        }
     }
 
     @Override
-    public void saveCurrentWork() throws FlooringMasteryPersistenceException, Exception {
-        dao.writeLibrary();
+    public void writeOrders() throws FlooringMasteryPersistenceException {
+        dao.writeOrders();
     }
 
+    
     @Override
-    public void getCounter() throws FlooringMasteryPersistenceException {
+    public void loadCounter() throws FlooringMasteryPersistenceException {
         dao.loadCounter();
     }
 
     @Override
-    public void saveCounter(counter currentCount) throws FlooringMasteryPersistenceException, Exception {
+    public void writeCounter(counter currentCount) throws FlooringMasteryPersistenceException {
         dao.writeCounter(currentCount);
     }
 
     @Override
-    public boolean getMode() throws FlooringMasteryPersistenceException, Exception {
+    public boolean getMode() throws FlooringMasteryPersistenceException {
         return dao.setMode();
     }
     
@@ -147,5 +144,20 @@ public class FlooringMasteryServiceLayerFileImpl implements FlooringMasteryServi
     @Override
     public counter getCurrentCounter() {
         return dao.getCurrentCounter();
+    }
+    
+    @Override
+    public void addDate(date date) throws FlooringMasteryPersistenceException {
+        dao.addDate(date);
+    }
+    
+    @Override
+    public void loadDate() throws FlooringMasteryPersistenceException {
+        dao.loadDate();
+    }
+        
+    @Override
+    public void writeDate() throws FlooringMasteryPersistenceException {
+        dao.writeDate();
     }
 }

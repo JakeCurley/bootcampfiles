@@ -5,6 +5,7 @@ com\curleyj\flooringmastery\ui\FlooringMasteryView.class
 com\curleyj\flooringmastery\ui\UserIO.class
 com\curleyj\flooringmastery\controller\FlooringMasteryController.class
 com\curleyj\flooringmastery\dto\product.class
+com\curleyj\flooringmastery\dto\date.class
 com\curleyj\flooringmastery\dao\FlooringMasteryDaoStubImpl.class
 com\curleyj\flooringmastery\service\FlooringMasteryServiceLayerFileImpl.class
 com\curleyj\flooringmastery\dao\FlooringMasteryPersistenceException.class

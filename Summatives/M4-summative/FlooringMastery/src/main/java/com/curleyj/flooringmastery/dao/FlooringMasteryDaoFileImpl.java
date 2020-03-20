@@ -6,6 +6,7 @@
 package com.curleyj.flooringmastery.dao;
 
 import com.curleyj.flooringmastery.dto.counter;
+import com.curleyj.flooringmastery.dto.date;
 import com.curleyj.flooringmastery.dto.order;
 import com.curleyj.flooringmastery.dto.product;
 import com.curleyj.flooringmastery.dto.taxes;
@@ -15,6 +16,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -34,6 +36,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     HashMap<Integer, order> orderMap = new HashMap<>();
     HashMap<String, product> productsMap = new HashMap<>();
     HashMap<String, counter> counterMap = new HashMap<>();
+    HashMap<LocalDate, date> dateMap = new HashMap<>();
     public static final String DELIMITER = ",";
 
     private order unmarshallOrder(String orderAsText, String date) {
@@ -128,7 +131,6 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     public void loadOrders() throws FlooringMasteryPersistenceException {
         File folder = new File("./resources/");
         File[] listOfFiles = folder.listFiles();
-        int max = 0;
         Scanner scanner;
         for (File file : listOfFiles) {
             String date = file.toString().substring(19, 27);
@@ -184,7 +186,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
         try {
             scanner = new Scanner(new BufferedReader(new FileReader(ROSTER_FILE)));
         } catch (FileNotFoundException e) {
-            throw new FlooringMasteryPersistenceException("-_- Could not load mode settings into memory.", e);
+            throw new FlooringMasteryPersistenceException("Could not load mode settings into memory.", e);
         }
         String currentLine = scanner.nextLine();
         if (currentLine.equalsIgnoreCase("training")) {
@@ -244,7 +246,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     }
 
     @Override
-    public void addToMap(order newOrder) throws FlooringMasteryPersistenceException {
+    public void addToMap(order newOrder) {
         orderMap.put(newOrder.getOrderNumber(), newOrder);
     }
 
@@ -312,7 +314,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     }
 
     @Override
-    public void writeCounter(counter counter) throws FlooringMasteryPersistenceException, Exception {
+    public void writeCounter(counter counter) throws FlooringMasteryPersistenceException {
         try {
             PrintWriter out;
             File file = new File("counter.txt");
@@ -324,23 +326,27 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
             out.flush();
             out.close();
         }
-        catch (Exception e) {
+        catch (IOException e) {
             throw new FlooringMasteryPersistenceException("File not found.");
         }
     }
 
     @Override
-    public void writeLibrary() throws FlooringMasteryPersistenceException, Exception {
+    public void writeOrders() throws FlooringMasteryPersistenceException {
 
         try {
             PrintWriter out;
-            Set<Integer> orderKey = orderMap.keySet();
-            for (Integer k : orderKey) {
-                String date = orderMap.get(k).getDate();
-                File file = new File("./resources/Orders_" + date + ".txt");
+            Set<LocalDate> dateKey = dateMap.keySet();
+            for (LocalDate k : dateKey) {
+                String formattedDate = k.format(DateTimeFormatter.ofPattern("MMddyyyy"));
+                if (k == null) {
+                    throw new FlooringMasteryPersistenceException("No date.");
+                }
+                File file = new File("./resources/Orders_" + formattedDate + ".txt");
                 out = new PrintWriter(new FileWriter(file, false));
+                Set<Integer> orderKey = orderMap.keySet();
                 for (Integer j : orderKey) {
-                    if (orderMap.get(j).getDate().equals(date)) {
+                    if (orderMap.get(j).getDate().equals(formattedDate)) {
                         String orderAsText;
                         orderAsText = marshallItem(orderMap.get(j));
                         out.println(orderAsText);
@@ -348,7 +354,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
                     }
                 }
             }
-        } catch (NullPointerException e) {
+        } catch (IOException e) {
             throw new FlooringMasteryPersistenceException("Could not save file.");
         }
     }
@@ -376,4 +382,66 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     public counter getCurrentCounter() {
         return counterMap.get("counter");
     }
+    
+    @Override
+    public void writeDate() throws FlooringMasteryPersistenceException {
+        try {
+            PrintWriter out;
+            File file = new File("dates.txt");
+            out = new PrintWriter(new FileWriter(file, false));
+            Set<LocalDate> dateKey = dateMap.keySet();
+            for (LocalDate k : dateKey) {
+                        String dateAsText;
+                        dateAsText = marshallDate(dateMap.get(k));
+                        out.println(dateAsText);
+                        out.flush();
+                    }
+                out.close();
+            }
+        catch (IOException e) {
+            throw new FlooringMasteryPersistenceException("File not found.");
+        }
+    }
+
+    private String marshallDate(date aDate) {
+        String orderAsText = aDate.getLd().toString();       
+        return orderAsText;
+    }
+    
+    @Override
+    public void addDate(date date) throws FlooringMasteryPersistenceException {
+        dateMap.put(date.getLd(), date);
+    }
+
+    private date unmarshallDate(String dateAsText) {
+        String date = dateAsText;
+        LocalDate ld = LocalDate.parse(date);
+        date dateFromFile = new date(ld);
+        dateMap.put(dateFromFile.getLd(), dateFromFile);
+        return dateFromFile;
+    }
+    
+    public void loadDate() throws FlooringMasteryPersistenceException {
+
+        String ROSTER_FILE = "dates.txt";
+        Scanner scanner;
+
+        try {
+            scanner = new Scanner(new BufferedReader(new FileReader(ROSTER_FILE)));
+        } catch (FileNotFoundException e) {
+            throw new FlooringMasteryPersistenceException("-_- Could not load item data into memory.", e);
+        }
+
+        String currentLine;
+        date currentDate;
+        
+        while (scanner.hasNextLine()) {
+        currentLine = scanner.nextLine();
+        currentDate = unmarshallDate(currentLine);
+        dateMap.put(currentDate.getLd(), currentDate);
+        }
+        scanner.close();
+
+    }
+    
 }
