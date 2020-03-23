@@ -123,10 +123,10 @@ public class FlooringMasteryController {
 
     public void removeOrder() throws Exception {
         view.bannerRemoveOrder();
-        LocalDate ld = view.getDate();
         boolean again = true;
-        int orderNumber = view.getOrderNumber();
         while (again) {
+            LocalDate ld = view.getDate();
+            int orderNumber = view.getOrderNumber();
             HashMap<Integer, order> newMap = service.displayOrdersService(ld);
             try {
                 order newOrder = service.validateOrderNumber(newMap, orderNumber);
@@ -147,7 +147,6 @@ public class FlooringMasteryController {
                 again = false;
             } catch (FlooringMasteryInvalidOrderException e) {
                 view.errorMessage(e.getMessage());
-                orderNumber = view.getOrderNumber();
                 again = true;
             }
         }
@@ -155,28 +154,28 @@ public class FlooringMasteryController {
 
     public void editOrder() throws Exception {
         view.bannerEditOrder();
-        LocalDate ld = view.getDate();
-        HashMap<Integer, order> newMap = service.displayOrdersService(ld);
-        if (newMap.isEmpty()) {
-            view.errorDisplayOrders();
-        } else {
             boolean again = true;
             while (again) {
                 try {
-                    int orderNumber = view.getOrderNumber();
-                    order newOrder = service.validateOrderNumber(newMap, orderNumber);
-                    newOrder = view.editOrder(newOrder);
-                    service.validateStateGetTaxRate(newOrder);
-                    service.validateProductGetCosts(newOrder);
-                    service.moneyCalculations(newOrder);
-                    service.addToMap(newOrder);
-                    again = false;
+                    LocalDate ld = view.getDate();
+                    HashMap<Integer, order> newMap = service.displayOrdersService(ld);
+                    if (newMap.isEmpty()) {
+                        view.errorDisplayOrders();
+                    } else {
+                        int orderNumber = view.getOrderNumber();
+                        order newOrder = service.validateOrderNumber(newMap, orderNumber);
+                        newOrder = view.editOrder(newOrder);
+                        service.validateStateGetTaxRate(newOrder);
+                        service.validateProductGetCosts(newOrder);
+                        service.moneyCalculations(newOrder);
+                        service.addToMap(newOrder);
+                        again = false;
+                    } 
                 } catch (FlooringMasteryInvalidOrderException e) {
                     view.errorMessage(e.getMessage());
                     again = true;
                 }
             }
-        }
     }
 
     public void saveCurrentWork(boolean mode) {

@@ -113,6 +113,7 @@ public class FlooringMasteryDaoTest {
         Set<Integer> orderKey = testMap.keySet();
         assertEquals(testMap.get(1).getOrderNumber(), 1);
         assertEquals(testMap.get(2).getOrderNumber(), 2);
+        assertNull(testMap.get(-1));
         tearDown();
     }
 
@@ -132,6 +133,7 @@ public class FlooringMasteryDaoTest {
         Set<Integer> orderKey = test1Map.keySet();
         for (Integer k : orderKey) {
             assertEquals(test1Map.get(k).getOrderNumber(), 1);
+            assertNull(test1Map.get(2));
         } 
     }
     
@@ -148,6 +150,7 @@ public class FlooringMasteryDaoTest {
         Set<Integer> orderKey = test1Map.keySet();
         for (Integer k : orderKey) {
             assertEquals(test1Map.get(k).getOrderNumber(), 2);
+            assertNull(test1Map.get(1));
         } 
     }
 
@@ -242,47 +245,10 @@ public class FlooringMasteryDaoTest {
     }
 
     /**
-     * Test of writeLibrary method, of class FlooringMasteryDao.
-     */
-    /*@Test
-    public void testWriteLibrary() throws Exception {
-        //writeLibrary works in setUp();
-        
-        setUp();
-        TreeMap<Integer, order> orderMap = new TreeMap<>();
-        order order = new order(1);
-        orderMap.put(order.getOrderNumber(), order);
-        try {                                                   //Testing an order with no date - should fail
-            PrintWriter out;
-            Set<Integer> orderKey = orderMap.keySet();
-            for (Integer k : orderKey) {
-                String date = orderMap.get(k).getDate();
-                if (date == null) {
-                    throw new FlooringMasteryPersistenceException("No date.");
-                }
-                File file = new File("./resources/Orders_" + date + ".txt");
-                out = new PrintWriter(new FileWriter(file, false));
-                for (Integer j : orderKey) {
-                    if (orderMap.get(j).getDate().equals(date)) {
-                        String orderAsText;
-                        //orderAsText = marshallItem(orderMap.get(j));
-                        //out.println(orderAsText);
-                        out.flush();
-                    }
-                }
-            }
-            fail("Should have thrown exception");
-        }
-        catch (FlooringMasteryPersistenceException e) {
-            return;
-        }
-    }
-
-    /**
      * Test of getOrderNumberByDate method, of class FlooringMasteryDao.
      */
     @Test
-    public void testGetOrderNumberByDate() throws Exception {
+    public void testvalidateOrderNumber() throws Exception {
         setUp();
         HashMap<Integer, order> newMap = new HashMap<>();
         TreeMap<Integer, order> testMap = new TreeMap<>();
@@ -291,7 +257,7 @@ public class FlooringMasteryDaoTest {
         newMap.putAll(testMap);
         order order = dao.validateOrderNumber(newMap, 1);
         try {
-            order order1 = dao.validateOrderNumber(newMap, 500);
+            order order1 = dao.validateOrderNumber(newMap, -1);
             fail("Should have thrown exception.");
         }
         catch (FlooringMasteryInvalidOrderException e) {
@@ -349,7 +315,7 @@ public class FlooringMasteryDaoTest {
         dao.loadCounter();
         counter counter3 = dao.getCurrentCounter();
         counter counter4 = new counter("test");
-        counter4.setCount(counter3.getCount());
+        counter4.setCount(counter3.getCount());  //counter4 now holds current count value to be resest after the test
         
         counter counter = dao.getCurrentCounter();
         counter.setCount(20);

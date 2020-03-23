@@ -68,6 +68,17 @@ public class FlooringMasteryServiceLayerTest {
      */
     @Test
     public void testDisplayOrdersService() throws Exception {
+        String date = "03182020";
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MMddyyyy");
+        LocalDate ld = LocalDate.parse(date, dateFormat);
+        
+        HashMap<Integer, order> newMap = new HashMap<>();
+        
+        newMap = service.displayOrdersService(ld);
+        
+        assertEquals(newMap.get(1).getCustomerName(), "Curley");
+        assertNull(newMap.get(10000));
+
     }
 
     /**
@@ -75,16 +86,16 @@ public class FlooringMasteryServiceLayerTest {
      */
     @Test
     public void testValidateStateGetTaxRate() throws Exception {
-        TreeMap<Integer, order> newMap = new TreeMap<>();
-        newMap = service.getMap();
-        
-        order order1 = newMap.get(1);
+        order order1 = new order(1000);
         order1.setState("OH");
-        service.validateStateGetTaxRate(newMap.get(1));
+        service.validateStateGetTaxRate(order1);
         
-        newMap = service.getMap();
-        assertEquals(newMap.get(1).getTaxRate(), new BigDecimal("6.25"));
-                
+        order order2 = new order(2);
+        order2.setState("test");
+        service.validateStateGetTaxRate(order2);
+        
+        assertEquals(order1.getTaxRate(), new BigDecimal("6.25"));
+        assertNull(order2.getTaxRate());            
     }
 
     /**
@@ -93,16 +104,20 @@ public class FlooringMasteryServiceLayerTest {
     @Test
     public void testValidateProductGetCosts() throws Exception {
         String type = "wood";
-        product newProduct = new product(type);
+        String type2 = "test";
        
-        TreeMap<Integer, order> newMap = new TreeMap<>();
-        newMap = service.getMap();
-        order order1 = newMap.get(1);
-        order1.setProductType(newProduct.getName());
+
+        order order1 = new order(100000);
+        order1.setProductType("wood");
         service.validateProductGetCosts(order1);
-        newMap = service.getMap();
-        assertEquals(newMap.get(1).getCpsq(),new BigDecimal("5.15"));
-        assertEquals(newMap.get(1).getLaborCPSQ(), new BigDecimal("4.75"));
+        assertEquals(order1.getCpsq(),new BigDecimal("5.15"));
+        assertEquals(order1.getLaborCPSQ(), new BigDecimal("4.75"));
+
+        order order2 = new order(20000000);
+        order1.setProductType("test");
+        service.validateProductGetCosts(order1);
+        assertNull(order2.getCpsq());
+        assertNull(order2.getLaborCPSQ());
     }
 
     /**
@@ -118,12 +133,8 @@ public class FlooringMasteryServiceLayerTest {
         newOrder.setCpsq(new BigDecimal("5.15"));
         newOrder.setLaborCPSQ(new BigDecimal("4.75"));
         newOrder.setArea(new BigDecimal("30.00"));
-        
-        newOrder.setLaborCost((newOrder.getLaborCPSQ().multiply(newOrder.getArea())).setScale(2, RoundingMode.HALF_UP));
-        newOrder.setMaterialCost((newOrder.getCpsq().multiply(newOrder.getArea())).setScale(2, RoundingMode.HALF_UP));
-        newOrder.setTax((newOrder.getLaborCost().add(newOrder.getMaterialCost())).multiply(newOrder.getTaxRate().movePointLeft(2)).setScale(2, RoundingMode.HALF_UP));
-        newOrder.setTotal((newOrder.getLaborCost().add(newOrder.getMaterialCost()).add(newOrder.getTax())).setScale(2, RoundingMode.HALF_UP));
-        
+    
+        service.moneyCalculations(newOrder);
         assertEquals(newOrder.getLaborCost(), new BigDecimal("142.50"));
         assertEquals(newOrder.getMaterialCost(), new BigDecimal("154.50"));
         assertEquals(newOrder.getTax(), new BigDecimal("17.82"));
@@ -139,7 +150,7 @@ public class FlooringMasteryServiceLayerTest {
         newMap = service.getMap();
         
         assertEquals(newMap.get(1).getCustomerName(), "Curley");
-        assertNull(newMap.get(500));
+        assertNull(newMap.get(-1));
     }
 
     /**
@@ -148,14 +159,13 @@ public class FlooringMasteryServiceLayerTest {
     @Test
     public void testAddToMap() throws Exception {
         order order = new order(3);
-        //order.setDate("03172020");
         service.addToMap(order);
         
         TreeMap<Integer,order> newMap = new TreeMap<>();
         newMap = service.getMap();
         
         assertEquals(newMap.get(3), order);
-        
+        service.removeOrder(order);
     }
 
     /**
@@ -196,7 +206,7 @@ public class FlooringMasteryServiceLayerTest {
         service.removeOrder(order);
         
         newMap = service.getMap();
-        assertEquals(newMap.get(3), null);   
+        assertNull(newMap.get(3));   
     }
 
     /**
@@ -210,11 +220,12 @@ public class FlooringMasteryServiceLayerTest {
     /**
      * Test of getCounter method, of class FlooringMasteryServiceLayer.
      */
-   /* @Test
+    @Test
     public void testGetCounter() throws Exception {
-        counter counter = dao.loadCounter();
+        service.loadCounter();
+        counter counter = service.getCurrentCounter();
         
-        assertEquals(counter.getCount(), 3);
+        assertNotNull(counter);
     }
 
     /**

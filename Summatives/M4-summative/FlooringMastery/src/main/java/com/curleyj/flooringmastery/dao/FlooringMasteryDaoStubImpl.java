@@ -26,6 +26,7 @@ public class FlooringMasteryDaoStubImpl implements FlooringMasteryDao {
     order newOrder;
     order newOrder2;
     TreeMap<Integer, order> newMap = new TreeMap<>();
+    HashMap<String, counter> counterMap = new HashMap<>();
     
     public FlooringMasteryDaoStubImpl() {
         newOrder = new order(1);
@@ -69,11 +70,11 @@ public class FlooringMasteryDaoStubImpl implements FlooringMasteryDao {
     public HashMap<Integer, order> loadOrdersByDate(LocalDate ld) {
         String date = ld.format(DateTimeFormatter.ofPattern("MMddyyyy"));
         HashMap<Integer, order> testMap = new HashMap<>();
-        //testMap.putAll(newMap);
-        Set<Integer> orderKey = newMap.keySet();
+        testMap.putAll(newMap);
+        Set<Integer> orderKey = testMap.keySet();
         for (Integer k : orderKey) {
-            if (newMap.get(k).getDate().equals(date)) {
-                String test = newMap.get(k).getDate();
+            if (testMap.get(k).getDate().equals(date)) {
+                String test = testMap.get(k).getDate();
                 if (test.equals(date)) {
                     testMap.put(k, newMap.get(k));
                 }
@@ -143,7 +144,9 @@ public class FlooringMasteryDaoStubImpl implements FlooringMasteryDao {
     @Override
     public void loadCounter() throws FlooringMasteryPersistenceException {
         counter counter = new counter("counter");
-        counter.setCount(3);
+        counter.setName("counter");
+        counter.setCount(1);
+        counterMap.put(counter.getName(), counter);
     }
 
     @Override
@@ -163,7 +166,8 @@ public class FlooringMasteryDaoStubImpl implements FlooringMasteryDao {
 
     @Override
     public counter getCurrentCounter() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        counter counter = counterMap.get("counter");
+        return counter;
     }
 
     @Override
