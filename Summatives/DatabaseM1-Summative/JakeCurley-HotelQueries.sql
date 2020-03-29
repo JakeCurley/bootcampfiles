@@ -7,13 +7,13 @@ USE HotelReservation;
 
 SELECT
 	CONCAT(Guest.FirstName, ' ', Guest.LastName) GuestName,
-    Reservation.RoomNumber,
+    RoomReservation.RoomNumber,
     Reservation.StartDate,
     Reservation.EndDate
 FROM Reservation
 INNER JOIN Guest ON Reservation.GuestID = Guest.GuestID
-INNER JOIN Room ON Reservation.RoomNumber = Room.RoomNumber
 INNER JOIN RoomReservation ON Reservation.ReservationID = RoomReservation.ReservationID
+INNER JOIN Room ON RoomReservation.RoomNumber = Room.RoomNumber
 WHERE Reservation.EndDate BETWEEN '2023/07/01' AND '2023/07/31';
 
 -- Returns
@@ -30,11 +30,12 @@ WHERE Reservation.EndDate BETWEEN '2023/07/01' AND '2023/07/31';
 
 SELECT
 	CONCAT(Guest.FirstName, ' ', Guest.LastName) GuestName,
-    Reservation.RoomNumber,
+    RoomReservation.RoomNumber,
     Reservation.StartDate,
     Reservation.EndDate
 FROM Reservation
-INNER JOIN RoomAmenity ON Reservation.RoomNumber = RoomAmenity.RoomNumber
+INNER JOIN RoomReservation ON Reservation.ReservationID = RoomReservation.ReservationID
+INNER JOIN RoomAmenity ON RoomReservation.RoomNumber = RoomAmenity.RoomNumber
 INNER JOIN Guest ON Reservation.GuestID = Guest.GuestID
 WHERE RoomAmenity.AmenityName = 'Jacuzzi';
 
@@ -60,12 +61,13 @@ WHERE RoomAmenity.AmenityName = 'Jacuzzi';
 
 SELECT
 	CONCAT(Guest.FirstName, ' ', Guest.LastName) GuestName,
-    Reservation.RoomNumber,
+    RoomReservation.RoomNumber,
     Reservation.NumAdults NumberOfAdults,
     Reservation.NumChildren NumberOfChildren,
     Reservation.StartDate
 FROM Reservation
 INNER JOIN Guest ON Reservation.GuestID = Guest.GuestID
+INNER JOIN RoomReservation ON Reservation.ReservationID = RoomReservation.ReservationId
 WHERE Guest.GuestID = 2;
 
 -- RETURNS
@@ -124,11 +126,12 @@ ORDER BY ReservationNumber;
 --------------------------------------------------------------------------------------------------------------------------------------
 
 SELECT
-	Reservation.RoomNumber
+	RoomReservation.RoomNumber
 FROM Reservation
 INNER JOIN Guest ON Reservation.GuestID = Guest.GuestID
+INNER JOIN RoomReservation ON Reservation.ReservationID = RoomReservation.ReservationID
 WHERE (StartDate BETWEEN '2023/04/01' AND '2023/04/30') OR (EndDate BETWEEN '2023/04/01' AND '2023/04/30')
-GROUP BY Reservation.RoomNumber
+GROUP BY RoomReservation.RoomNumber
 HAVING  SUM(NumAdults + NumChildren) >= 3;
 -- Returns nothing?  No rooms booked in April have 3 or more guests.
 --------------------------------------------------------------------------------------------------------------

@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS RoomType (
 );
 
 CREATE TABLE IF NOT EXISTS Room (
-	RoomNumber INT PRIMARY KEY,
+	RoomNumber INT PRIMARY KEY NOT NULL,
     isADAaccessible INT NOT NULL,
     Price DECIMAL(10,2) NOT NULL,
     RoomType CHAR(6) NOT NULL,
@@ -35,14 +35,14 @@ CREATE TABLE IF NOT EXISTS Reservation (
     NumChildren INT,
     StartDate DATE NOT NULL,
     EndDate DATE NOT NULL,
-    TotalCost DECIMAL,
+    TotalCost DECIMAL (10,2),
     GuestID INT NOT NULL,
     foreign key fk_Reservation_Guest (GuestID)
 	 references Guest(GuestID)
 );
 
 CREATE TABLE IF NOT EXISTS AmenityName (
-	AmenityName CHAR(12) PRIMARY KEY
+	AmenityName CHAR(12) PRIMARY KEY NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS RoomAmenity (
@@ -58,23 +58,10 @@ CREATE TABLE IF NOT EXISTS RoomAmenity (
 CREATE TABLE IF NOT EXISTS RoomReservation (
 	ReservationNumber INT,
 	RoomNumber INT NOT NULL,
+    ReservationID INT,
     PRIMARY KEY (ReservationNumber, RoomNumber),
     FOREIGN KEY fk_RoomReservation_Room (RoomNumber)
-		references Room(RoomNumber)
+		references Room(RoomNumber),
+	FOREIGN KEY fk_RoomReservation_Reservation (ReservationID)
+		REFERENCES Reservation(ReservationID)
 );
-
-ALTER TABLE Reservation 
-	ADD COLUMN (
-		RoomNumber INT NOT NULL
-	),
-    ADD CONSTRAINT fk_Reservation_Room
-		FOREIGN KEY (RoomNumber)
-        REFERENCES Room (RoomNumber);
-        
-ALTER TABLE Reservation 
-	ADD COLUMN (
-		ReservationNumber INT
-	),
-    ADD CONSTRAINT fk_Reservation_RoomReservation
-		FOREIGN KEY (ReservationNumber)
-        REFERENCES RoomReservation (ReservationNumber);
