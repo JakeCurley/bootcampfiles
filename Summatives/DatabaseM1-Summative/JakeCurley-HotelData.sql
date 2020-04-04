@@ -82,7 +82,8 @@ INSERT INTO Guest (FirstName, LastName, Address, City, State, Zipcode, PhoneNumb
     ('Walter', 'Holaway', '7556 Arrowhead St.', 'Cumberland', 'RI', 02864, '446-396-6785'),
     ('Wilfred', 'Vise', '77 West Surrey Street', 'Oswego', 'NY', 13126, '834-727-1001'),
     ('Maritza', 'Tilton', '939 Linda Rd.', 'Burke', 'VA', 22015, '446-351-6860'),
-    ('Joleen', 'Tison', '87 Queen St.', 'Drexel Hill', 'PA', 19026, '231-893-2755');
+    ('Joleen', 'Tison', '87 Queen St.', 'Drexel Hill', 'PA', 19026, '231-893-2755'),
+    ('Bob', 'Smith', '123 Faker St.', 'FakeTOwn', 'MN', '12345', '123-123-1234');
 
 
 INSERT INTO Reservation (GuestId, NumAdults, NumChildren, StartDate, EndDate, TotalCost) VALUES
@@ -110,7 +111,8 @@ INSERT INTO Reservation (GuestId, NumAdults, NumChildren, StartDate, EndDate, To
     (4, 2, 2, '2023/11/22', '2023/11/25', 1199.97),
     (2, 2, 0, '2023/11/22', '2023/11/25', 449.97),
     (2, 2, 2, '2023/11/22', '2023/11/25', 599.97),
-    (11, 2, 0, '2023/12/24', '2023/12/28', 699.96);
+    (11, 2, 0, '2023/12/24', '2023/12/28', 699.96),
+    (13, 2, 2, '2023/03/27', '2023/05/04', 5500.00);
     
 INSERT INTO RoomReservation (ReservationNumber, RoomNumber, ReservationID) VALUES
 	(1, 308, 1),
@@ -137,7 +139,8 @@ INSERT INTO RoomReservation (ReservationNumber, RoomNumber, ReservationID) VALUE
 	(21, 401, 22),
 	(22, 206, 23),
 	(22, 301, 24),
-	(23, 302, 25);
+	(23, 302, 25),
+    (24, 308, 26);
 
 SET SQL_SAFE_UPDATES = 0;
 

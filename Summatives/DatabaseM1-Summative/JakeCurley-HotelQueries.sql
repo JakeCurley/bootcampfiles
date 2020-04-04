@@ -130,7 +130,7 @@ SELECT
 FROM Reservation
 INNER JOIN Guest ON Reservation.GuestID = Guest.GuestID
 INNER JOIN RoomReservation ON Reservation.ReservationID = RoomReservation.ReservationID
-WHERE (StartDate BETWEEN '2023/04/01' AND '2023/04/30') OR (EndDate BETWEEN '2023/04/01' AND '2023/04/30')
+WHERE MONTH('2023/04/01') BETWEEN MONTH(StartDate) AND MONTH(EndDate)
 GROUP BY RoomReservation.RoomNumber
 HAVING  SUM(NumAdults + NumChildren) >= 3;
 -- Returns nothing?  No rooms booked in April have 3 or more guests.
