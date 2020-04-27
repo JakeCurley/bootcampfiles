@@ -16,6 +16,4 @@ import java.util.List;
 public interface guessDao {
     guess add(game game, String guess, int exact, int partial, boolean correct);
     List<guess> getAll(int id);
-    guess guessById(int id);  
-    void insertGame(game game, guess guess);
 }

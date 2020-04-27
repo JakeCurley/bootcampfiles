@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Agent Assignment Service</title>
+  </head>
+  <body>
+      <div class="container">
+          <div class="row">
+              <div class="col-6">
+                <h3>Assignments</h3>
+              </div>
+              <div class="col-6 text-right">
+                  <a href="#" th:href="@{displayAddAssignment(identifier=${agent.identifier})}" name="agent"><button class="btn btn-primary">Add an assignment</button></a>
+              </div>
+          </div>
+          <div class="row">
+                <div class="col text-center m-3">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Country</th>
+                                <th>Start</th>
+                                <th>End</th>
+                            </tr>
+                        </thead>
+                        <tbody >
+                            <tr th:each="assignment : ${assignments}">
+                                <td th:text="${assignment.country.name}"></td>
+                                <td th:text="${assignment.startDate}"></td>
+                                <td th:text="${assignment.projectedEndDate}"></td>
+                                <td><a href="#" th:href="@{deleteAssignment(identifier=${assignment.assignmentId})}">Delete</a></td>
+                                <td><a href="#" th:href="@{editAssignment(identifier=${agent.identifier}, assignmentId=${assignment.assignmentId})}">View/Edit</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+          <a href="/" class="btn btn-primary" style="margin-left: 1vw">Home</a>
+      </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  </body>
+</html>

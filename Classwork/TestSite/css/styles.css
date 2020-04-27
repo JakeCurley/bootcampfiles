@@ -1,0 +1,53 @@
+#movieSearch {
+  color: #f2ac16;
+  font-size: 6vw;
+  font-family: Impact, Charcoal, sans-serif;
+}
+
+#movieSearchBox {
+  height: 3vw;
+}
+
+#search-button {
+  background-color: #f2ac16;
+  width: 20vw;
+  margin-top: 1vw;
+}
+
+#searchResult {
+
+}
+
+#test {
+  height:5vw;
+}
+
+.movie {
+  color: white;
+}
+
+#image {
+  width: 5vw;
+  height: 5vw;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+body,html {
+  height: 100%;
+}
+
+body {
+  background-color: #14120b;
+}
+
+#movieTitle {
+  word-break: normal;
+}
+
+.ui-autocomplete {
+  height: 20vw;
+  width: 10vw;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}

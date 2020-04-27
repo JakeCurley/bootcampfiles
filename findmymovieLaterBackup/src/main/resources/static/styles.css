@@ -1,0 +1,66 @@
+#movieSearch {
+  color: #f2ac16;
+  font-size: 6vw;
+  font-family: Impact, Charcoal, sans-serif;
+}
+
+#resultsBox {
+  height: 30vw;
+  margin: 0em;
+  overflow-y: auto;
+}
+
+.infoTitles {
+  color: #f2ac16;
+}
+#test {
+  height: 8vw;
+  background-color: white;
+  border: solid #f2ac16 0.5vw;
+}
+
+.movie {
+  color: white;
+  margin-top: 0px;
+}
+
+#image {
+  width: 8vw;
+  height: 8vw;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.movieListForm {
+  background-color: #14120b;
+  color: #f2ac16;
+}
+
+body,
+.labelClass {
+  background-color: #14120b;
+}
+
+#movieTitle {
+  word-break: normal;
+}
+
+.ui-autocomplete {
+  height: 20vw;
+  width: 10vw;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+h3 {
+  color: #f2ac16;
+  margin-top: 2vw;
+  margin-bottom: 2vw;
+}
+
+.btn-primary,
+.btn-primary:hover .btn-primary:active {
+  background-color: #f2ac16 !important;
+  color: #14120b !important;
+  font-weight: bold !important;
+}

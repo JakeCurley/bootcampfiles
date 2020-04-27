@@ -14,6 +14,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Jake
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/guessGame")
 public class Controller {
@@ -45,10 +47,15 @@ public class Controller {
     public game begin() {
         return service.add();
     }
-    
+
     @PostMapping("/guess")
-    public guess guess(@RequestBody gameGuess gameGuess) {
-        return service.validateAnswer(gameGuess.getGameID(), gameGuess.getGuess());
+    public ResponseEntity<guess> guess(@RequestBody gameGuess gameGuess) {
+        guess guess = service.validateAnswer(gameGuess.getGameID(), gameGuess.getGuess());
+        
+        if (guess == null) {
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+        }
+        return ResponseEntity.ok(guess);
     }
 
     @GetMapping("/game/{id}")

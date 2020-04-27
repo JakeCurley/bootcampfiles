@@ -79,11 +79,20 @@ public class ServiceLayerImpl implements ServiceLayer {
     @Override
     public guess validateAnswer(int gameID, String guess) {
         boolean correct = false;
-        game game = gameDaoDB.gameById(gameID);
+        String answer = "";
+        game game = new game();
+        try {
+            game = gameDaoDB.gameById(gameID);
+            answer = game.getAnswer();
+        } catch (NullPointerException e) {
+            return null;
+        }
         int exact = 0;
         int partial = 0;
-
-        String answer = game.getAnswer();
+        
+        if (!guess.matches("[0-9]{4}")) {
+            return null;
+        }
 
         String answer1 = answer.substring(0, 1);
         String answer2 = answer.substring(1, 2);
@@ -124,11 +133,11 @@ public class ServiceLayerImpl implements ServiceLayer {
             correct = true;
             gameDaoDB.update(isFinished, gameID);
         }
-        guess newGuess = guessDaoDB.add(game, guess, exact, partial, correct);
-        int guessID = newGuess.getGuessId();
-        guessDaoDB.insertGame(game, newGuess);
-
-        return newGuess;
-
+        try {
+            guess newGuess = guessDaoDB.add(game, guess, exact, partial, correct);
+            return newGuess;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

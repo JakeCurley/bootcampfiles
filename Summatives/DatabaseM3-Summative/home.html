@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Vending Machine</title>
+    <link href = "css/bootstrap.css" rel="stylesheet">
+    <link href = "css/styles.css" rel="stylesheet">
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="row text-center">
+        <h1 style="font-weight: bold">Vending Machine</h1>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-sm-8" id="content">
+        </div>
+        <div class="col-sm-4 text-center">
+          <label for="enter-money" class="row control-label">
+            Total $ In
+          </label>
+          <div class="row">
+            <div class="col-sm-offset-1 col-sm-10">
+              <input type="text" class="form-control" id="enter-money" readonly />
+            </div>
+          </div>
+          <div class="row" style="margin-top: 1vw">
+            <div class="col-sm-offset-1 col-sm-5">
+              <button type="button" id="add-dollar" class="btn btn-default"><p>Add Dollar</p></button>
+            </div>
+            <div class="col-sm-5">
+              <button type="button" id="add-quarter" class="btn btn-default"><p>Add Quarter</p></button>
+            </div>
+          </div>
+          <div class="row" style="margin-top: 1vw">
+            <div class="col-sm-offset-1 col-sm-5">
+              <button type="button" id="add-dime" class="btn btn-default"><p>Add Dime</p></button>
+            </div>
+            <div class="col-sm-5">
+              <button type="button" id="add-nickel" class="btn btn-default"><p>Add Nickel</p></button>
+            </div>
+          </div>
+          <hr />
+          <div class="row">
+            <label for="enter-messages" class="row control-label">
+              Messages
+            </label>
+            <div class="row">
+              <div class="col-sm-offset-1 col-sm-10">
+                <textarea type="text" class="form-control" id="enter-messages" readonly></textarea>
+              </div>
+            </div>
+          </div>
+
+          <form class="form-inline" style="margin-top:1vw">
+            <div class="row form-group">
+              <div class col="col-sm-offset-1 col-sm-10">
+                <label for="enter-item" class="row control-label" style="margin-right: 1vw">Item</label>
+                <input type="text" class="form-control" id="enter-item"  readonly />
+              </div>
+            </div>
+          </form>
+          <div class="row">
+            <div class="col-sm-offset-1 col-sm-10">
+              <button type="button" id="buy-button" class="btn btn-default" style="margin-top: 1vw"><p>Make Purchase</p></button>
+            </div>
+          </div>
+          <hr />
+
+          <div class="row text-center">
+            <label for="change-return" class="row control-label">
+              Change
+            </label>
+            <div class="row">
+              <div class="col-sm-offset-1 col-sm-10">
+                <textarea type="text" class="form-control" id="change-return" readonly></textarea>
+              </div>
+            </div>
+          <div class="row">
+            <div class="col-sm-offset-1 col-sm-10">
+              <button type="button" id="change-button" class="btn btn-default" style="margin-top: 1vw"><p>Change Return</p></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" id="hidden-div" style="display:none"></div>
+    </div>
+
+    <script src="js/jquery-2.2.4.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/home.js"></script>
+  </body>
+</html>

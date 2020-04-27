@@ -1,0 +1,42 @@
+.container {
+  height: 100%;
+}
+
+.col-sm-3 {
+  background-color: #0d0d0d;
+  border: 2px solid #e6e6e6;
+  margin: 1vw;
+  height: 22vh;
+  margin-bottom: 2vw;
+}
+
+body {
+  padding: 15px;
+  background-color: #666666;
+}
+
+.btn, .btn:hover, .btn:focus {
+  background-color: #0d0d0d;
+  height: 6vh;
+  width: 100%;
+}
+
+h1, h2, label {
+  color: #0d0d0d;
+}
+
+p {
+  color: #e6e6e6;
+  margin: 0px;
+  word-break: break-all;
+  white-space: pre-line;
+  font-size: 15px;
+}
+
+a {
+  color:black;
+}
+
+.control-label {
+  font-size: 30px;
+}

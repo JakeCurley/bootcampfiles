@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Inventory Manager</title>
+  </head>
+  <body>
+      <div class="container">
+          <div class="row">
+              <h3>Agent Assignment Service</h3>
+          </div>
+          <div class="row">  
+            <div class="col">
+                <form action="addAgent" method="POST" class="form">
+                    <div class="row form-group">
+                        <div class="col">
+                            <label for="firstName">First Name</label>
+                            <input class="form-control" type="text" name="firstName"/>
+                        </div>
+                        <div class="col">
+                            <label for="middleName">Middle Name</label>
+                            <input class="form-control" type="text" name="middleName"/>
+                        </div>
+                        <div class="col">
+                            <label for="middleName">Last Name</label>
+                            <input class="form-control" type="text" name="lastName"/>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col">
+                            <label for="birthDate">Birth Date</label>
+                            <input class="form-control" type="date" name="birthDate"/>
+                        </div>
+                        <div class="col">
+                            <label for="height">Height</label>
+                            <input class="form-control" type="text" name="height"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h3>Agency</h3>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col">
+                            <label for="identifier">Identifier</label>
+                            <input class="form-control" type="text" id="identifier" name="identifier"/>
+                        </div>
+                        <div class="col">
+                            <label for="agency">Agency</label>
+                            <select class="form-control" name="agency">
+                                <option value="0">-Select-</option>
+                                <option th:each="agency : ${agencies}" th:value="${agency.agencyId}" th:text="${agency.name}"></option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="securityClearance">Security Clearance</label>
+                            <select class="form-control" name="securityClearance">
+                                <option value="0">-Select-</option>
+                                <option th:each="clearance : ${clearances}" th:value="${clearance.securityClearanceId}" th:text="${clearance.name}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-6">
+                            <label for="activationDate">Activation Date</label>
+                            <input class="form-control" type="date" id="activationDate" name="activationDate"/>
+                        </div>
+                        <div class="col-6 h-100">
+                            <div class="form-check h-100">
+                                <input type="checkbox" class="form-check-input align-bottom" name="isActive" value="true">
+                                <label class="form-check-label" for="isActive">Is Active</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col">
+                            <label for="pictureUrl">Picture URL</label>
+                            <input class="form-control" type="text" id="picture" name="pictureUrl"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <button type="submit" class="btn btn-primary" id="save">Save</button>
+                        <a href="/" class="btn btn-primary" style="margin-left: 1vw">Cancel</a>
+                    </div>
+                </form>
+            </div>
+          </div>
+      </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  </body>
+</html>

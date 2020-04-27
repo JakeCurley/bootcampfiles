@@ -60,22 +60,9 @@ public class guessDaoDB implements guessDao {
         return newGuess;
     }
 
-    @Override
+    @Override  //Return all guesses for a given gameID
     public List<guess> getAll(int id) {
         final String sql = "SELECT * FROM guess JOIN game ON guess.gameID = game.gameID WHERE game.gameID = ?";
         return jdbc.query(sql, new guessMapper(), id);
     }
-
-    @Override
-    public guess guessById(int id) {
-        final String sql = "SELECT * FROM guess JOIN game ON guess.gameID = game.gameID ORDER BY guessTime WHERE gameID = ?";
-        return jdbc.queryForObject(sql, new guessMapper(), id);
-    }
-    
-    @Override
-    public void insertGame(game game, guess guess) {
-        final String sql = "UPDATE guess SET gameID = ? WHERE guessID = ?";
-        jdbc.update(sql, game.getGameID(), guess.getGuessId());
-    }
-    
 }

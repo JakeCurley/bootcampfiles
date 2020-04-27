@@ -22,4 +22,4 @@ CREATE TABLE guess (
 		REFERENCES game(gameID)
 );
 
-SELECT * FROM guess;
+SELECT * FROM game;
