@@ -1,0 +1,208 @@
+#movieSearch,
+#loginTitle {
+  color: #f2ac16;
+  font-size: 6vw;
+  font-family: Impact, Charcoal, sans-serif;
+}
+
+#resultsBox {
+  height: 30vw;
+  margin: 0em;
+  overflow-y: auto;
+}
+
+label {
+  color: #f2ac16;
+  padding: 0px;
+}
+
+.form-control-static {
+  margin-bottom: 0px;
+}
+
+.test {
+  height: 8vw;
+  background-color: white;
+  border: solid #f2ac16 0.5vw;
+}
+
+.movie {
+  color: white;
+  margin-top: 0px;
+}
+
+#image {
+  width: 8vw;
+  height: 8vw;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.movieListForm {
+  background-color: #14120b;
+  color: #f2ac16;
+}
+
+body,
+.labelClass {
+  background-color: #14120b;
+}
+
+#movieTitle {
+  word-break: normal;
+}
+
+.ui-autocomplete {
+  height: 20vw;
+  width: 10vw;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+h2 {
+  color: #f2ac16;
+  font-size: 4vw;
+}
+h3 {
+  color: #f2ac16;
+  margin-top: 2vw;
+  margin-bottom: 2vw;
+}
+
+.btn-primary,
+.btn-primary:hover .btn-primary:active {
+  background-color: #f2ac16 !important;
+  color: #14120b !important;
+  font-weight: bold !important;
+}
+
+p {
+  color: white;
+  margin-top: 0;
+}
+
+#myListContainer,
+#myStatsContainer {
+  border: 5px outset #f2ac16;
+  border-radius: 23px;
+}
+
+#registerDiv,
+#loginDiv {
+  border: 5px outset #f2ac16;
+  border-radius: 23px;
+  padding: 1vw;
+  margin: 1vw;
+  background-color: #242629;
+}
+
+.myMovie {
+  cursor: pointer;
+}
+
+.star-rating {
+  color: #f2ac16;
+}
+
+.star-rating.star1:after {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: #f2ac16;
+  content: "\f005";
+  padding-left: 10px;
+}
+
+.star-rating.star2:after {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: #f2ac16;
+  content: "\f005\f005";
+  padding-left: 10px;
+}
+
+.star-rating.star3:after {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: #f2ac16;
+  content: "\f005\f005\f005";
+  padding-left: 10px;
+}
+.star-rating.star4:after {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: #f2ac16;
+  content: "\f005\f005\f005\f005";
+  padding-left: 10px;
+}
+.star-rating.star5:after {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: #f2ac16;
+  content: "\f005\f005\f005\f005\f005";
+  padding-left: 10px;
+}
+.star-rating.star6:after {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: #f2ac16;
+  content: "\f005\f005\f005\f005\f005\f005";
+  padding-left: 10px;
+}
+.star-rating.star7:after {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: #f2ac16;
+  content: "\f005\f005\f005\f005\f005\f005\f005";
+  padding-left: 10px;
+}
+.star-rating.star8:after {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: #f2ac16;
+  content: "\f005\f005\f005\f005\f005\f005\f005\f005";
+  padding-left: 10px;
+}
+.star-rating.star9:after {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: #f2ac16;
+  content: "\f005\f005\f005\f005\f005\f005\f005\f005\f005";
+  padding-left: 10px;
+}
+.star-rating.star10:after {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: #f2ac16;
+  content: "\f005\f005\f005\f005\f005\f005\f005\f005\f005\f005";
+  padding-left: 10px;
+}
+
+.statsButton,
+.listlinks {
+  border: 4px solid #14120b;
+  border-radius: 0.7vw;
+  background-color: #f2ac16;
+  border-style: outset;
+  margin-top: 1vw;
+  margin-bottom: 1vw;
+  font-weight: bold;
+  color: #14120b;
+}
+
+.listnameTop {
+  border: 5px groove #242629;
+  border-radius: 8px;
+  background-color: #f2ac16;
+  font-weight: bold;
+  font-size: 2vw;
+}
+
+.movienameBottom {
+  border: 5px groove #242629;
+  border-radius: 8px;
+}
+
+.deleteList {
+  border: 5px groove #242629;
+  border-radius: 8px;
+}

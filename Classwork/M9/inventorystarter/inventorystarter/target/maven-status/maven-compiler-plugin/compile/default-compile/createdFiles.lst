@@ -1,0 +1,8 @@
+com\sg\inventory\repositories\SupplierRepository.class
+com\sg\inventory\entities\Supplier.class
+com\sg\inventory\InventoryApplication.class
+com\sg\inventory\controller\MainController.class
+com\sg\inventory\entities\Product.class
+com\sg\inventory\entities\Store.class
+com\sg\inventory\repositories\ProductRepository.class
+com\sg\inventory\repositories\StoreRepository.class

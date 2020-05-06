@@ -1,0 +1,17 @@
+com\curleyj\securitydemo\config\SecurityConfig.class
+com\curleyj\securitydemo\dao\RoleDao.class
+com\curleyj\securitydemo\config\SecurityWebApplicationInitializer.class
+com\curleyj\securitydemo\dao\UserDao.class
+com\curleyj\securitydemo\controllers\LoginController.class
+com\curleyj\securitydemo\config\PWEnc.class
+com\curleyj\securitydemo\service\UserDetailsServiceImpl.class
+com\curleyj\securitydemo\entities\User.class
+com\curleyj\securitydemo\entities\Role.class
+com\curleyj\securitydemo\dao\UserDaoDB.class
+com\curleyj\securitydemo\dao\UserDaoDB$UserMapper.class
+com\curleyj\securitydemo\controllers\AdminController.class
+com\curleyj\securitydemo\controllers\ContentController.class
+com\curleyj\securitydemo\SecuritydemoApplication.class
+com\curleyj\securitydemo\dao\RoleDaoDB$RoleMapper.class
+com\curleyj\securitydemo\controllers\HomeController.class
+com\curleyj\securitydemo\dao\RoleDaoDB.class

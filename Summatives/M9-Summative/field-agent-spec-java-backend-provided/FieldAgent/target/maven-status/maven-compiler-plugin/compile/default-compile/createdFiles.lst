@@ -1,0 +1,17 @@
+corbos\fieldagent\entities\SecurityClearance.class
+corbos\fieldagent\data\CountryRepository.class
+corbos\fieldagent\data\AgencyRepository.class
+corbos\fieldagent\controllers\MainController.class
+corbos\fieldagent\service\AgentService.class
+corbos\fieldagent\entities\Assignment.class
+corbos\fieldagent\entities\Country.class
+corbos\fieldagent\service\LookupService.class
+corbos\fieldagent\data\AssignmentRepository.class
+corbos\fieldagent\controllers\test.class
+corbos\fieldagent\entities\Agent.class
+corbos\fieldagent\AppStart.class
+corbos\fieldagent\data\SecurityClearanceRepository.class
+corbos\fieldagent\service\AssignmentService.class
+corbos\fieldagent\service\AgencyService.class
+corbos\fieldagent\entities\Agency.class
+corbos\fieldagent\data\AgentRepository.class

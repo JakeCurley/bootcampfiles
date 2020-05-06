@@ -1,0 +1,96 @@
+
+<!doctype html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Agent Assignment Service</title>
+  </head>
+  <body>
+      <div class="container">
+          <div class="row">
+              <h3>Assignment</h3>
+          </div>
+          <div class="row">  
+            <div class="col">
+                <form action="editAssignment" method="POST" class="form">
+                    <div class="row form-group">
+                        <div class="col">
+                            <label for="fieldAgent">Field Agent</label>
+                            <select class="form-control" name="fieldAgent">
+                                <option name="fieldAgent" th:value="${agent.firstName + ' ' + agent.middleName + ' ' + agent.lastName} ?: ''" th:text="${agent.firstName + ' ' + agent.middleName + ' ' + agent.lastName}"></option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="country">Country</label>
+                            <select class="form-control" name="country">
+                                <option value="disabled">-Select Country-</option>
+                                <option  name="country" th:selected="${countryNew?.name == country?.name}" th:each="country : ${countries}" th:value="${country?.countryCode} ?: ''"  th:text="${country.name}"></option>
+                            </select>
+                            <div th:if="${#fields.hasErrors('assignment.country')}">
+                                <p th:each="error : ${#fields.errors('assignment?.country')}" class="alert alert-danger"
+                                  th:text="${error}"></p>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col">
+                            <label for="startDate">Start</label>
+                            <input th:value="${assignment?.startDate} ?: ''" class="form-control" type="date" name="startDate" max="12/31/9999"/>
+                            <div th:if="${#fields.hasErrors('assignment.startDate')}">
+                                <p th:each="error : ${#fields.errors('assignment.startDate')}" class="alert alert-danger"
+                                  th:text="${error}"></p>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="projectedEndDate">Project End Date</label>
+                            <input th:value="${assignment?.projectedEndDate} ?: ''" class="form-control" type="date" name="projectedEndDate" max="12/31/9999"/>
+                            <div th:if="${#fields.hasErrors('assignment.projectedEndDate')}">
+                                <p th:each="error : ${#fields.errors('assignment.projectedEndDate')}" class="alert alert-danger"
+                                  th:text="${error}"></p>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="actualEndDate">Actual End Date</label>
+                            <input th:value="${assignment?.actualEndDate} ?: null" class="form-control" type="date" name="actualEndDate" max="12/31/9999"/>
+                            <div th:if="${#fields.hasErrors('assignment.actualEndDate')}">
+                                <p th:each="error : ${#fields.errors('assignment.actualEndDate')}" class="alert alert-danger"
+                                  th:text="${error}"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col">
+                            <label for="notes">Notes</label>
+                            <textarea th:text="${assignment.notes}" class="form-control" type="text" id="notes" name="notes"></textarea>
+                            <div th:if="${#fields.hasErrors('assignment.notes')}">
+                                <p th:each="error : ${#fields.errors('assignment.notes')}" class="alert alert-danger"
+                                  th:text="${error}"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="hidden" th:value="${assignment.assignmentId}" name="assignmentId" />
+                        <input type="hidden" th:value="${countryNew?.countryCode}" name="countryCode" />
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <a href="#" th:href="@{displayAssignments(identifier=${assignment.agent.identifier})}" class="btn btn-primary" id="cancel" style="margin-left: 1vw">Cancel</a>
+                    </div>
+                </form>
+            </div>
+          </div>
+      </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  </body>
+</html>
+
