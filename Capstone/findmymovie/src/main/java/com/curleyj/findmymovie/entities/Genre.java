@@ -13,6 +13,7 @@ public class Genre {
     private int genreID;
     private String genreName;
     private int genreCount;
+    private String userName;
     
     public Genre(String genreName) {
         this.genreName = genreName;
@@ -41,4 +42,14 @@ public class Genre {
     public void setGenreCount(int genreCount) {
         this.genreCount = genreCount;
     }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+    
+    
 }

@@ -45,8 +45,8 @@ public class ServiceLayerImpl implements ServiceLayer {
     MovieListDao movieListDao;
     
     @Override
-    public List<MovieList> getAllMovieList() {
-        return movieListDao.getAllMovieList();
+    public List<MovieList> getAllMovieList(MovieList ml) {
+        return movieListDao.getAllMovieList(ml);
     }
     
     @Override
@@ -110,13 +110,18 @@ public class ServiceLayerImpl implements ServiceLayer {
     }
     
     @Override
-    public List<Genre> getAllGenres() {
-        return genreDao.getAllGenres();
+    public List<Genre> getAllGenres(Movie movie) {
+        return genreDao.getAllGenres(movie);
     }
     
     @Override
-    public List<Actor> getAllActors() {
-        return actorDao.getAllActors();
+    public List<Actor> getAllActors(Movie movie) {
+        return actorDao.getAllActors(movie);
+    }
+    
+    @Override
+    public List<Movie> getAllRatings(Movie movie) {
+        return movieDao.getAllRatings(movie);
     }
     
     @Override
@@ -130,17 +135,17 @@ public class ServiceLayerImpl implements ServiceLayer {
     }
     
     @Override
-    public List<Movie> scoreComparisonChart() {
-        return movieDao.scoreComparisonChart();
+    public List<Movie> scoreComparisonChart(Movie movie) {
+        return movieDao.scoreComparisonChart(movie);
     }
     
     @Override
-    public List<Movie> budgetScoreChart() {
-        return movieDao.budgetScoreChart();
+    public List<Movie> budgetScoreChart(Movie movie) {
+        return movieDao.budgetScoreChart(movie);
     }
     
     @Override
-    public List<Movie> movieLengthChart() {
-        return movieDao.movieLengthChart();
+    public List<Movie> movieLengthChart(Movie movie) {
+        return movieDao.movieLengthChart(movie);
     }
 }

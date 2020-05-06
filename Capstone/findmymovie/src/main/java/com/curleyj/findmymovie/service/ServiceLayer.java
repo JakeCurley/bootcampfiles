@@ -20,7 +20,7 @@ import java.util.List;
 
 public interface ServiceLayer {
     
-    List<MovieList> getAllMovieList();
+    List<MovieList> getAllMovieList(MovieList ml);
     MovieList addList(MovieList movieList);
     Movie addMovieToList(Movie movie, String listName);
     void addActor(Actor actor);
@@ -33,11 +33,12 @@ public interface ServiceLayer {
     void deleteList(MovieList movieList);
     void deleteMovie(Movie movie);
     void updateUserScore(Movie movie);
-    List<Genre> getAllGenres();
-    List<Actor> getAllActors();
+    List<Genre> getAllGenres(Movie movie);
+    List<Actor> getAllActors(Movie movie);
+    List<Movie> getAllRatings(Movie movie);
     LoginInfo register(LoginInfo li);
     LoginInfo login(LoginInfo li);
-    List<Movie> scoreComparisonChart();
-    List<Movie> budgetScoreChart();
-    List<Movie> movieLengthChart();
+    List<Movie> scoreComparisonChart(Movie movie);
+    List<Movie> budgetScoreChart(Movie movie);
+    List<Movie> movieLengthChart(Movie movie);
 }

@@ -69,8 +69,9 @@ public class ServiceLayerImplTest {
     
     @BeforeEach
     public void setUp() {
-        
-        List<MovieList> movieLists = movieListDao.getAllMovieList();
+        MovieList forUser = new MovieList();
+        forUser.setUserName("admin");
+        List<MovieList> movieLists = movieListDao.getAllMovieList(forUser);
         try {
             for (MovieList list : movieLists) {
                 movieListDao.deleteList(list);
@@ -86,9 +87,17 @@ public class ServiceLayerImplTest {
             }
         } catch(NullPointerException e) {}
         
-        List<Movie> movies2 = movieDao.budgetScoreChart();
+        LoginInfo newLogin = new LoginInfo();
+        newLogin.setUserName("admin");
+        newLogin.setPassword("password");
+        liDao.register(newLogin);
+        
+        Movie movieForUser = new Movie();
+        movieForUser.setUserName("admin");
+        List<Movie> movies2 = movieDao.budgetScoreChart(movieForUser);
         MovieList ml = new MovieList();
         ml.setListName("list1");
+        ml.setUserName("admin");
         movieListDao.add(ml);
         
         Movie movie2 = new Movie();
@@ -98,21 +107,24 @@ public class ServiceLayerImplTest {
             movie2.setReleaseDate("2015-01-01");
             movie2.setRating("");
             movie2.setRunTime(120);
-            movie2.setDirector("Test director");
             movie2.setPlot("This is a test plot");
             movie2.setPoster("iGoXIpQb7Pot00EEdwpwPajheZ5.jpg");
             movie2.setPopularity("7.9");
             movie2.setBudget(50000000);
+            movie2.setUserName("admin");
+            
         movieDao.add(movie2, ml.getListName());
         movieListDao.movieListByName(movie2, ml.getListName());
         
         Actor actor = new Actor("");
         actor.setActorName("TestActor");
+        actor.setUserName("admin");
         actorDao.add(actor);
         movieDao.addActorToMovie(movie2, actor);
         
         Genre genre = new Genre("");
         genre.setGenreName("GenreTest");
+        genre.setUserName("admin");
         genreDao.add(genre);
         movieDao.addGenreToMovie(movie2, genre);  
     }
@@ -126,7 +138,9 @@ public class ServiceLayerImplTest {
      */
     @Test
     public void testGetAllMovieList() {
-        List<MovieList> movieLists = movieListDao.getAllMovieList();
+        MovieList ml = new MovieList();
+        ml.setUserName("admin");
+        List<MovieList> movieLists = movieListDao.getAllMovieList(ml);
         assertEquals(movieLists.size(), 1);
     }
 
@@ -137,14 +151,16 @@ public class ServiceLayerImplTest {
     public void testAddList() {
         MovieList newList = new MovieList();
         newList.setListName("Test List");
+        newList.setUserName("admin");
         movieListDao.add(newList);
-        List<MovieList> lists = movieListDao.getAllMovieList();
+        List<MovieList> lists = movieListDao.getAllMovieList(newList);
         
         assertEquals(lists.size(), 2);
         assertNotEquals(lists.size(), 3);
         
         //Test duplicate list names
         MovieList failList = new MovieList();
+        failList.setUserName("admin");
         failList.setListName("list1");
         
         MovieList testFail = movieListDao.add(failList);
@@ -164,12 +180,15 @@ public class ServiceLayerImplTest {
             movie.setReleaseDate("2015-01-01");
             movie.setRating("");
             movie.setRunTime(120);
-            movie.setDirector("Test director");
             movie.setPlot("This is a test plot");
             movie.setPoster("iGoXIpQb7Pot00EEdwpwPajheZ5.jpg");
             movie.setPopularity("7.9");
             movie.setBudget(50000000);
-            List<MovieList> lists = movieListDao.getAllMovieList();
+            movie.setUserName("admin");
+            
+            MovieList ml = new MovieList();
+            ml.setUserName("admin");
+            List<MovieList> lists = movieListDao.getAllMovieList(ml);
             
             for (MovieList list : lists) {
                 movieDao.add(movie, list.getListName());
@@ -188,11 +207,11 @@ public class ServiceLayerImplTest {
             movie2.setReleaseDate("2015-01-01");
             movie2.setRating("");
             movie2.setRunTime(120);
-            movie2.setDirector("Test director");
             movie2.setPlot("This is a test plot");
             movie2.setPoster("iGoXIpQb7Pot00EEdwpwPajheZ5.jpg");
             movie2.setPopularity("7.9");
             movie2.setBudget(50000000);
+            movie2.setUserName("admin");
             
             Movie failAdd = movieDao.add(movie2, "list1");
             assertNull(failAdd);
@@ -206,10 +225,13 @@ public class ServiceLayerImplTest {
         
         Actor actor = new Actor("");
         actor.setActorName("ActorTest");
+        
+        Movie forUserName = new Movie();
+        forUserName.setUserName("admin");
         actorDao.add(actor);
-        List<Actor> actors = actorDao.getAllActors();
-        assertEquals(actors.size(), 2);
-        assertNotEquals(actors.size(), 3);
+        List<Actor> actors = actorDao.getAllActors(forUserName);
+        assertEquals(actors.size(), 1);
+        assertNotEquals(actors.size(), 2);
         
     }
 
@@ -222,9 +244,12 @@ public class ServiceLayerImplTest {
         Genre genre = new Genre("");
         genre.setGenreName("TestGenre");
         genreDao.add(genre);
-        List<Genre> genres = genreDao.getAllGenres();
-        assertEquals(genres.size(), 2);
-        assertNotEquals(genres.size(), 1);
+        
+        Movie forUserName = new Movie();
+        forUserName.setUserName("admin");
+        List<Genre> genres = genreDao.getAllGenres(forUserName);
+        assertEquals(genres.size(), 1);
+        assertNotEquals(genres.size(), 2);
         
     }
 
@@ -235,6 +260,7 @@ public class ServiceLayerImplTest {
     public void testGetCompleteList() {
         MovieList ml = new MovieList();
         ml.setListName("list2");
+        ml.setUserName("admin");
         movieListDao.add(ml);
         
         Movie movie2 = new Movie();
@@ -244,11 +270,11 @@ public class ServiceLayerImplTest {
             movie2.setReleaseDate("2015-01-01");
             movie2.setRating("");
             movie2.setRunTime(120);
-            movie2.setDirector("Test director");
             movie2.setPlot("This is a test plot");
             movie2.setPoster("iGoXIpQb7Pot00EEdwpwPajheZ5.jpg");
             movie2.setPopularity("7.9");
             movie2.setBudget(50000000);
+            movie2.setUserName("admin");
         movieDao.add(movie2, ml.getListName());
         movieListDao.movieListByName(movie2, ml.getListName());
         MovieListActorGenre daoList = movieListDao.getCompleteList(ml);
@@ -262,8 +288,9 @@ public class ServiceLayerImplTest {
      */
     @Test
     public void testGetMyMovie() {
-        
-        List<Movie> movies = movieDao.budgetScoreChart();
+        Movie forUserName = new Movie();
+        forUserName.setUserName("admin");
+        List<Movie> movies = movieDao.budgetScoreChart(forUserName);
         System.out.println(movies.size());
         
         for (Movie m : movies) {
@@ -282,12 +309,13 @@ public class ServiceLayerImplTest {
     public void testDeleteList() {
         MovieList list = new MovieList();
         list.setListName("deleteList");
+        list.setUserName("admin");
         movieListDao.add(list);
-        List<MovieList> lists = movieListDao.getAllMovieList();
+        List<MovieList> lists = movieListDao.getAllMovieList(list);
         assertEquals(lists.size(),2);
         
         movieListDao.deleteList(list);
-        lists = movieListDao.getAllMovieList();
+        lists = movieListDao.getAllMovieList(list);
         assertEquals(lists.size(), 1);
     }
 
@@ -304,19 +332,19 @@ public class ServiceLayerImplTest {
             movie2.setReleaseDate("2015-01-01");
             movie2.setRating("");
             movie2.setRunTime(120);
-            movie2.setDirector("Test director");
             movie2.setPlot("This is a test plot");
             movie2.setPoster("iGoXIpQb7Pot00EEdwpwPajheZ5.jpg");
             movie2.setPopularity("7.9");
             movie2.setBudget(50000000);
+            movie2.setUserName("admin");
             
         movieDao.add(movie2, "list1");
         movieListDao.movieListByName(movie2, "list1");
-        List<Movie> movies = movieDao.movieLengthChart();
+        List<Movie> movies = movieDao.movieLengthChart(movie2);
         assertEquals(movies.size(), 2);
         
         movieDao.deleteMovie(movie2);
-        movies = movieDao.movieLengthChart();
+        movies = movieDao.movieLengthChart(movie2);
         assertEquals(movies.size(), 1);
         
     }
@@ -326,15 +354,16 @@ public class ServiceLayerImplTest {
      */
     @Test
     public void testUpdateUserScore() {
-        
-        List<Movie> movies = movieDao.budgetScoreChart();
+        Movie movie = new Movie();
+        movie.setUserName("admin");
+        List<Movie> movies = movieDao.budgetScoreChart(movie);
         for (Movie m : movies) {
             assertEquals(m.getUserScore(), 5);
             m.setUserScore(10);
             movieDao.updateUserScore(m);
         }
         
-        movies = movieDao.budgetScoreChart();
+        movies = movieDao.budgetScoreChart(movie);
         for (Movie m2 : movies) {
             assertEquals(m2.getUserScore(), 10);
         }
@@ -345,8 +374,10 @@ public class ServiceLayerImplTest {
      */
     @Test
     public void testGetAllGenres() {
-        List<Genre> genres = genreDao.getAllGenres();
-        assertEquals(genres.size(), 2);
+        Movie movie = new Movie();
+        movie.setUserName("admin");
+        List<Genre> genres = genreDao.getAllGenres(movie);
+        assertEquals(genres.size(), 1);
     }
 
     /**
@@ -354,8 +385,10 @@ public class ServiceLayerImplTest {
      */
     @Test
     public void testGetAllActors() {
-        List<Actor> actors = actorDao.getAllActors();
-        assertEquals(actors.size(), 2);
+        Movie movie = new Movie();
+        movie.setUserName("admin");
+        List<Actor> actors = actorDao.getAllActors(movie);
+        assertEquals(actors.size(), 1);
     }
 
     /**
@@ -400,7 +433,9 @@ public class ServiceLayerImplTest {
      */
     @Test
     public void testScoreComparisonChart() {
-        List<Movie> movies = movieDao.scoreComparisonChart();
+        Movie movie = new Movie();
+        movie.setUserName("admin");
+        List<Movie> movies = movieDao.scoreComparisonChart(movie);
         assertEquals(movies.size(), 1);
     }
 
@@ -409,7 +444,9 @@ public class ServiceLayerImplTest {
      */
     @Test
     public void testBudgetScoreChart() {
-        List<Movie> movies = movieDao.budgetScoreChart();
+        Movie movie = new Movie();
+        movie.setUserName("admin");
+        List<Movie> movies = movieDao.budgetScoreChart(movie);
         assertEquals(movies.size(), 1);
     }
 
@@ -418,7 +455,9 @@ public class ServiceLayerImplTest {
      */
     @Test
     public void testMovieLengthChart() {
-        List<Movie> movies = movieDao.movieLengthChart();
+        Movie movie = new Movie();
+        movie.setUserName("admin");
+        List<Movie> movies = movieDao.movieLengthChart(movie);
         assertEquals(movies.size(), 1);
     }
     

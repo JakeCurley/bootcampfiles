@@ -35,6 +35,7 @@ public class MovieListDaoDB implements MovieListDao {
             MovieList movieList = new MovieList();
             movieList.setListID(Integer.parseInt(rs.getString("listID")));
             movieList.setListName(rs.getString("listName"));
+            movieList.setUserName(rs.getString("userName"));
             return movieList;
         }
     }
@@ -42,8 +43,8 @@ public class MovieListDaoDB implements MovieListDao {
     @Override
     public MovieList add(MovieList movieList) {
         int i = 0;
-        final String SELECT_MOVIE_LIST = "SELECT * FROM movieList";
-        List<MovieList> MovieLists = jdbc.query(SELECT_MOVIE_LIST, new MovieListMapper());
+        final String SELECT_MOVIE_LIST = "SELECT * FROM movieList WHERE userName = ?";
+        List<MovieList> MovieLists = jdbc.query(SELECT_MOVIE_LIST, new MovieListMapper(), movieList.getUserName());
         for (MovieList m : MovieLists) {
             if (movieList.getListName().equals(m.getListName())) {
                 i++;
@@ -51,8 +52,8 @@ public class MovieListDaoDB implements MovieListDao {
         }
         
         if (i == 0) {
-        final String INSERT_LIST = "INSERT INTO movieList(listName) VALUES (?)";
-        jdbc.update(INSERT_LIST, movieList.getListName());
+        final String INSERT_LIST = "INSERT INTO movieList(listName, userName) VALUES (?,?)";
+        jdbc.update(INSERT_LIST, movieList.getListName(), movieList.getUserName());
         
         int newId = jdbc.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
         movieList.setListID(newId);
@@ -62,17 +63,17 @@ public class MovieListDaoDB implements MovieListDao {
     }
 
     @Override
-    public List<MovieList> getAllMovieList() {
-        final String SELECT_MOVIE_LIST = "SELECT * FROM movieList";
-        List<MovieList> MovieLists = jdbc.query(SELECT_MOVIE_LIST, new MovieListMapper());
+    public List<MovieList> getAllMovieList(MovieList ml) {
+        final String SELECT_MOVIE_LIST = "SELECT * FROM movieList WHERE userName = ?";
+        List<MovieList> MovieLists = jdbc.query(SELECT_MOVIE_LIST, new MovieListMapper(), ml.getUserName());
         return MovieLists;
     }
 
     @Override
     public void movieListByName(Movie movie, String name) {
         
-       final String SELECT_BY_NAME = "SELECT * FROM movieList WHERE listName = ?";
-       MovieList movieList = jdbc.queryForObject(SELECT_BY_NAME, new MovieListMapper(), name);
+       final String SELECT_BY_NAME = "SELECT * FROM movieList WHERE listName = ? AND userName = ?";
+       MovieList movieList = jdbc.queryForObject(SELECT_BY_NAME, new MovieListMapper(), name, movie.getUserName());
 
        final String INSERT_MOVIE_LIST = "INSERT INTO movieListmovie (movieID, listID) VALUES (?,?)";
        jdbc.update(INSERT_MOVIE_LIST, movie.getMovieID(), movieList.getListID());

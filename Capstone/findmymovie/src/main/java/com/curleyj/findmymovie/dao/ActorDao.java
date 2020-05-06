@@ -6,6 +6,7 @@
 package com.curleyj.findmymovie.dao;
 
 import com.curleyj.findmymovie.entities.Actor;
+import com.curleyj.findmymovie.entities.Movie;
 import java.util.List;
 
 /**
@@ -14,5 +15,5 @@ import java.util.List;
  */
 public interface ActorDao {
     void add(Actor actorName);
-    List<Actor> getAllActors();
+    List<Actor> getAllActors(Movie movie);
 }

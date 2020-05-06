@@ -11,6 +11,10 @@ $(document).ready(function () {
     login(userName, password);
   });
 
+  $("#logoutButton").click(function (event) {
+    displayLoginScreen();
+  });
+
   $("#genreStats").click(function (event) {
     $("#myCharts").show();
     if ($("#genreChartDiv").is(":hidden")) {
@@ -30,6 +34,17 @@ $(document).ready(function () {
       return;
     } else {
       getAllActors();
+    }
+  });
+
+  $("#ratingsStats").click(function (event) {
+    $("#myCharts").show();
+    if ($("#genreChartDiv").is(":hidden")) {
+      $("#genreChartDiv").toggle();
+      getAllRatings();
+      return;
+    } else {
+      getAllRatings();
     }
   });
 
@@ -116,8 +131,7 @@ $(document).ready(function () {
             result += '<div class="col-sm-9 text-left my-auto">';
             result += '<h4 class="movieTitle">' + title + "(" + date + ")</h3>";
             result += "</div></div>";
-            result +=
-              '<div style="display:none" class="imdbID">' + id + "</div>";
+            result += '<div style="display:none" id="imdbID">' + id + "</div>";
             result += "</a></div>";
 
             $("#resultsBox").append(result);
@@ -138,7 +152,7 @@ $(document).ready(function () {
 
   /*Links for search results*/
   $(document).on("click", ".link", function (event) {
-    var realId = $(this).find(".imdbID").html();
+    var realId = $(this).find("#imdbID").html();
     findMovie(realId);
   });
 
@@ -151,9 +165,9 @@ $(document).ready(function () {
   });
 
   /*Links for movies in a list*/
-  $(document).on("click", "#myMovieLink", function (event) {
+  $(document).on("click", ".myMovieLink", function (event) {
     var movieID = $(this).find(".myMovieID").html();
-    var listID = $(this).find(".listIDFromMovie").html();
+    var listID = $(this).find("#listIDFromMovie").html();
     $("#searchResult").empty();
     findMyMovie(movieID, listID);
   });
@@ -220,7 +234,7 @@ $(document).ready(function () {
 
   /*Delete list button - Displays delete warning screen*/
   $(document).on("click", ".deleteList", function (event) {
-    var listID = $(this).find(".listIDFromMovie").html();
+    var listID = $(this).find("#listIDForDelete").html();
     $("#listToBeDeleted").append(listID);
     displayDeleteWarningScreen();
   });
@@ -269,8 +283,15 @@ function register(newUserName, newPassword) {
       password: newPassword,
     }),
     success: function (message) {
-      $("#loginScreen").hide();
-      displayHomePage();
+      $("#userName").val(newUserName);
+      var valid =
+        '<h5 style="color: white; margin-left: 1vw;">Account created successfully.  Please login.</h5>';
+      $("#invalidLogin").text("");
+      $("#duplicateUserName").text("");
+      $("#invalidLogin").append(valid);
+      $("#newUserName").val("");
+      $("#newPassword").val("");
+      $("#confirmPassword").val("");
     },
     error: function (xhr, status, error) {
       var message = xhr.status;
@@ -310,6 +331,7 @@ function login(userName, password) {
         console.log(message);
         $("#invalidLogin").text("");
         $("#invalidLogin").append(message);
+        $("#invalidLogin").show();
       }
     },
   });
@@ -324,10 +346,10 @@ function findMovie(realId) {
     url:
       "https://api.themoviedb.org/3/movie/" +
       realId +
-      "?api_key=1d86b5ada9e966c6efb7b12938ffccf4&append_to_response=credits",
+      "?api_key=1d86b5ada9e966c6efb7b12938ffccf4&append_to_response=credits,release_dates",
     success: function (movie) {
       var test = JSON.stringify(movie);
-      var imdbID = movie.imdb_id;
+      var imdbID = realId;
       var posterPath = movie.poster_path;
       if (posterPath != null) {
         var workingPoster = posterPath.substring(1);
@@ -337,19 +359,19 @@ function findMovie(realId) {
       var poster = "https://image.tmdb.org/t/p/w342/" + movie.poster_path;
       var title = movie.title;
       var releaseDate = movie.release_date;
-      var rating = null;
+      var rating = movie.release_dates.results;
+      for (k = 0; k < rating.length; k++) {
+        if (rating[k].iso_3166_1 === "US") {
+          var actualRating = rating[k].release_dates[0].certification;
+        }
+      }
+
       var runtime = movie.runtime;
       var popularity = movie.vote_average;
       var budget = movie.budget;
       var genres = [];
       movie.genres.forEach(function (entry) {
         genres.push(entry.name);
-      });
-      var directors = [];
-      movie.credits.crew.forEach(function (entry) {
-        if (entry.job === "Director") {
-          directors.push(entry.name);
-        }
       });
       var plot = movie.overview;
       var actors = [];
@@ -358,48 +380,46 @@ function findMovie(realId) {
       });
       var test = actors.slice(0, 8);
       var row =
-        '<div class="col-sm-offset-2 col-sm-8" style="border: 4px solid #f2ac16; padding: 3vw;">';
-      row += '<div class="row">';
+        '<div class="col-sm-offset-2 col-sm-10" style="border: 4px solid #f2ac16; padding: 0vw 3vw 1vw 3vw; margin-top: 2vw;">';
       row +=
-        '<div class="col-5"><div class="row movie text-center"><img src="' +
+        '<div class="row"><div class="col-12"><a id="closeButton" style="margin-left: 100%"><span id="closeMovieSelection" style="font-size: 2vw; font-family: Times New Roman; color: #f2ac16;">&#10006;</span></a></div>';
+      row +=
+        '<div class="col-4"><div class="row movie text-center"><img src="' +
         poster +
-        '"/></div></div>';
+        '" class="img-fluid"/></div></div>';
       row +=
         '<div class="row movie" style="display:none" id="posterUrl">' +
         workingPoster +
         "</div>";
+      row += '<div class="col-7"><form class="form-group mb-0">';
       row +=
-        '<div class="col-7"><div class="row justify-content-end" style="margin: 0px"><a id="closeButton"><span id="closeMovieSelection" style="font-size: 2vw; font-family: Times New Roman; color: #f2ac16;">&#10006;</span></a></div><div class="row movie"><p class="infoTitles">Title: </p><br><p id="title">' +
+        '<div class="form-group mt-0 mb-0"><label class="col-1 col-form-label">Title: </label><div class="col-11"><p class="form-control-static" id="title">' +
         title +
-        "</p></div>";
+        "</p></div></div>";
       row +=
-        '<div class="row movie"><p class="infoTitles">Plot: </p><p id="plot">' +
+        '<div class="form-group mt-0 mb-0"><label class="col-1 col-form-label">Plot: </label><div class="col-11"><p class="form-control-static" id="plot">' +
         plot +
-        "</p></div>";
+        "</p></div></div>";
       row +=
-        '<div class="row movie"><p class="infoTitles">Release Date: </p><p id="releaseDate">' +
+        '<div class="form-group mt-0 mb-0"><label class="col-3 col-form-label">Release Date: </label><div class="col-9"><p class="form-control-static" id="releaseDate">' +
         releaseDate +
-        "</p></div>";
+        "</p></div></div>";
       row +=
-        '<div class="row movie"><p class="infoTitles">Rating: </p><p id="rating">' +
-        rating +
-        "</p></div>";
+        '<div class="form-group mt-0 mb-0"><label class="col-1 col-form-label">Rating: </label><div class="col-11"><p class="form-control-static" id="rating">' +
+        actualRating +
+        "</p></div></div>";
       row +=
-        '<div class="row movie"><p class="infoTitles">Run time: </p><p id="runtime">' +
+        '<div class="form-group mt-0 mb-0"><label class="col-3 col-form-label">Run time: </label><div class="col-9"><p class="form-control-static" id="runtime">' +
         runtime +
-        "</p><p> minutes</p></div>";
+        " minutes</p></div></div>";
       row +=
-        '<div class="row movie"><p class="infoTitles">Genre: </p><p id="genre">' +
+        '<div class="form-group mt-0 mb-0"><label class="col-1 col-form-label">Genre: </label><div class="col-11"><p class="form-control-static" id="genre">' +
         genres.toString() +
-        "</p></div>";
+        "</p></div></div>";
       row +=
-        '<div class="row movie"><p class="infoTitles">Director: </p><p id="director">' +
-        directors.toString() +
-        "</p></div>";
-      row +=
-        '<div class="row movie"><p class="infoTitles">Actors: </p><p id="actor">' +
+        '<div class="form-group mt-0 mb-0"><label class="col-1 col-form-label">Actors: </label><div class="col-11"><p class="form-control-static" id="actor">' +
         test.toString() +
-        "</p></div>";
+        "</p></div></div></form>";
       row += '<div style="display:none;" id="budget">' + budget + "</div>";
       row +=
         '<div style="display:none" id="popularity">' + popularity + "</div>";
@@ -434,7 +454,6 @@ function findMyMovie(movieID, listID) {
     success: function (movie) {
       var actors = movie.actorList;
       var genres = movie.genreList;
-      console.log(actors[1].actorName);
       var movieID = movie.movie.movieID;
       var imdbID = movie.movie.imdbID;
       var poster = movie.movie.poster;
@@ -444,7 +463,7 @@ function findMyMovie(movieID, listID) {
       var releaseDate = movie.movie.releaseDate;
       var runTime = movie.movie.runTime;
       var plot = movie.movie.plot;
-      var rating = null;
+      var rating = movie.movie.rating;
 
       var actorString = "";
       for (i = 0; i < actors.length; i++) {
@@ -454,7 +473,6 @@ function findMyMovie(movieID, listID) {
         }
         actorString += ", ";
       }
-      console.log(actorString);
 
       var genreString = "";
       for (i = 0; i < genres.length; i++) {
@@ -464,54 +482,58 @@ function findMyMovie(movieID, listID) {
         }
         genreString += ", ";
       }
-      console.log(genreString);
 
       var row =
-        '<div class="col-sm-offset-2 col-sm-8" style="border: 4px solid #f2ac16; padding: 3vw; margin-top: 2vw;">';
-      row += '<div class="row">';
+        '<div class="col-sm-offset-2 col-sm-10" style="border: 4px solid #f2ac16; padding: 0vw 3vw 1.5vw 3vw; margin-top: 2vw;">';
       row +=
-        '<div class="col-5"><div class="row movie text-center"><img src="' +
+        '<div class="row"><div class="col-12"><a class="closeMyMovieButton" style="margin-left: 100%"><span id="closeMovieSelection" style="font-size: 1.5vw; font-family: Times New Roman; color: #f2ac16;">&#10006;</span></a></div>';
+      row +=
+        '<div class="col-4"><div class="row movie text-center"><img src="' +
         workingPoster +
-        '"/></div></div>';
+        '" class="img-fluid"/></div>';
+      row +=
+        '<div class="row justify-content-center" style="margin-top: 1vw;"><button class="btn btn-dark removeMovieButton">Remove from list<div style="display:none" class="movieIDToRemove">' +
+        movieID +
+        "</div></button></div></div>";
       row +=
         '<div class="row movie" style="display:none" id="posterUrl">' +
         workingPoster +
         "</div>";
+      row += '<div class="col-8">';
       row +=
-        '<div class="col-7"><div class="row justify-content-end" style="margin: 0px"><a class="closeMyMovieButton"><span id="closeMovieSelection" style="font-size: 2vw; font-family: Times New Roman; color: #f2ac16;">&#10006;</span></a></div><div class="row movie"><p class="infoTitles">Title: </p><br><p id="title">' +
+        '<form class="form-group mb-0"><div class="form-group mt-0 mb-0"><label class="col-1 col-form-label">Title: </label><div class="col-11"><p class="form-control-static" id="title">' +
         title +
-        "</p></div>";
+        "</p></div></div>";
       row +=
-        '<div class="row movie"><p class="infoTitles">Plot: </p><p id="plot">' +
+        '<div class="form-group mt-0 mb-0"><label class="col-1 col-form-label">Plot: </label><div class="col-11"><p class="form-control-static" id="plot">' +
         plot +
-        "</p></div>";
+        "</p></div></div>";
       row +=
-        '<div class="row movie"><p class="infoTitles">Release Date: </p><p id="releaseDate">' +
+        '<div class="form-group mt-0 mb-0"><label class="col-3 col-form-label">Release Date: </label><div class="col-9"><p class="form-control-static" id="releaseDate">' +
         releaseDate +
-        "</p></div>";
+        "</p></div></div>";
       row +=
-        '<div class="row movie"><p class="infoTitles">Rating: </p><p id="rating">' +
+        '<div class="form-group mt-0 mb-0"><label class="col-1 col-form-label">Rating: </label><div class="col-11"><p class="form-control-static" id="rating">' +
         rating +
-        "</p></div>";
+        "</p></div></div>";
       row +=
-        '<div class="row movie"><p class="infoTitles">Run time: </p><p id="runtime">' +
+        '<div class="form-group mt-0 mb-0"><label class="col-3 col-form-label">Run time: </label><div class="col-9"><p class="form-control-static" id="runtime">' +
         runTime +
-        " minutes</p></div>";
+        " minutes</p></div></div>";
       row +=
-        '<div class="row movie"><p class="infoTitles">Genre: </p><p id="genre">' +
+        '<div class="form-group mt-0 mb-0"><label class="col-1 col-form-label">Genre: </label><div class="col-11"><p class="form-control-static" id="genre">' +
         genreString +
-        "</p></div>";
+        "</p></div></div>";
       row +=
-        '<div class="row movie"><p class="infoTitles">Actors: </p><p id="actor">' +
+        '<div class="form-group mt-0 mb-0"><label class="col-1 col-form-label">Actors: </label><div class="col-11"><p p class="form-control-static" id="actor">' +
         actorString +
-        "</p></div>";
-      row += '<div class="row"><p class="infoTitles">My Rating: </p>';
+        "</p></div></div>";
       row +=
-        '<span class="ml-auto star-rating star' + userScore + '"></span></div>';
+        '<div class="form-group mt-0 mb-0"><label class="col-3 col-form-label">My Rating: </label>';
       row +=
-        '<button class="btn btn-dark removeMovieButton">Remove from list<div style="display:none" class="movieIDToRemove">' +
-        movieID +
-        "</div></button>";
+        '<span class="col-9 ml-auto star-rating star' +
+        userScore +
+        '"></span></div></form>';
       row += '<div style="display:none" class="imdbID">' + imdbID + "</div>";
       row += '<div style="display:none" class="listid">' + listID + "</div>";
       row += "</div></div></div>";
@@ -531,11 +553,12 @@ function findMyMovie(movieID, listID) {
 
 /*Add movie to a list*/
 function addMovieToList(movie) {
-  var test = $("#budget").html();
+  var test = $("#userName").val();
   $("#duplicateMovie").empty();
   var list = $("#selectCurrentList option:selected").val();
   var userscore = $("input[name=rating]").val();
-  var test2 = $("#posterUrl").html();
+  var runtime = $("#runtime").html();
+  var sub = runtime.substring(0, runtime.length - 8);
   $.ajax({
     type: "POST",
     url: "http://localhost:8080/addMovie",
@@ -550,7 +573,7 @@ function addMovieToList(movie) {
       title: $("#title").html(),
       releaseDate: $("#releaseDate").html(),
       rating: $("#rating").html(),
-      runTime: $("#runtime").html(),
+      runTime: sub,
       director: $("#director").html(),
       userScore: userscore,
       plot: $("#plot").html(),
@@ -558,6 +581,7 @@ function addMovieToList(movie) {
       genres: $("#genre").html(),
       popularity: $("#popularity").html(),
       budget: $("#budget").html(),
+      userName: $("#userName").val(),
     }),
     success: function (message) {
       $("#duplicateMovie").hide();
@@ -583,8 +607,15 @@ function getMovieListsForSelection() {
   $(".hiddenMovieList").empty();
   var contentRows = $(".hiddenMovieList");
   $.ajax({
-    type: "GET",
+    type: "POST",
     url: "http://localhost:8080/getMovieList",
+    data: JSON.stringify({
+      userName: $("#userName").val(),
+    }),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
     success: function (movieListArray) {
       $.each(movieListArray, function (index, movie) {
         var listID = movie.listID;
@@ -617,6 +648,7 @@ function createNewList(name) {
     },
     data: JSON.stringify({
       listName: name,
+      userName: $("#userName").val(),
     }),
     success: function (message) {
       var row = '<option value="' + name + '">' + name + "</option>";
@@ -643,7 +675,7 @@ function createNewList(name) {
 }
 
 /*Returns data to display a list*/
-function getCompleteList(listID, listName) {
+function getCompleteList(listId, listName) {
   var contentRows = $("#selectedList");
   $("#myListContainer").empty();
   $.ajax({
@@ -654,27 +686,27 @@ function getCompleteList(listID, listName) {
       "Content-Type": "application/json",
     },
     data: JSON.stringify({
-      listID: listID,
+      listID: listId,
       listName: listName,
     }),
     success: function (movieList) {
-      var listNamef = movieList.listName;
+      var listName = movieList.listName;
       var movies = movieList.movies;
       var row =
-        '<div class="col-offset-1 col-10" margin-bottom: 2vw; width: 100%;"><a id="closeListButton"><div class="row justify-content-end"><span id="closeListSelection" style="font-size: 2vw; font-family: Times New Roman; color: #f2ac16;">&#10006;</span></div></a>';
+        '<div class="col-10 mx-auto"><a id="closeListButton"><div class="row justify-content-end"><span id="closeListSelection" style="font-size: 2vw; font-family: Times New Roman; color: #f2ac16;">&#10006;</span></div></a>';
       row +=
-        '<div class="row justify-content-center" style="background-color: #f2ac16; width: 100%;"><div class="col-10">' +
-        movieList.listName +
-        '</div><button class="btn btn-dark text-right deleteList" style="color: white; height: 80%">Delete<div style="display:none" class="listIDFromMovie">' +
-        listID +
-        "</div></button>";
+        '<div class="col-11 mx-auto listnameTop" style="background-color: #f2ac16;"><div class="row justify-content-center">' +
+        listName +
+        '</div><div style="display:none" id="listIDFromMovie">' +
+        listId +
+        '</div></div><div class="row movienameBottom">';
 
       for (i = 0; i < movies.length; i++) {
         var rating = movies[i].userScore;
         var string = movies[i].releaseDate.substring(0, 4);
         var release = "(" + string + ")";
         row +=
-          '<div class="row" style="border: 1px solid #14120b; width: 100%; margin-left:1vw;"><a id="myMovieLink"><div class="row myMovie" style="background-color: white; font-size: 2vw; width: 100%;">' +
+          '<div class="col-12 movienameBottom"><a class="myMovieLink" style="width: 100%"><div class="row myMovie" style="background-color: white; font-size: 2vw; padding: .2vw;">' +
           movies[i].title +
           " " +
           release +
@@ -684,12 +716,13 @@ function getCompleteList(listID, listName) {
           '"></span></div>' +
           '<div style="display:none" class="myMovieID">' +
           movies[i].movieID +
-          '</div><div style="display:none" class="listIDFromMovie">' +
-          listID +
           "</div></a></div>";
       }
 
-      row += "</div>";
+      row +=
+        '</div><div class="row justify-content-center deleteListButton"><button class="btn btn-primary deleteList">Delete List<div style="display:none" id="listIDForDelete">' +
+        listId +
+        "</div></div></button></div>";
       contentRows.append(row);
       displayCompleteList();
     },
@@ -708,19 +741,26 @@ function loadListLinks() {
   $("#myListContainer").empty();
   var contentRows = $("#myListContainer");
   $.ajax({
-    type: "GET",
+    type: "POST",
     url: "http://localhost:8080/getMovieList",
+    data: JSON.stringify({
+      userName: $("#userName").val(),
+    }),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
     success: function (movieListArray) {
       $.each(movieListArray, function (index, movie) {
         var listID = movie.listID;
         var listName = movie.listName;
 
         var row =
-          '<a class="listLink"><div class="col-5 btn btn-primary listName" style="margin-top: 1vw; margin-bottom: 1vw; margin-left: 3.7vw;">' +
+          '<div class="col-6 listLink"><button type="button" class="btn btn-dark w-100 listlinks listName">' +
           listName +
-          '</div><div class="listID" style="display:none">' +
+          '</button><div class="listID" style="display:none">' +
           listID +
-          "</div></div></a>";
+          "</div></div>";
 
         contentRows.append(row);
         $("#myStatsTitle").show();
@@ -867,8 +907,15 @@ function getAllGenres() {
   genreNamesX = [];
   genreCountY = [];
   $.ajax({
-    type: "GET",
+    type: "POST",
     url: "http://localhost:8080/getAllGenres",
+    data: JSON.stringify({
+      userName: $("#userName").val(),
+    }),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
     success: function (genreArray) {
       $.each(genreArray, function (index, genre) {
         genreNamesX.push(genre.genreName);
@@ -907,6 +954,12 @@ function getAllGenres() {
           },
         },
       });
+      $("html, body").animate(
+        {
+          scrollTop: $("#myCharts").offset().top,
+        },
+        1000
+      );
     },
     error: function () {
       $("#errorMessages").append(
@@ -926,8 +979,15 @@ function getAllActors() {
     chart.destroy();
   }
   $.ajax({
-    type: "GET",
+    type: "POST",
     url: "http://localhost:8080/getAllActors",
+    data: JSON.stringify({
+      userName: $("#userName").val(),
+    }),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
     success: function (actorArray) {
       $.each(actorArray, function (index, actor) {
         actorNamesX.push(actor.actorName);
@@ -981,6 +1041,84 @@ function getAllActors() {
           },
         },
       });
+      $("html, body").animate(
+        {
+          scrollTop: $("#myCharts").offset().top,
+        },
+        1000
+      );
+    },
+    error: function () {
+      $("#errorMessages").append(
+        $("<li>")
+          .attr({ class: "list-group-item list-group-item-danger" })
+          .text("Error calling web service.. Please try again later.")
+      );
+    },
+  });
+}
+
+/*Chart for Ratings*/
+function getAllRatings() {
+  if (chart) {
+    chart.destroy();
+  }
+  ratingsX = [];
+  ratingsCountY = [];
+  $.ajax({
+    type: "POST",
+    url: "http://localhost:8080/getAllRatings",
+    data: JSON.stringify({
+      userName: $("#userName").val(),
+    }),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    success: function (movieArray) {
+      $.each(movieArray, function (index, movie) {
+        ratingsX.push(movie.rating);
+        ratingsCountY.push(movie.ratingCount);
+        console.log(movie.rating);
+        console.log(movie.ratingCount);
+      });
+      chart = new Chart(document.getElementById("genreChart"), {
+        type: "doughnut",
+        responsive: false,
+        data: {
+          labels: ratingsX,
+          datasets: [
+            {
+              borderWidth: 4,
+              backgroundColor: getColors(ratingsCountY.length),
+              data: ratingsCountY,
+            },
+          ],
+        },
+        options: {
+          animation: {
+            duration: 3000,
+            animateRotate: true,
+          },
+          legend: {
+            display: false,
+          },
+          responsive: true,
+          title: {
+            display: true,
+            fontSize: 30,
+            fontColor: "#f2ac16",
+            text: "Ratings preference across all lists",
+            padding: 10,
+          },
+        },
+      });
+      $("html, body").animate(
+        {
+          scrollTop: $("#myCharts").offset().top,
+        },
+        1000
+      );
     },
     error: function () {
       $("#errorMessages").append(
@@ -1000,8 +1138,15 @@ function scoreComparisonChart() {
   var popularityScore = [];
   var titles = [];
   $.ajax({
-    type: "GET",
+    type: "POST",
     url: "http://localhost:8080/scoreComparisonChart",
+    data: JSON.stringify({
+      userName: $("#userName").val(),
+    }),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
     success: function (movieArray) {
       $.each(movieArray, function (index, movie) {
         userScore.push(movie.userScore);
@@ -1047,7 +1192,7 @@ function scoreComparisonChart() {
             display: true,
             fontSize: 30,
             fontColor: "#f2ac16",
-            text: "My Score Compared To TMDB Users",
+            text: "My Top 30 Scores Compared To TMDB Users",
             padding: 10,
           },
           scales: {
@@ -1070,6 +1215,12 @@ function scoreComparisonChart() {
           },
         },
       });
+      $("html, body").animate(
+        {
+          scrollTop: $("#myCharts").offset().top,
+        },
+        1000
+      );
     },
     error: function () {
       $("#errorMessages").append(
@@ -1089,8 +1240,15 @@ function budgetScoreChart() {
   var budget = [];
   var titles = [];
   $.ajax({
-    type: "GET",
+    type: "POST",
     url: "http://localhost:8080/budgetScoreChart",
+    data: JSON.stringify({
+      userName: $("#userName").val(),
+    }),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
     success: function (movieArray) {
       $.each(movieArray, function (index, movie) {
         userScore.push(movie.userScore);
@@ -1187,6 +1345,12 @@ function budgetScoreChart() {
           },
         },
       });
+      $("html, body").animate(
+        {
+          scrollTop: $("#myCharts").offset().top,
+        },
+        1000
+      );
     },
     error: function () {
       $("#errorMessages").append(
@@ -1207,8 +1371,15 @@ function movieLengthChart() {
   var titles = [];
   var total = 0;
   $.ajax({
-    type: "GET",
+    type: "POST",
     url: "http://localhost:8080/movieLengthChart",
+    data: JSON.stringify({
+      userName: $("#userName").val(),
+    }),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
     success: function (movieArray) {
       $.each(movieArray, function (index, movie) {
         userScore.push(movie.userScore);
@@ -1311,6 +1482,12 @@ function movieLengthChart() {
       );
     },
   });
+  $("html, body").animate(
+    {
+      scrollTop: $("#myCharts").offset().top,
+    },
+    1000
+  );
 }
 
 function totalRuntimeChart() {
@@ -1324,8 +1501,15 @@ function totalRuntimeChart() {
   var titles = [];
   var totalMin = 0;
   $.ajax({
-    type: "GET",
+    type: "POST",
     url: "http://localhost:8080/movieLengthChart",
+    data: JSON.stringify({
+      userName: $("#userName").val(),
+    }),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
     success: function (movieArray) {
       $.each(movieArray, function (index, movie) {
         runtime.push(movie.runTime);
@@ -1417,6 +1601,12 @@ function totalRuntimeChart() {
       );
     },
   });
+  $("html, body").animate(
+    {
+      scrollTop: $("#myCharts").offset().top,
+    },
+    1000
+  );
 }
 
 /*All Page Displays -> Route every event to one of these*/
@@ -1425,7 +1615,9 @@ function displayHomePage() {
   loadListLinks();
   $("#searchDiv").show();
   $("#myListsTitle").show();
+  $("#myListOuterContainer").show();
   $("#myListContainer").show();
+  $("#logout").show();
   $("#resultsBox").hide();
   $("#selectedList").hide();
   $("#searchResult").hide();
@@ -1523,4 +1715,28 @@ function displayDeleteWarningScreen() {
   $("#myStatsTitle").hide();
   $("#myStatsContainer").hide();
   $("#myCharts").hide();
+}
+
+function displayLoginScreen() {
+  $("#loginScreen").show();
+  $("#userName").val("");
+  $("#password").val("");
+  $("#newUserName").val("");
+  $("#newPassword").val("");
+  $("#searchDiv").hide();
+  $("#myListsTitle").hide();
+  $("#myListContainer").hide();
+  $("#resultsBox").hide();
+  $("#selectedList").hide();
+  $("#searchResult").hide();
+  $("#listDiv").hide();
+  $("#movieRating").hide();
+  $("#updateUserScore").hide();
+  $("#deleteWarningScreen").hide();
+  $("#myCharts").hide();
+  $("#myStatsTitle").hide();
+  $("#myStatsContainer").hide();
+  $("#logout").hide();
+  $("#invalidLogin").hide();
+  $("#duplicateUserName").hide();
 }

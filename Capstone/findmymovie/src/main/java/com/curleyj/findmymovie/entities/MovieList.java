@@ -12,6 +12,7 @@ package com.curleyj.findmymovie.entities;
 public class MovieList {
     private int listID;
     private String listName;
+    private String userName;
 
     public String getListName() {
         return listName;
@@ -27,6 +28,14 @@ public class MovieList {
 
     public void setListID(int listID) {
         this.listID = listID;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
     
     

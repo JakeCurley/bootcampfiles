@@ -13,6 +13,7 @@ public class Actor {
     private int actorID;
     private String actorName;
     private int actorCount;
+    private String userName;
     
     public Actor(String actorName) {
         this.actorName = actorName;
@@ -40,6 +41,14 @@ public class Actor {
 
     public void setActorCount(int actorCount) {
         this.actorCount = actorCount;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
     
     

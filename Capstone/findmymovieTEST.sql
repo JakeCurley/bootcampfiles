@@ -3,9 +3,17 @@ CREATE DATABASE findmymovieTEST;
 
 USE findmymovieTEST;
 
+CREATE TABLE login (
+    userName VARCHAR(50) PRIMARY KEY NOT NULL,
+    enc VARCHAR(100) NOT NULL,
+    salt VARCHAR(100) NOT NULL
+);
+
 CREATE TABLE movieList (
 	listID int PRIMARY KEY AUTO_INCREMENT,
-    listName VARCHAR(200) NOT NULL
+    listName VARCHAR(200) NOT NULL,
+    userName VARCHAR(50),
+    FOREIGN KEY (userName) REFERENCES login(userName) ON DELETE CASCADE
 );
 
 CREATE TABLE movie (
@@ -17,20 +25,25 @@ CREATE TABLE movie (
     releaseDate VARCHAR(20) NOT NULL,
     rating VARCHAR(5) NOT NULL,
     runTime INT NOT NULL,
-    director VARCHAR(30) NOT NULL,
     plot TEXT NOT NULL,
     popularity VARCHAR(5) NOT NULL,
-    budget INT NOT NULL
+    budget INT NOT NULL,
+    userName VARCHAR(50),
+    FOREIGN KEY (userName) REFERENCES login(userName) ON DELETE CASCADE
 );
 
 CREATE TABLE genre (
 	genreID INT PRIMARY KEY AUTO_INCREMENT,
-	genreName VARCHAR(20)
+	genreName VARCHAR(20),
+    userName VARCHAR(50),
+    FOREIGN KEY (userName) REFERENCES login(userName) ON DELETE CASCADE
 );
 
 CREATE TABLE actor (
 	actorID INT PRIMARY KEY AUTO_INCREMENT,
-	actorName VARCHAR(40) NOT NULL
+	actorName VARCHAR(40) NOT NULL,
+    userName VARCHAR(50),
+    FOREIGN KEY (userName) REFERENCES login(userName) ON DELETE CASCADE
 );
 
 CREATE TABLE movieGenre (
@@ -56,10 +69,3 @@ CREATE TABLE movieListmovie (
     FOREIGN KEY (movieID) REFERENCES movie(movieID) ON DELETE CASCADE,
     FOREIGN KEY (listID) REFERENCES movieList(listID) ON DELETE CASCADE
 );
-
-CREATE TABLE login (
-	loginID INT PRIMARY KEY AUTO_INCREMENT,
-    userName VARCHAR(50) NOT NULL,
-    enc VARCHAR(100) NOT NULL,
-    salt VARCHAR(100) NOT NULL
-)

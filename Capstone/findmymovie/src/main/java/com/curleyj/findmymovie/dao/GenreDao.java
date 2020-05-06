@@ -6,6 +6,7 @@
 package com.curleyj.findmymovie.dao;
 
 import com.curleyj.findmymovie.entities.Genre;
+import com.curleyj.findmymovie.entities.Movie;
 import java.util.List;
 
 /**
@@ -15,5 +16,5 @@ import java.util.List;
 
 public interface GenreDao {
     void add(Genre genre);
-    List<Genre> getAllGenres();
+    List<Genre> getAllGenres(Movie movie);
 }

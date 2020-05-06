@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface MovieListDao {
     MovieList add(MovieList movieList);
-    List<MovieList> getAllMovieList();
+    List<MovieList> getAllMovieList(MovieList ml);
     void movieListByName(Movie movie, String name);
     MovieListActorGenre getCompleteList(MovieList movieList);
     void deleteList(MovieList movieList);

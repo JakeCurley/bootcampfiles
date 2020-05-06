@@ -39,9 +39,9 @@ public class Controller {
     ServiceLayer service;
     
     
-    @GetMapping("/getMovieList")
-    public ResponseEntity<List<MovieList>> getMovieList() {
-        List<MovieList> movieList = service.getAllMovieList();
+    @PostMapping("/getMovieList")
+    public ResponseEntity<List<MovieList>> getMovieList(@RequestBody MovieList ml) {
+        List<MovieList> movieList = service.getAllMovieList(ml);
         
         if (movieList.isEmpty()) {
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
@@ -67,13 +67,13 @@ public class Controller {
         movie.setTitle(mlag.getTitle());
         movie.setPlot(mlag.getPlot());
         movie.setUserScore(mlag.getUserScore());
-        movie.setDirector(mlag.getDirector());
         movie.setPoster(mlag.getPoster());
         movie.setRating(mlag.getRating());
         movie.setReleaseDate(mlag.getReleaseDate());
         movie.setRunTime(mlag.getRunTime());
         movie.setPopularity(mlag.getPopularity());
         movie.setBudget(mlag.getBudget());
+        movie.setUserName(mlag.getUserName());
         
         Movie newMovie = service.addMovieToList(movie, mlag.getListName());
        
@@ -86,6 +86,7 @@ public class Controller {
             String[] actors = mlag.getActors().split(",");
             for (int i=0; i<actors.length; i++) {
                 Actor actor = new Actor(actors[i]);
+                actor.setUserName(mlag.getUserName());
                 service.addActor(actor);
                 service.addActorToMovie(movie, actor);
             }
@@ -93,6 +94,7 @@ public class Controller {
             String[] genres = mlag.getGenres().split(",");
             for (int i=0; i<genres.length; i++) {
                 Genre genre = new Genre(genres[i]);
+                genre.setUserName(mlag.getUserName());
                 service.addGenre(genre);
                 service.addGenreToMovie(movie, genre);
             }
@@ -131,17 +133,24 @@ public class Controller {
         service.updateUserScore(movie);
     }
     
-    @GetMapping("/getAllGenres")
-    public ResponseEntity<List<Genre>> getAllGenres() {
-        List<Genre> genres = service.getAllGenres();
+    @PostMapping("/getAllGenres")
+    public ResponseEntity<List<Genre>> getAllGenres(@RequestBody Movie movie) {
+        List<Genre> genres = service.getAllGenres(movie);
         return ResponseEntity.ok(genres);
     }
     
-    @GetMapping("/getAllActors")
-    public ResponseEntity<List<Actor>> getAllActors() {
-        List<Actor> actors = service.getAllActors();
+    @PostMapping("/getAllActors")
+    public ResponseEntity<List<Actor>> getAllActors(@RequestBody Movie movie) {
+        List<Actor> actors = service.getAllActors(movie);
         
         return ResponseEntity.ok(actors);
+    }
+    
+    @PostMapping("/getAllRatings")
+    public ResponseEntity<List<Movie>> getAllRatings(@RequestBody Movie movie) {
+        List<Movie> movies = service.getAllRatings(movie);
+        
+        return ResponseEntity.ok(movies);
     }
     
     @PostMapping("/Register")
@@ -170,21 +179,23 @@ public class Controller {
         return ResponseEntity.ok(newLi);
     }
     
-    @GetMapping("/scoreComparisonChart")
-    public ResponseEntity<List<Movie>> scoreComparisonChart() {
-        List<Movie> movies = service.scoreComparisonChart();
+    @PostMapping("/scoreComparisonChart")
+    public ResponseEntity<List<Movie>> scoreComparisonChart(@RequestBody Movie movie) {
+        List<Movie> movies = service.scoreComparisonChart(movie);
         return ResponseEntity.ok(movies);
     }
     
-    @GetMapping("/budgetScoreChart")
-    public ResponseEntity<List<Movie>> budgetScoreChart() {
-        List<Movie> movies = service.budgetScoreChart();
+    @PostMapping("/budgetScoreChart")
+    public ResponseEntity<List<Movie>> budgetScoreChart(@RequestBody Movie movie) {
+        List<Movie> movies = service.budgetScoreChart(movie);
         return ResponseEntity.ok(movies);
     }
     
-    @GetMapping("/movieLengthChart")
-    public ResponseEntity<List<Movie>> movieLengthChart() {
-        List<Movie> movies = service.movieLengthChart();
+    @PostMapping("/movieLengthChart")
+    public ResponseEntity<List<Movie>> movieLengthChart(@RequestBody Movie movie) {
+        List<Movie> movies = service.movieLengthChart(movie);
         return ResponseEntity.ok(movies);
     }
+    
+    
 }

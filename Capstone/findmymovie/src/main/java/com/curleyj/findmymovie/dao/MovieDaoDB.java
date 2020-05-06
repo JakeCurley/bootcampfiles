@@ -41,11 +41,21 @@ public class MovieDaoDB implements MovieDao {
             movie.setReleaseDate(rs.getString("releaseDate"));
             movie.setRating(rs.getString("rating"));
             movie.setRunTime(rs.getInt("runTime"));
-            movie.setDirector(rs.getString("director"));
             movie.setPlot(rs.getString("plot"));
             movie.setPoster(rs.getString("poster"));
             movie.setPopularity(rs.getString("popularity"));
             movie.setBudget(rs.getInt("budget"));
+            
+            return movie;
+        }
+    }
+    
+    public static final class ratingMapper implements RowMapper<Movie> {
+        @Override
+        public Movie mapRow(ResultSet rs, int index) throws SQLException {
+            Movie movie = new Movie();
+            movie.setRating(rs.getString("rating"));
+            movie.setRatingCount(rs.getInt("r"));
             
             return movie;
         }
@@ -55,17 +65,17 @@ public class MovieDaoDB implements MovieDao {
     public Movie add(Movie movie, String listName) {
         final String SELECT_MOVIES_IN_LIST = "SELECT * FROM movie m JOIN movieListmovie mlm ON m.movieID = mlm.movieID " +
                                                 "JOIN movieList ml ON mlm.listID = ml.listID " +
-                                                    "WHERE ml.listName = ?";
+                                                    "WHERE ml.listName = ? AND m.userName = ?";
         
-        List<Movie> movies = jdbc.query(SELECT_MOVIES_IN_LIST, new movieMapper(), listName);
+        List<Movie> movies = jdbc.query(SELECT_MOVIES_IN_LIST, new movieMapper(), listName, movie.getUserName());
         for (Movie newMovie : movies) {
             if (newMovie.getTitle().equals(movie.getTitle())) {
                 return null;
             }
         }
         
-        final String INSERT_MOVIE = "INSERT INTO movie (imdbID, userScore, poster, title, releaseDate, rating, runTime, director, plot, popularity, budget) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-        jdbc.update(INSERT_MOVIE, movie.getImdbID(), movie.getUserScore(), movie.getPoster(), movie.getTitle(), movie.getReleaseDate(), movie.getRating(), movie.getRunTime(), movie.getDirector(), movie.getPlot(), movie.getPopularity(), movie.getBudget());
+        final String INSERT_MOVIE = "INSERT INTO movie (userName, imdbID, userScore, poster, title, releaseDate, rating, runTime, plot, popularity, budget) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+        jdbc.update(INSERT_MOVIE, movie.getUserName(), movie.getImdbID(), movie.getUserScore(), movie.getPoster(), movie.getTitle(), movie.getReleaseDate(), movie.getRating(), movie.getRunTime(), movie.getPlot(), movie.getPopularity(), movie.getBudget());
         
         int newId = jdbc.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
         movie.setMovieID(newId);
@@ -90,7 +100,7 @@ public class MovieDaoDB implements MovieDao {
     
     @Override
     public MovieListActorGenre getMyMovie(Movie movie) {
-        final String SELECT_MOVIE = "SELECT * FROM movie WHERE movieID = ?";
+        final String SELECT_MOVIE = "SELECT * FROM movie WHERE movieID = ? ";
         final String SELECT_ACTORS = "SELECT * FROM actor a JOIN movieActor ma ON a.actorID = ma.actorID " +
                                         "JOIN movie m ON ma.movieID = m.movieID WHERE m.movieID = ? ";
         final String SELECT_GENRES = "SELECT * FROM genre g JOIN movieGenre mg ON g.genreID = mg.genreID " +
@@ -130,24 +140,32 @@ public class MovieDaoDB implements MovieDao {
     }
     
     @Override
-    public List<Movie> scoreComparisonChart() {
-        final String GET_MOVIES = "SELECT * FROM movie ORDER BY userScore DESC LIMIT 30";
-        List<Movie> movies = jdbc.query(GET_MOVIES, new movieMapper());
+    public List<Movie> scoreComparisonChart(Movie movie) {
+        final String GET_MOVIES = "SELECT * FROM movie WHERE userName = ? ORDER BY userScore DESC LIMIT 30";
+        List<Movie> movies = jdbc.query(GET_MOVIES, new movieMapper(), movie.getUserName());
         
         return movies;
     }
     
     @Override
-    public List<Movie> budgetScoreChart() {
-        final String GET_MOVIES = "SELECT * FROM movie ORDER BY budget DESC";
-        List<Movie> movies = jdbc.query(GET_MOVIES, new movieMapper());
+    public List<Movie> budgetScoreChart(Movie movie) {
+        final String GET_MOVIES = "SELECT * FROM movie WHERE userName = ? ORDER BY budget DESC";
+        List<Movie> movies = jdbc.query(GET_MOVIES, new movieMapper(), movie.getUserName());
         return movies;
     }
     
     @Override
-    public List<Movie> movieLengthChart() {
-        final String GET_MOVIES = "SELECT * FROM movie ORDER BY runTime DESC";
-        List<Movie> movies = jdbc.query(GET_MOVIES, new movieMapper());
+    public List<Movie> movieLengthChart(Movie movie) {
+        final String GET_MOVIES = "SELECT * FROM movie WHERE userName = ? ORDER BY runTime DESC";
+        List<Movie> movies = jdbc.query(GET_MOVIES, new movieMapper(), movie.getUserName());
+        return movies;
+    }
+    
+    public List<Movie> getAllRatings(Movie movie) {
+        final String GET_ALL_RATINGS = "SELECT rating, COUNT(rating) r FROM movie WHERE userName = ? " +
+                                           "GROUP BY rating ORDER BY r DESC";
+        
+        List<Movie> movies = jdbc.query(GET_ALL_RATINGS, new ratingMapper(), movie.getUserName());
         return movies;
     }
 

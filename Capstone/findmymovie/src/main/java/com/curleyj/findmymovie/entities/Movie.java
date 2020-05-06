@@ -21,11 +21,12 @@ public class Movie {
     private String releaseDate;
     private String rating;
     private int runTime;
-    private String director;
     private String plot;
     private String poster;
     private String popularity;
     private int budget;
+    private String userName;
+    private int ratingCount;
 
     public String getImdbID() {
         return imdbID;
@@ -75,14 +76,6 @@ public class Movie {
         this.runTime = runTime;
     }
 
-    public String getDirector() {
-        return director;
-    }
-
-    public void setDirector(String director) {
-        this.director = director;
-    }
-
     public String getPlot() {
         return plot;
     }
@@ -123,6 +116,24 @@ public class Movie {
         this.budget = budget;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public int getRatingCount() {
+        return ratingCount;
+    }
+
+    public void setRatingCount(int ratingCount) {
+        this.ratingCount = ratingCount;
+    }
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -133,7 +144,6 @@ public class Movie {
         hash = 53 * hash + Objects.hashCode(this.releaseDate);
         hash = 53 * hash + Objects.hashCode(this.rating);
         hash = 53 * hash + this.runTime;
-        hash = 53 * hash + Objects.hashCode(this.director);
         hash = 53 * hash + Objects.hashCode(this.plot);
         hash = 53 * hash + Objects.hashCode(this.poster);
         hash = 53 * hash + Objects.hashCode(this.popularity);
@@ -175,9 +185,6 @@ public class Movie {
             return false;
         }
         if (!Objects.equals(this.rating, other.rating)) {
-            return false;
-        }
-        if (!Objects.equals(this.director, other.director)) {
             return false;
         }
         if (!Objects.equals(this.plot, other.plot)) {

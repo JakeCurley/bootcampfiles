@@ -20,7 +20,6 @@ public class MovieListActorGenre {
     private int userScore;
     private String releaseDate;
     private String poster;
-    private String director;
     private String rating;
     private int runTime;
     private String plot;
@@ -32,6 +31,7 @@ public class MovieListActorGenre {
     private Movie movie;
     private String popularity;
     private int budget;
+    private String userName;
 
     public String getListName() {
         return listName;
@@ -79,14 +79,6 @@ public class MovieListActorGenre {
 
     public void setRunTime(int runTime) {
         this.runTime = runTime;
-    }
-
-    public String getDirector() {
-        return director;
-    }
-
-    public void setDirector(String director) {
-        this.director = director;
     }
 
     public String getPoster() {
@@ -175,5 +167,13 @@ public class MovieListActorGenre {
 
     public void setBudget(int budget) {
         this.budget = budget;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

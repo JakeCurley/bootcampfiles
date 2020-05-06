@@ -23,7 +23,8 @@ public interface MovieDao {
     MovieListActorGenre getMyMovie(Movie movie);
     void deleteMovie(Movie movie);
     void updateUserScore(Movie movie);
-    List<Movie> scoreComparisonChart();
-    List<Movie> budgetScoreChart();
-    List<Movie> movieLengthChart();
+    List<Movie> scoreComparisonChart(Movie movie);
+    List<Movie> budgetScoreChart(Movie movie);
+    List<Movie> movieLengthChart(Movie movie);
+    List<Movie> getAllRatings(Movie movie);
 }
