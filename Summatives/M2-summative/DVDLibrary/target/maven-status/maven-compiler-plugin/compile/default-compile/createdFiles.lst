@@ -1,0 +1,8 @@
+com\curleyj\dvdlibrary\App.class
+com\curleyj\dvdlibrary\ui\UserIO.class
+com\curleyj\dvdlibrary\dto\dvd.class
+com\curleyj\dvdlibrary\ui\DvDLibraryView.class
+com\curleyj\dvdlibrary\controller\DvDLibraryController.class
+com\curleyj\dvdlibrary\dao\DvDLibraryDao.class
+com\curleyj\dvdlibrary\dao\DvDLibraryDaoFileImpl.class
+com\curleyj\dvdlibrary\ui\UserIOConsoleImpl.class

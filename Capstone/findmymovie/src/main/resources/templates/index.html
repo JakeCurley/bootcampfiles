@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <title>FindMyMovie</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/smoothness/jquery-ui.css"
+    />
+    <link
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      rels="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css"
+    />
+    <link rel="stylesheet" href="bootstrap.css" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header></header>
+    <div class="container-fluid h-100">
+      <!--Logout button-->
+      <div class="row" id="logout" style="display: none;">
+        <button
+          type="button"
+          id="logoutButton"
+          class="btn btn-primary"
+          style="margin: 1vw;"
+        >
+          Logout
+        </button>
+      </div>
+      <!--Login screen-->
+      <div
+        class="row w-100 h-100 justify-content-center align-center"
+        id="loginScreen"
+      >
+        <div class="row w-100 justify-content-center" id="loginTitle">
+          FindMyMovie
+        </div>
+        <div class="col-offset-2 col-4 text-center" id="loginDiv">
+          <div
+            class="row justify-content-center"
+            style="font-family: Impact, Charcoal, sans-serif;"
+          >
+            <h3>Login</h3>
+          </div>
+          <form>
+            <div class="form-group">
+              <input
+                type="text"
+                class="form-control"
+                id="userName"
+                placeholder="User Name"
+              />
+            </div>
+            <div class="form-group">
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                placeholder="Password"
+              />
+            </div>
+            <div class="row" id="invalidLogin"></div>
+            <button type="button" class="btn btn-primary" id="loginButton">
+              Login
+            </button>
+          </form>
+        </div>
+        <div class="col-offset-2 col-4 text-center" id="registerDiv">
+          <div
+            class="row justify-content-center"
+            style="font-family: Impact, Charcoal, sans-serif;"
+          >
+            <h3>Register</h3>
+          </div>
+          <form>
+            <div class="form-group">
+              <input
+                type="text"
+                class="form-control"
+                id="newUserName"
+                placeholder="User Name"
+              />
+              <div class="row" id="duplicateUserName"></div>
+            </div>
+            <div class="form-group">
+              <input
+                type="password"
+                class="form-control"
+                id="newPassword"
+                placeholder="Password"
+              />
+              <input
+                type="password"
+                class="form-control"
+                id="confirmPassword"
+                placeholder="Confirm Password"
+                style="margin-top: 1vw;"
+              />
+            </div>
+            <button type="button" class="btn btn-primary" id="registerButton">
+              Register
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!--Search input box and Results box-->
+      <div
+        class="row justify-content-center"
+        id="searchDiv"
+        style="display: none;"
+      >
+        <form class="col-8 mx-auto text-center" style="width: 100%;">
+          <label
+            for="movieSearch"
+            id="movieSearch"
+            class="justify-content-center"
+            >FindMyMovie</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            id="movieSearchBox"
+            placeholder="Enter movie title here"
+          />
+          <div class="row" id="resultsBox" style="display: none;"></div>
+        </form>
+      </div>
+
+      <!--Display MY Lists-->
+      <div
+        class="row justify-content-center"
+        style="margin-top: 5vw; display: none;"
+        id="myListsTitle"
+      >
+        <h2>My Lists</h2>
+      </div>
+
+      <!--Display all list links-->
+      <div
+        class="row justify-content-center"
+        id="myListOuterContainer"
+        style="margin-bottom: 2vw; display: none;"
+      >
+        <div class="col-10 mx-auto">
+          <div class="row" id="myListContainer"></div>
+        </div>
+      </div>
+
+      <!--Display My Stats Link-->
+      <div
+        class="row justify-content-center"
+        style="margin-top: 5vw; display: none;"
+        id="myStatsTitle"
+      >
+        <h2>My Stats</h2>
+      </div>
+      <div class="row justify-content-center">
+        <div
+          class="col-10"
+          id="myStatsContainer"
+          style="margin-bottom: 2vw; display: none;"
+        >
+          <div class="row">
+            <div class="col-6 mx-auto">
+              <button
+                type="button"
+                id="genreStats"
+                class="btn btn-dark statsButton w-100"
+              >
+                Genre Stats
+              </button>
+            </div>
+            <div class="col-6 mx-auto">
+              <button
+                type="button"
+                id="ratingsStats"
+                class="btn btn-dark statsButton w-100"
+              >
+                Ratings Stats
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6 mx-auto">
+              <button
+                type="button"
+                id="actorStats"
+                class="btn btn-dark statsButton w-100"
+              >
+                Actor Stats
+              </button>
+            </div>
+            <div class="col-6 mx-auto">
+              <button
+                type="button"
+                id="scoreComparison"
+                class="btn btn-dark statsButton w-100"
+              >
+                Score Comparison
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6 mx-auto">
+              <button
+                type="button"
+                id="budgetScoreComparison"
+                class="btn btn-dark statsButton w-100"
+              >
+                Budget/Score Comparison
+              </button>
+            </div>
+            <div class="col-6 mx-auto">
+              <button
+                type="button"
+                id="movieLengthComparison"
+                class="btn btn-dark statsButton w-100"
+              >
+                Movie Length/Score Comparison
+              </button>
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="col-6 mx-auto">
+              <button
+                type="button"
+                id="totalViewTime"
+                class="btn btn-dark statsButton w-100"
+              >
+                Total View Time
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--Charts container-->
+      <div
+        class="row justify-content-center"
+        id="myCharts"
+        style="display: none;"
+      >
+        <div class="row w-100 justify-content-end">
+          <a id="closeStatsButton"
+            ><div class="col-1">
+              <span
+                id="closeStats"
+                style="
+                  font-size: 2vw;
+                  font-family: Times New Roman;
+                  color: #f2ac16;
+                "
+                >&#10006;</span
+              >
+            </div></a
+          >
+        </div>
+        <div
+          class="chart-container"
+          style="width: 500; height: 500; display: none;"
+          id="genreChartDiv"
+        >
+          <canvas id="genreChart" width="1200" height="500"></canvas>
+        </div>
+      </div>
+
+      <!--Display selected list-->
+      <div id="displayList"></div>
+
+      <!--Display Selected List-->
+      <div
+        class="row justify-content-center"
+        style="margin-top: 2vw; display: none;"
+        id="selectedList"
+      ></div>
+
+      <!--Display Movie from TMDB API and LocalHost-->
+      <div class="row w-60 justify-content-center" id="searchResult"></div>
+
+      <!--Create OR Select a list-->
+      <div
+        class="row justify-content-center"
+        id="listDiv"
+        style="display: none;"
+      >
+        <div
+          class="row justify-content-center"
+          id="duplicateMovie"
+          style="display: none;"
+        ></div>
+        <div class="row">
+          <div class="offset-1 col-4" id="movieList">
+            <form class="movieListForm">
+              <label for="hiddenMovieList labelClass"
+                ><h3>Add to a current list</h3></label
+              >
+              <select
+                class="hiddenMovieList currentList"
+                style="width: 30vw; height: 2.5vw;"
+                id="selectCurrentList"
+              ></select>
+              <div id="errorSelectedList" style="display: none;">
+                <p>Please select a current list or create a new one.</p>
+              </div>
+              <div id="newListSuccess"></div>
+              <button
+                type="button"
+                class="btn btn-primary text-left"
+                id="selectList"
+                style="margin-top: 1vw;"
+              >
+                Select List
+              </button>
+            </form>
+          </div>
+          <div class="col-2 text-center my-auto">
+            <h2 style="color: #f2ac16;">OR</h2>
+          </div>
+          <div class="col-4" style="margin-left: 2vw;">
+            <form
+              class="form-horizontal movieListForm"
+              role="form"
+              id="create-form"
+            >
+              <div class="row form-group">
+                <label for="createNewList" class="col-md-12 control-label"
+                  ><h3>
+                    Create a new list
+                  </h3></label
+                >
+                <div class="col-md-12">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="createNewList"
+                    placeholder="New list name"
+                    style="width: 30vw;"
+                    required
+                  />
+                </div>
+                <div id="errorListName"></div>
+                <div id="errorBlankNewList" style="display: none;">
+                  <p>Please enter a name for the new list.</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="btn btn-primary text-left"
+                id="createListButton"
+              >
+                Create a new list
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!--Rate movie-->
+      <div class="row text-center" id="movieRating" style="display: none;">
+        <div class="col-12" id="myRating" style="display: none;">
+          <h3>Update Rating?</h3>
+        </div>
+        <div class="col-12" id="likeIt" style="display: none;">
+          <h3>How did you like it?</h3>
+        </div>
+        <div class="col-12 stars"></div>
+        <div style="color: white;" id="scoreHolder"></div>
+        <div class="col-12">
+          <button
+            type="button"
+            class="btn btn-primary"
+            style="margin-top: 2vw; display: none;"
+            id="addMovieButton"
+          >
+            Add Movie
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            style="margin-top: 2vw; display: none;"
+            id="updateScoreButton"
+          >
+            Update Rating
+          </button>
+        </div>
+      </div>
+
+      <!--Update User Score-->
+      <div class="row text-center" id="updateUserScore" style="display: none;">
+        <div style="color: white;" id="updateScoreHolder"></div>
+        <div class="col-12"></div>
+      </div>
+
+      <!--Delete Warning Screen-->
+      <div
+        class="row text-center mx-auto"
+        id="deleteWarningScreen"
+        style="
+          border: 5px outset #f2ac16;
+          border-radius: 23px;
+          width: 60%;
+          display: none;
+        "
+      >
+        <div class="col-12"><h3>Are you sure you want to delete?</h3></div>
+        <div class="col-12">
+          <h5 style="color: #f2ac16;">
+            This will remove the list and all movies associated with it.
+          </h5>
+        </div>
+        <div class="col-12">
+          <button
+            type="button"
+            class="btn btn-dark"
+            id="confirmDeleteButton"
+            style="margin-top: 2vw; margin-bottom: 2vw;"
+          >
+            Delete
+            <div style="display: none;" id="listToBeDeleted"></div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!--Scripts-->
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="jquery.emojiRatings.min.js"></script>
+    <script
+      src="https://kit.fontawesome.com/9c9dafe676.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="dvd.js"></script>
+  </body>
+</html>

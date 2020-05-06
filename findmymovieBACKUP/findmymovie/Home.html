@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <title>FindMyMovie</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/smoothness/jquery-ui.css"
+    />
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <header></header>
+    <div class="container-fluid">
+      <div class="row align-self-center w-100" id="searchDiv">
+        <p>>Test</p>
+        <form class="col-8 mx-auto text-center">
+          <label
+            for="movieSearch"
+            id="movieSearch"
+            class="justify-content-center"
+            >FindMyMovie</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            id="movieSearchBox"
+            placeholder="Enter movie title here"
+          />
+          <div class="row" id="resultsBox"></div>
+        </form>
+      </div>
+      <div class="row w-60 justify-content-center" id="searchResult"></div>
+      <div class="row mx-auto" id="listDiv" style="width: 100%; display: none;">
+        <div
+          class="col-offset-1 col-4 form-group"
+          id="movieList"
+          style="margin-left: 6vw;"
+        >
+          <form class="movieListForm">
+            <label for="hiddenMovieList labelClass"
+              ><h3>Add to a current list</h3></label
+            >
+            <select
+              class="hiddenMovieList"
+              style="width: 30vw; height: 3vw;"
+            ></select>
+          </form>
+        </div>
+        <div class="col-2 text-center my-auto">
+          <h2 style="color: #f2ac16;">OR</h2>
+        </div>
+        <div class="col-5">
+          <form
+            class="form-horizontal movieListForm"
+            role="form"
+            id="create-form"
+          >
+            <div class="row form-group">
+              <label for="createNewList" class="col-md-12 control-label"
+                ><h3>
+                  Create a new list
+                </h3></label
+              >
+              <div class="col-md-12">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="createNewList"
+                  placeholder="New list name"
+                  style="width: 30vw;"
+                  required
+                />
+              </div>
+            </div>
+            <button
+              type="button"
+              class="btn btn-primary text-left"
+              id="createListButton"
+            >
+              Create a new list
+            </button>
+          </form>
+        </div>
+      </div>
+      <div class="row text-center" id="movieRating" style="display: none;">
+        <div class="col-12"><h3>Confirm list to add movie to</h3></div>
+        <div class="col-12">
+          <select
+            class="hiddenMovieList"
+            style="width: 30vw; height: 3vw;"
+          ></select>
+        </div>
+        <div class="col-12">
+          <h3>How did you like it?</h3>
+        </div>
+        <div class="col-12" id="stars"></div>
+        <div class="col-12">
+          <button
+            type="button"
+            class="btn btn-primary"
+            style="margin-top: 2vw;"
+            id="addMovieButton"
+          >
+            Add Movie
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="js/jquery.emojiRatings.min.js"></script>
+
+    <script src="js/dvd.js"></script>
+    <!-- custom js file for jQuery -->
+  </body>
+</html>

@@ -1,0 +1,86 @@
+2020-03-07T20:44:54.656118600 : $1.50 was added to the vending machine.
+2020-03-07T20:45:15.471111600 : com.curleyj.vendingmachine.dto.Item@58651fd0 was purchased.
+2020-03-07T20:45:15.495689600 : Change dispursed: 2 quarters 0 dimes 1 nickels 0 pennies.
+2020-03-07T20:50:19.430042900 : $2.00 was added to the vending machine.
+2020-03-07T20:50:27.589950300 : PayDay was purchased.
+2020-03-07T20:50:27.637671200 : Change dispursed: 5 quarters 0 dimes 0 nickels 0 pennies.
+2020-03-07T20:50:58.675924100 : $100 was added to the vending machine.
+2020-03-07T20:51:01.773338 : Twix was purchased.
+2020-03-07T20:51:01.776624300 : Change dispursed: 395 quarters 2 dimes 0 nickels 0 pennies.
+2020-03-07T22:16:02.185943100 : $1.50 was added to the vending machine.
+2020-03-07T22:16:06.317247900 : KitKat was purchased.
+2020-03-07T22:16:06.336428500 : Change dispursed: 1 quarters 1 dimes 1 nickels 0 pennies.
+2020-03-07T23:01:02.663003100 : $1.50 was added to the vending machine.
+2020-03-07T23:01:05.508799100 : KitKat was purchased.
+2020-03-07T23:01:05.527309 : Change dispursed: 1 quarters 1 dimes 1 nickels 0 pennies.
+2020-03-07T23:01:09.498203600 : $1.50 was added to the vending machine.
+2020-03-07T23:01:13.795215100 : Twix was purchased.
+2020-03-07T23:01:13.795489900 : Change dispursed: 1 quarters 2 dimes 0 nickels 0 pennies.
+2020-03-07T23:01:18.822074500 : $1 was added to the vending machine.
+2020-03-07T23:04:48.904902900 : $1.00 was added to the vending machine.
+2020-03-07T23:04:57.236849300 : PayDay was purchased.
+2020-03-07T23:04:57.258013900 : Change dispursed: 1 quarters 0 dimes 0 nickels 0 pennies.
+2020-03-08T16:44:52.026989800 : $1.50 was added to the vending machine.
+2020-03-08T16:44:54.600252200 : KitKat was purchased.
+2020-03-08T16:44:54.615212800 : Change dispursed: 1 quarters 1 dimes 1 nickels 0 pennies.
+2020-03-08T16:44:58.829237500 : $1.50 was added to the vending machine.
+2020-03-09T08:47:24.412373700 : $1.50 was added to the vending machine.
+2020-03-09T08:47:28.158442900 : KitKat was purchased.
+2020-03-09T08:47:28.189410500 : Change dispursed: 1 quarters 1 dimes 1 nickels 0 pennies.
+2020-03-09T08:47:31.038035600 : $2.00 was added to the vending machine.
+2020-03-09T08:47:34.658899900 : Twix was purchased.
+2020-03-09T08:47:34.659856 : Change dispursed: 3 quarters 2 dimes 0 nickels 0 pennies.
+2020-03-09T09:08:40.727851500 : $1.50 was added to the vending machine.
+2020-03-09T09:08:44.132496100 : KitKat was purchased.
+2020-03-09T09:08:44.147802700 : Change dispursed: 1 quarters 1 dimes 1 nickels 0 pennies.
+2020-03-09T09:08:49.231266500 : $1.00 was added to the vending machine.
+<<<<<<< HEAD
+=======
+2020-03-09T09:24:59.093501800 : $1.50 was added to the vending machine.
+2020-03-09T09:25:02.274277900 : Snickers was purchased.
+2020-03-09T09:25:02.288239700 : Change dispursed: 2 quarters 0 dimes 1 nickels 0 pennies.
+2020-03-09T09:25:05.815650800 : $2.00 was added to the vending machine.
+2020-03-09T09:28:38.156251500 : $1.50 was added to the vending machine.
+2020-03-09T09:28:42.222612200 : PayDay was purchased.
+2020-03-09T09:28:42.234580900 : Change dispursed: 3 quarters 0 dimes 0 nickels 0 pennies.
+2020-03-09T09:28:54.471307500 : $100.00 was added to the vending machine.
+2020-03-09T09:31:20.840474300 : Herseys was purchased.
+2020-03-09T09:31:20.846460700 : Change dispursed: 396 quarters 0 dimes 0 nickels 0 pennies.
+2020-03-09T10:26:35.222055600 : $1.50 was added to the vending machine.
+2020-03-09T10:27:20.261257 : Twix was purchased.
+2020-03-09T10:27:20.289710700 : Change dispursed: 1 quarters 2 dimes 0 nickels 0 pennies.
+2020-03-09T10:27:39.422920100 : $1.05 was added to the vending machine.
+2020-03-09T10:27:44.038769700 : Twix was purchased.
+2020-03-09T10:27:44.038769700 : Change dispursed: 0 quarters 0 dimes 0 nickels 0 pennies.
+2020-03-09T10:27:49.513239400 : $1.50 was added to the vending machine.
+2020-03-09T10:27:54.009470 : Twix was purchased.
+2020-03-09T10:27:54.011606300 : Change dispursed: 1 quarters 2 dimes 0 nickels 0 pennies.
+2020-03-09T10:27:59.973200300 : $1.50 was added to the vending machine.
+2020-03-09T10:28:51.485629100 : Herseys was purchased.
+2020-03-09T10:28:51.486244300 : Change dispursed: 2 quarters 0 dimes 0 nickels 0 pennies.
+2020-03-09T10:29:27.384315400 : $1.43 was added to the vending machine.
+2020-03-09T10:29:42.595006700 : Herseys was purchased.
+2020-03-09T10:29:42.596500100 : Change dispursed: 1 quarters 1 dimes 1 nickels 3 pennies.
+2020-03-09T10:29:58.175213500 : $1.00 was added to the vending machine.
+2020-03-09T10:30:07.129848900 : $-5.00 was added to the vending machine.
+2020-03-09T10:39:45.469524 : $0.01 was added to the vending machine.
+2020-03-09T10:40:07.995832600 : $0.00 was added to the vending machine.
+2020-03-09T11:37:12.795402700 : $0.01 was added to the vending machine.
+2020-03-13T12:05:30.770406 : $1.50 was added to the vending machine.
+2020-03-13T12:05:33.939421700 : Twix was purchased.
+2020-03-13T12:05:34.025309900 : Change dispursed: 1 quarters 2 dimes 0 nickels 0 pennies.
+2020-03-13T12:05:44.328864 : $1.00 was added to the vending machine.
+2020-03-13T12:05:46.925351100 : PayDay was purchased.
+2020-03-13T12:05:46.926623400 : Change dispursed: 1 quarters 0 dimes 0 nickels 0 pennies.
+2020-03-13T12:20:01.853781100 : $1.50 was added to the vending machine.
+2020-03-13T12:20:05.347445700 : Twix was purchased.
+2020-03-13T12:20:05.384997500 : Change dispursed: 1 quarters 2 dimes 0 nickels 0 pennies.
+2020-03-13T12:20:07.980396100 : $1.00 was added to the vending machine.
+2020-03-13T12:20:20.980830500 : $1.00 was added to the vending machine.
+2020-03-13T12:20:23.276898300 : Twix was purchased.
+2020-03-13T12:20:23.277936900 : Change dispursed: 3 quarters 2 dimes 0 nickels 0 pennies.
+2020-03-16T08:40:28.123667800 : $1.50 was added to the vending machine.
+2020-03-16T08:40:32.469069700 : Snickers was purchased.
+2020-03-16T08:40:32.543905600 : Change dispursed: 2 quarters 0 dimes 1 nickels 0 pennies.
+2020-03-16T15:01:43.042051300 : $1.50 was added to the vending machine.
+>>>>>>> 9ddb214ac7eca8db766d76a586b8581214c9a0fe
